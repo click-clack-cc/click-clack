@@ -1,7 +1,6 @@
 import axios from 'axios'
-require('dotenv').config()
 
-const url = process.env.API_URL + 'stats/'
+const url = 'https://click-clack.cc:5000/api/stats/'
 
 class statService {
     static getStats (id) {

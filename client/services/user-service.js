@@ -1,7 +1,6 @@
 import axios from 'axios'
-require('dotenv').config()
 
-const url = process.env.API_URL + 'users/'
+const url = 'https://click-clack.cc:5000/api/users/'
 
 class userService {
     static logIn (username, password) {
@@ -93,7 +92,6 @@ class userService {
     }
 
     static changeId (oldid, newid, token) {
-        console.log(oldid + ' ' + newid + ' ' + token)
         return axios.post(url + 'id',
             {
                 id: oldid,

@@ -1,8 +1,7 @@
 import axios from 'axios'
-require('dotenv').config()
 
-const keyboardsurl = process.env.API_URL + 'keyboards/search'
-const usersurl = process.env.API_URL + 'users/search'
+const keyboardsurl = 'https://click-clack.cc:5000/api/keyboards/search'
+const usersurl = 'https://click-clack.cc:5000/api/users/search'
 
 class searchService {
     static search (searchtext) {

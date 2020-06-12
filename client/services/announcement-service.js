@@ -1,7 +1,6 @@
 import axios from 'axios'
-require('dotenv').config()
 
-const url = process.env.API_URL + 'announcements/'
+const url = 'https://click-clack.cc:5000/api/announcements/'
 
 class announcementService {
     static getAnnouncements () {

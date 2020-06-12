@@ -1,7 +1,6 @@
 import axios from 'axios'
-require('dotenv').config()
 
-const url = process.env.API_URL + 'img/'
+const url = 'https://click-clack.cc:5000/api/img/'
 
 class imgService {
     static uploadProfileImage (id, img, token) {

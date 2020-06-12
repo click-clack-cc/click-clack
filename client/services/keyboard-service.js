@@ -1,7 +1,6 @@
 import axios from 'axios'
-require('dotenv').config()
 
-const url = process.env.API_URL + 'keyboards/'
+const url = 'https://click-clack.cc:5000/api/keyboards/'
 
 class keyboardService {
     static getKeyboards (user) {
@@ -183,7 +182,6 @@ class keyboardService {
                     )
                 })
             } catch (e) {
-                console.log(e)
                 reject(e)
             }
         })

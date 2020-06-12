@@ -66,11 +66,12 @@ export default {
     },
     serverMiddleware: [
         redirectSSL.create({
-            enabled: process.env.NODE_ENV === 'production'
+            statusCode: 301
         })
     ],
     buildModules: [
-        '@nuxtjs/eslint-module'
+        '@nuxtjs/eslint-module',
+        '@nuxtjs/dotenv'
     ],
     modules: [
         'cookie-universal-nuxt',
