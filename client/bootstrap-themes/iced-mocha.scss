@@ -1,0 +1,93 @@
+$white: #2a2a2a !default;
+$gray-100: #3d3d3d !default;
+$gray-200: #bababa !default;
+$gray-300: 7 bffe5 !default;
+$gray-400: #7d7d7d !default;
+$gray-500: #5a5a5a !default;
+$gray-600: #868686 !default;
+$gray-700: 7 bffe5 !default;
+$gray-800: #848484 !default;
+$gray-900: #a3a3a3 !default;
+$black: #f3f3f3 !default;
+
+$primary: #8fffea !default;
+$secondary: $primary !default;
+
+$blue: #7babff !default;
+$indigo: #ae7bff !default;
+$purple: #8f7bff !default;
+$pink: #d77bff !default;
+$red: #ff7b7b !default;
+$orange: #ffbf7b !default;
+$yellow: #ffde7b !default;
+$green: #a3ff7b !default;
+$teal: #7bffca !default;
+$cyan: $primary !default;
+
+
+$success: $primary !default;
+$info: $cyan !default;
+$warning: $yellow !default;
+$danger: $red !default;
+$light: $gray-100 !default;
+$dark: $gray-800 !default;
+
+$theme-colors: () !default;
+$theme-colors: map-merge(
+        (
+            'primary': $primary,
+            'secondary': $secondary,
+            'success': $success,
+            'info': $info,
+            'warning': $warning,
+            'danger': $danger,
+            'light': $light,
+            'dark': $dark
+        ),
+        $theme-colors
+);
+$link-color: $gray-800;
+
+$enable-shadows: false;
+$enable-rounded: true;
+$enable-gradients: false;
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=Poppins:wght@400&family=Courier+Prime&family=PT+Serif&family=Montserrat:ital,wght@1,400;1,800&amily=Source+Code+Pro&family=Open+Sans&family=Open+Sans+Condensed:wght@300&family=Playfair+Display&family=Press+Start+2P&family=Roboto&display=swap');
+$font-family-sans-serif: 'IBM Plex Sans', Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+
+
+@import '../node_modules/bootstrap/scss/bootstrap';
+@import '../node_modules/bootstrap-vue/src/index';
+
+.card-header, .card-footer {
+    background-color: $gray-100
+}
+
+.card {
+    border-color: $primary;
+}
+
+.btn-light, .btn-light:focus, .btn-light:active {
+    color: $primary;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+p {
+    color: $gray-800;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: $primary;
+    //font-family: 'Anton';
+    font-family: 'IBM Plex Sans';
+    font-weight: 600;
+    //font-weight: 400;
+}
+
+
+
+
+

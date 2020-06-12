@@ -1,0 +1,81 @@
+$white: #f2eaf3 !default;
+$gray-100: #d3b0d9 !default;
+$gray-200: #b0d9d6 !default;
+$gray-300: #cdb0d9 !default;
+$gray-400: #5b6083 !default;
+$gray-500: #5b6883 !default;
+$gray-600: #5b6583 !default;
+$gray-700: #785b83 !default;
+$gray-800: #2e1233 !default;
+$gray-900: #2d1233 !default;
+$black: #2d1233 !default;
+
+$primary: #ceb0d9 !default;
+$secondary: #b0d9d6 !default;
+
+$blue: #af9cd5 !default;
+$indigo: #afa4c2 !default;
+$purple: #b6accb !default;
+$pink: #c6a5b4 !default;
+$red: #ce9ea2 !default;
+$orange: #c9b09c !default;
+$yellow: #d4c8a6 !default;
+$green: #a1c9aa !default;
+$teal: #a2c2b7 !default;
+$cyan: #b0a3c6 !default;
+
+
+$success: $green !default;
+$info: $cyan !default;
+$warning: $yellow !default;
+$danger: $red !default;
+$light: $gray-100 !default;
+$dark: $gray-800 !default;
+
+$theme-colors: () !default;
+$theme-colors: map-merge(
+        (
+            'primary': $primary,
+            'secondary': $secondary,
+            'success': $success,
+            'info': $info,
+            'warning': $warning,
+            'danger': $danger,
+            'light': $light,
+            'dark': $dark
+        ),
+        $theme-colors
+);
+$link-color: $gray-800;
+
+$enable-shadows: false;
+$enable-rounded: true;
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=Poppins:wght@400&family=Courier+Prime&family=PT+Serif&family=Montserrat:ital,wght@1,400;1,800&amily=Source+Code+Pro&family=Open+Sans&family=Open+Sans+Condensed:wght@300&family=Playfair+Display&family=Press+Start+2P&family=Roboto&display=swap');
+$font-family-sans-serif: 'IBM Plex Sans', Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+
+
+@import '../node_modules/bootstrap/scss/bootstrap';
+@import '../node_modules/bootstrap-vue/src/index';
+
+
+.card-header, .card-footer {
+    background-color: $white
+}
+
+a {
+    text-decoration: none !important;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: $gray-800;
+    //font-family: 'Anton';
+    font-family: 'IBM Plex Sans';
+    font-weight: 600;
+    //font-weight: 400;
+}
+
+
+
+
+

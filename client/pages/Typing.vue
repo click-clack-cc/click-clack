@@ -1,0 +1,80 @@
+<template>
+    <div id="home">
+        <no-ssr>
+            <Typer :token="token" :user="user" style="padding-top: 4rem" @event="eventHandler" />
+        </no-ssr>
+    </div>
+</template>
+
+<script>
+    import { mapState } from 'vuex'
+    import Typer from '../components/Typer.vue'
+
+    export default {
+        name: 'Home',
+        layout: 'index',
+        components: {
+            Typer
+        },
+        props: [],
+        asyncData () {
+        },
+        mounted () {
+            this.$store.commit('updateZenmode', false)
+        },
+        computed: mapState(['user', 'token', 'nightmode', 'zenmode', 'darktheme', 'lighttheme', 'search']),
+        methods: {
+            eventHandler (event) {
+                this.$emit('event', event)
+            }
+        },
+        head () {
+            const description = 'Best place to hang out for mechanical keyboard enthusiasts.' +
+                ' Test your typing speed with our feature rich and clean typing test and check out' +
+                'the newest custom mech keeb builds in the showroom'
+            const title = 'Click-Clack - Typing Test and Mechanical Keyboard Showroom'
+            const image = 'https://click-clack.cc:5000/files/images/indeximage.jpg'
+            const url = 'https://click-clack.cc/'
+            return {
+                title,
+                htmlAttrs: {
+                    lang: 'en'
+                },
+                meta: [
+                    { charset: 'utf-8' },
+                    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+
+                    { name: 'title', property: 'title', hid: 'title', content: title },
+                    { name: 'og:title', property: 'og:title', hid: 'og:title', content: title },
+                    { name: 'twitter:title', property: 'twitter:title', hid: 'twitter:title', content: title },
+
+                    { name: 'description', property: 'description', hid: 'description', content: description },
+                    { name: 'og:description', property: 'og:description', hid: 'og:description', content: description },
+                    {
+                        name: 'twitter:description',
+                        property: 'twitter:description',
+                        hid: 'twitter:description',
+                        content: description
+                    },
+
+                    { name: 'twitter:image', hid: 'twitter:image', property: 'twitter:image', content: image },
+                    { name: 'og:image', hid: 'og:image', property: 'og:image', content: image },
+                    { name: 'image', hid: 'image', property: 'image', content: image },
+
+                    { name: 'og:site_name', property: 'og:site_name', hid: 'og:site_name', content: 'click-clack' },
+                    { name: 'og:type', property: 'og:type', hid: 'og:type', content: 'website' },
+                    {
+                        name: 'og:url',
+                        property: 'og:url',
+                        hid: 'og:url',
+                        content: url
+                    }
+                ]
+            }
+        }
+    }
+</script>
+
+<style scoped>
+
+</style>

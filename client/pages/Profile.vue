@@ -1,0 +1,263 @@
+<template>
+    <div id="stats">
+        <b-modal ref="login-modal" centered hide-footer>
+            <template v-slot:modal-title>
+                Welcome to click-clack 👋
+            </template>
+            <br>
+            <div class="d-block text-center">
+                <h4>Signed in as {{ firstname }}</h4>
+            </div>
+            <br>
+            <b-button
+                block
+                class="mt-2"
+                variant="outline-primary"
+                @click="hello"
+            >
+                Hello
+            </b-button>
+        </b-modal>
+        <div id="accountInfo">
+            <b-row v-if="user" id="signedIn">
+                <b-col>
+                    <div align="right">
+                        <b-dropdown
+                            :logout-button="true"
+                            right
+                            split
+                            text="Sign out"
+                            variant="outline-danger"
+                            @click="signOut"
+                        >
+                            <b-dropdown-item @click="deleteAccount">
+                                Delete account
+                            </b-dropdown-item>
+                        </b-dropdown>
+                    </div>
+                </b-col>
+            </b-row>
+            <b-col v-else id="notSignedIn">
+                <br>
+                <h4>Hello 👋</h4>
+                <br><br>
+                <b-card
+                    id="login-form-card"
+                    footer-tag="footer"
+                    header-tag="header"
+                >
+                    <template v-slot:header align="&quot;middle">
+                        <b-icon icon="lock" scale="2" />
+                    </template>
+                    <b-form id="login-form" align="left">
+                        <b-form-group
+                            label="Email or username"
+                        >
+                            <b-form-input
+                                id="username"
+                                v-model="username"
+                                placeholder="Email or username"
+                                required
+                                type="email"
+                            />
+                        </b-form-group>
+                        <b-form-group
+                            label="Password"
+                        >
+                            <b-form-input
+                                id="password"
+                                v-model="password"
+                                placeholder="Password"
+                                required
+                                type="password"
+                            />
+                        </b-form-group>
+                        <b-form-checkbox
+                            id="checkbox-1"
+                            v-model="stayLoggedIn"
+                            name="checkbox-1"
+                            unchecked-value="not_accepted"
+                            value="accepted"
+                        >
+                            Keep me logged in
+                        </b-form-checkbox>
+                    </b-form>
+                    <template v-slot:footer>
+                        <b-row align="middle">
+                            <b-col>
+                                <b-button id="login-button" type="submit" variant="primary" @click="signIn">
+                                    Log in
+                                </b-button>
+                            </b-col>
+                            <b-col>
+                                <b-button id="signup-button" to="/signup" variant="secondary">
+                                    Sign up
+                                </b-button>
+                            </b-col>
+                        </b-row>
+                    </template>
+                </b-card>
+                <br>
+                <a href="mailto:support@click-clack.cc">
+                    Trouble signing in?
+                </a>
+            </b-col>
+            <b-row v-if="user" id="selfUserDataCard">
+                <SelfUserData v-if="user" :token="token" :user="user" />
+            </b-row>
+        </div>
+        <br>
+        <h4 v-if="user && user.recommendations.length > 0">
+            Recommendations
+        </h4>
+        <recommendation-list v-if="user" :inspected-user="user" />
+        <br>
+        <h4 v-if="user">
+            Latest results
+        </h4>
+        <StatsList v-if="user" :user="user" />
+        {{ userdata }}
+    </div>
+</template>
+
+<script>
+    import { mapState } from 'vuex'
+    import StatsList from '../components/StatsList'
+    import userService from '../services/user-service.js'
+    import SelfUserData from '../components/SelfUserData'
+    import RecommendationList from '../components/RecommendationList'
+
+    export default {
+        name: 'Profile',
+        layout: 'index',
+        components: {
+            SelfUserData,
+            StatsList,
+            RecommendationList
+        },
+        props: [
+            // 'user',
+            // 'token'
+        ],
+        data () {
+            return {
+                username: this.username,
+                password: this.password,
+                firstname: this.firstname,
+                stayLoggedIn: this.stayLoggedIn
+            }
+        },
+        computed: mapState(['user', 'token', 'nightmode', 'zenmode', 'darktheme', 'lighttheme', 'search']),
+        methods: {
+            signIn () {
+                userService.logIn(this.username, this.password).then((data) => {
+                    if (data.user && data.token) {
+                        if (this.stayLoggedIn) {
+                            this.$cookies.set('id', data.user.id, '7d')
+                            this.$cookies.set('token', data.token, '7d')
+                        } else {
+                            this.$cookies.set('id', data.user.id, '1m')
+                            this.$cookies.set('token', data.token, '1m')
+                        }
+
+                        this.firstname = data.user.firstname
+                        this.$refs['login-modal'].show()
+                    }
+                }).catch((error) => {
+                    this.$bvToast.toast(error.response.statusText, {
+                        title: Error,
+                        toaster: 'b-toaster-top-center'
+                    })
+                })
+            },
+            signOut () {
+                this.$bvModal.msgBoxConfirm('Are you sure you want to sign out?', {
+                    title: 'Signing Out',
+                    size: 'sm',
+                    buttonSize: 'sm',
+                    okVariant: 'danger',
+                    okTitle: 'Yes please',
+                    cancelTitle: 'No',
+                    footerClass: 'p-2',
+                    hideHeaderClose: false,
+                    centered: true
+                }).then((value) => {
+                    if (value) {
+                        this.$cookies.remove('token')
+                        this.$cookies.remove('id')
+                        this.$bvToast.toast('Stay safe and see you soon! You will be redirected in 5 seconds', {
+                            title: 'Bye bye',
+                            toaster: 'b-toaster-top-center'
+                        })
+                        setTimeout(() => {
+                            this.$router.go()
+                        }, 5000)
+                    }
+                })
+            },
+            hello () {
+                this.$router.go()
+            },
+            deleteAccount () {
+                this.$bvModal.msgBoxConfirm('Are you sure you want to delete your account? This action is irreversible.', {
+                    title: 'Account Deletion',
+                    size: 'sm',
+                    buttonSize: 'sm',
+                    okVariant: 'danger',
+                    okTitle: 'Yes',
+                    cancelTitle: 'No, thank you',
+                    cancelVariant: 'success',
+                    footerClass: 'p-2',
+                    hideHeaderClose: false,
+                    centered: true,
+                    headerBgVariant: 'danger',
+                    headerTextVariant: 'light'
+                }).then((result) => {
+                    if (result) {
+                        userService.deleteUser(this.user._id, this.token).then(() => {
+                            this.$bvToast.toast('Stay safe and see you soon! You will be redirected in 5 seconds', {
+                                title: 'Bye bye',
+                                toaster: 'b-toaster-top-center'
+                            })
+                            setTimeout(() => {
+                                this.$router.go()
+                            }, 5000)
+                        })
+                    }
+                })
+            }
+        }
+    }
+</script>
+
+<style scoped>
+
+    #accountInfo {
+        margin-bottom: 1rem;
+    }
+
+    #signedIn {
+        margin-bottom: 1rem;
+    }
+
+    #notSignedIn {
+        max-width: 75%;
+        margin: auto;
+        text-align: center;
+    }
+
+    #selfUserDataCard {
+        margin-left: 0;
+        width: 100%;
+        margin-right: 0;
+    }
+
+    #login-form {
+        margin: auto;
+    }
+
+    #login-form-card {
+        width: 50%;
+        margin: auto;
+    }
+</style>
