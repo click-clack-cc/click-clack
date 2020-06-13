@@ -12,19 +12,20 @@
             ok-only
             size="xl"
             title="Theme preview"
-
             @hidden="reset"
             @ok="reset"
+            v-if='previewSelection'
         >
             <ThemePreview
-                :theme="this.previewSelection"
+
+                :theme="previewSelection"
                 style="margin: 5rem"
             />
         </b-modal>
         <b-row>
             <b-col v-for="(theme, index) in themes" :id="`preview_${theme.name}`" :key="index" cols="6">
                 <b-card
-                    :title="`\&quot;${theme.name}\&quot;`"
+                    :title='`"${theme.name}\"`'
                     footer-tag="footer"
                     style="margin-bottom: 2rem; height: 26rem"
                 >
@@ -57,7 +58,7 @@
                             <b-icon v-else icon="unlock" style="margin-right: 1rem" variant="primary" />
                             <b-button
                                 :disabled="isEnabled(theme.name)"
-                                :variant="currentLightTheme!==theme.name?&quot;outline-primary&quot;:&quot;primary&quot;"
+                                :variant="currentLightTheme!==theme.name?'outline-primary':'primary'"
                                 href="#"
                                 style="margin-right: 1rem"
                                 @click="setLightTheme(theme.name)"
@@ -67,7 +68,7 @@
                             </b-button>
                             <b-button
                                 :disabled="isEnabled(theme.name)"
-                                :variant="currentDarkTheme!==theme.name?&quot;outline-primary&quot;:&quot;primary&quot;"
+                                :variant="currentDarkTheme!==theme.name?'outline-primary':'primary'"
                                 href="#"
                                 style="margin-right: 1rem"
                                 @click="setDarkTheme(theme.name)"
@@ -166,7 +167,9 @@
                         category: '❤️ Supporter only'
                     }
                 ],
-                previewSelection: this.previewSelection
+                previewSelection: this.previewSelection,
+                currentLightTheme: 'light',
+                currentDarkTheme: 'dark'
             }
         },
         computed: mapState(['user', 'token', 'nightmode', 'zenmode', 'darktheme', 'lighttheme', 'search']),
@@ -208,9 +211,12 @@
                 this.$router.go()
             },
             previewTheme (theme) {
-                this.previewSelection = theme
-                this.$bvModal.show('theme-preview-modal')
-                // this.$router.go()
+                this.$nextTick(() => {
+                    this.previewSelection = theme
+                    this.$nextTick(() => {
+                        this.$bvModal.show('theme-preview-modal')
+                    })
+                })
             },
             reset () {
                 this.$router.go()
@@ -241,6 +247,48 @@
                 } else if (theme === 'iced-mocha') {
                     return !['supporter', 'developer', 'admin'].includes(this.user.role)
                 }
+            }
+        },
+        head () {
+            const description = 'Sign up to Click-Clack and check out the newest and nicest custom mechanical keyboard builds.'
+            const title = 'Click-Clack - Settings'
+            const image = 'https://click-clack.cc:5000/files/images/indeximage.jpg'
+            const url = 'https://click-clack.cc/settings'
+            return {
+                title,
+                htmlAttrs: {
+                    lang: 'en'
+                },
+                meta: [
+                    { charset: 'utf-8' },
+                    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+
+                    { name: 'title', property: 'title', hid: 'title', content: title },
+                    { name: 'og:title', property: 'og:title', hid: 'og:title', content: title },
+                    { name: 'twitter:title', property: 'twitter:title', hid: 'twitter:title', content: title },
+
+                    { name: 'description', property: 'description', hid: 'description', content: description },
+                    { name: 'og:description', property: 'og:description', hid: 'og:description', content: description },
+                    {
+                        name: 'twitter:description',
+                        property: 'twitter:description',
+                        hid: 'twitter:description',
+                        content: description
+                    },
+
+                    { name: 'twitter:image', hid: 'twitter:image', property: 'twitter:image', content: image },
+                    { name: 'og:image', hid: 'og:image', property: 'og:image', content: image },
+                    { name: 'image', hid: 'image', property: 'image', content: image },
+
+                    { name: 'og:site_name', property: 'og:site_name', hid: 'og:site_name', content: 'click-clack' },
+                    { name: 'og:type', property: 'og:type', hid: 'og:type', content: 'website' },
+                    {
+                        name: 'og:url',
+                        property: 'og:url',
+                        hid: 'og:url',
+                        content: url
+                    }
+                ]
             }
         }
     }

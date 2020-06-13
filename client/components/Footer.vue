@@ -24,7 +24,7 @@
                     </p>
 
                     <p id="version">
-                        Beta v0.9.1 b024112062020 <br>
+                        Beta v0.9.2 b201212062020 <br>
                     </p>
                 </div>
             </b-col>

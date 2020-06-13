@@ -1,6 +1,101 @@
 <template>
     <div id="container">
+        <b-modal
+            :id="`keeb-edit-modal${keeb._id}`"
+            :ref="`keeb-edit-modal${keeb._id}`"
+            centered
+            title="Edit keyboard"
+            @ok="handleKeebOk"
+        >
+            <b-overlay :show="uploading" blur="0.2rem" opacity="1" variant="transparent">
+                <form ref="form" @submit.stop.prevent="handleKeebSubmit">
+                    <b-form @submit="handleKeebOk">
+                        <b-form-group label="Build title">
+                            <b-form-input
+                                v-model="editKeyboard.name"
+                                disabled
+                                placeholder="Enter name of this build"
+                            />
+                        </b-form-group>
+                        <b-form-group label="Description">
+                            <b-form-textarea
+                                v-model="editKeyboard.description"
+                                max-rows="4"
+                                placeholder="What makes your build special?"
+                                required
+                                rows="2"
+                            />
+                        </b-form-group>
+                        <b-form-group label="Layout">
+                            <b-form-select
+                                v-model="editKeyboard.layout"
+                                :options="[{value: null, text: 'Please select a layout'}, 'sub 40', '40', '50', '60', '65', '75', '87', '1800', 'Full', 'Battlecruiser', 'Battleship', 'Other']"
+                                required
+                            />
+                        </b-form-group>
+                        <b-form-group label="Switches">
+                            <b-form-input
+                                v-model="editKeyboard.switches"
+                                placeholder="Enter switch type/model"
+                                required
+                            />
+                        </b-form-group>
+                        <b-form-group label="Keycap set">
+                            <b-form-input
+                                v-model="editKeyboard.keycaps"
+                                placeholder="Enter keycap set name"
+                                required
+                            />
+                        </b-form-group>
+                        <b-form-group label="Case">
+                            <b-form-input
+                                v-model="editKeyboard.case"
+                                placeholder="Enter case name"
+                                required
+                            />
+                        </b-form-group>
+                        <b-form-group label="PCB">
+                            <b-form-input
+                                v-model="editKeyboard.pcb"
+                                placeholder="Enter PCB type"
+                                required
+                            />
+                        </b-form-group>
+                        <b-form-group label="Photos">
+                            <b-form-file
+                                v-model="photos"
+                                accept=".jpg, .jpeg, .png"
+                                multiple
+                            >
+                                <template slot="file-name" slot-scope="{ names }">
+                                    <b-badge variant="dark">
+                                        {{ names[0] }}
+                                    </b-badge>
+                                    <b-badge v-if="names.length > 1" class="ml-1" variant="dark">
+                                        + {{ names.length - 1 }} More files
+                                    </b-badge>
+                                </template>
+                            </b-form-file>
+                        </b-form-group>
+                        <div v-for="(img, index) in keeb.images" :key="index" align="right">
+                            <b-img
+                                :src="`https://click-clack.cc:5000/files/images/${img}`"
+                                style="width: 100%"
+                            />
+                            <b-button
+                                style="width: 3rem; margin-top: -4rem; margin-right: 1rem; margin-bottom: 1rem"
+                                variant="danger"
+                                @click="removeKeyboardImage(index)"
+                            >
+                                <b-icon icon="trash" />
+                            </b-button>
+                        </div>
+                    </b-form>
+                </form>
+            </b-overlay>
+        </b-modal>
         <b-card
+            id="card"
             footer-tag="footer"
             header-tag="header"
             no-body
@@ -15,101 +110,6 @@
                             <span class="text-muted"> @{{ owner.id }} </span></a>
                     </div>
                     <div v-if="showEdit === true" id="keeb-edit-button">
-                        <b-modal
-                            :id="`keeb-edit-modal${keeb._id}`"
-                            :ref="`keeb-edit-modal${keeb._id}`"
-                            centered
-                            title="Edit keyboard"
-                            @ok="handleKeebOk"
-                        >
-                            <b-overlay :show="uploading" blur="0.2rem" opacity="1" variant="transparent">
-                                <form ref="form" @submit.stop.prevent="handleKeebSubmit">
-                                    <b-form @submit="handleKeebOk">
-                                        <b-form-group label="Build title">
-                                            <b-form-input
-                                                v-model="editKeyboard.name"
-                                                disabled
-                                                placeholder="Enter name of this build"
-                                            />
-                                        </b-form-group>
-                                        <b-form-group label="Description">
-                                            <b-form-textarea
-                                                v-model="editKeyboard.description"
-                                                max-rows="4"
-                                                placeholder="What makes your build special?"
-                                                required
-                                                rows="2"
-                                            />
-                                        </b-form-group>
-                                        <b-form-group label="Layout">
-                                            <b-form-select
-                                                v-model="editKeyboard.layout"
-                                                :options="[{value: null, text: 'Please select a layout'}, 'sub 40', '40', '50', '60', '65', '75', '87', '1800', 'Full', 'Battlecruiser', 'Battleship', 'Other']"
-                                                required
-                                            />
-                                        </b-form-group>
-                                        <b-form-group label="Switches">
-                                            <b-form-input
-                                                v-model="editKeyboard.switches"
-                                                placeholder="Enter switch type/model"
-                                                required
-                                            />
-                                        </b-form-group>
-                                        <b-form-group label="Keycap set">
-                                            <b-form-input
-                                                v-model="editKeyboard.keycaps"
-                                                placeholder="Enter keycap set name"
-                                                required
-                                            />
-                                        </b-form-group>
-                                        <b-form-group label="Case">
-                                            <b-form-input
-                                                v-model="editKeyboard.case"
-                                                placeholder="Enter case name"
-                                                required
-                                            />
-                                        </b-form-group>
-                                        <b-form-group label="PCB">
-                                            <b-form-input
-                                                v-model="editKeyboard.pcb"
-                                                placeholder="Enter PCB type"
-                                                required
-                                            />
-                                        </b-form-group>
-                                        <b-form-group label="Photos">
-                                            <b-form-file
-                                                v-model="photos"
-                                                accept=".jpg, .jpeg, .png"
-                                                multiple
-                                            >
-                                                <template slot="file-name" slot-scope="{ names }">
-                                                    <b-badge variant="dark">
-                                                        {{ names[0] }}
-                                                    </b-badge>
-                                                    <b-badge v-if="names.length > 1" class="ml-1" variant="dark">
-                                                        + {{ names.length - 1 }} More files
-                                                    </b-badge>
-                                                </template>
-                                            </b-form-file>
-                                        </b-form-group>
-                                        <div v-for="(img, index) in keeb.images" :key="index" align="right">
-                                            <b-img
-                                                :src="`https://click-clack.cc:5000/files/images/${img}`"
-                                                style="width: 100%"
-                                            />
-                                            <b-button
-                                                style="width: 3rem; margin-top: -4rem; margin-right: 1rem; margin-bottom: 1rem"
-                                                variant="danger"
-                                                @click="removeKeyboardImage(index)"
-                                            >
-                                                <b-icon icon="trash" />
-                                            </b-button>
-                                        </div>
-                                    </b-form>
-                                </form>
-                            </b-overlay>
-                        </b-modal>
-
                         <b-button
                             size="sm"
                             style="margin-left: 1rem; margin-right: 1rem"
@@ -134,71 +134,62 @@
                     </b-col>
                 </b-row>
             </template>
+            <b-carousel
+                v-if="keeb.images.length > 0"
+                id="carousel"
+                v-model="keeb.slide"
+                :interval="999999"
+                background="#ababab"
+                controls
+                img-height="480"
+                img-width="1024"
+            >
+                <b-carousel-slide
+                    v-for="(img, index) in keeb.images"
+                    :key="index"
+                    :img-src="`https://click-clack.cc:5000/files/images/${img}`"
+                />
+            </b-carousel>
             <b-row>
-                <b-col class="keeb-info">
-                    {{ truncate(keeb.description,350,true) }}
-                    <div style="position: absolute; bottom: 2rem; left: 1rem">
-                        <span v-if="keeb.images.length > 0">
-            <span style="font-weight: bold; margin-right: 1rem">
-              Switches
-            </span>
-            {{ keeb.switches }} <br>
-            <span style="font-weight: bold; margin-right: 1rem">
-              Keycaps
-            </span>
-            {{ keeb.keycaps }} <br>
-            <span style="font-weight: bold; margin-right: 1rem">
-              PCB
-            </span>
-            {{ keeb.pcb }} <br>
-            <span style="font-weight: bold; margin-right: 1rem">
-              Case
-            </span>
-            {{ keeb.case }} <br></span>
+                <b-col no-gutters>
+                    <div id="no-img-parts-list-container">
+                        <b-col class="keeb-info">
+                            {{ truncate(keeb.description,350,true) }}
+                            <br>
+                            <br>
+                            <div style="">
+                                    <span style="font-weight: bold; margin-right: 1rem">
+                                      Switches
+                                    </span>
+                                    {{ keeb.switches }} <br>
+                                    <span style="font-weight: bold; margin-right: 1rem">
+                                      Keycaps
+                                    </span>
+                                    {{ keeb.keycaps }} <br>
+                                    <span style="font-weight: bold; margin-right: 1rem">
+                                      PCB
+                                    </span>
+                                    {{ keeb.pcb }} <br>
+                                    <span style="font-weight: bold; margin-right: 1rem">
+                                      Case
+                                    </span>
+                                    {{ keeb.case }} <br>
+                            </div>
+                            <br>
+                            <div style="">
+                                <b-icon
+                                    v-if="!hearted"
+                                    icon="heart"
+                                    style="cursor:pointer;"
+                                    @click="toggleHeart(keeb)"
+                                />
+                                <b-icon v-else icon="heart-fill" variant="primary" />
+                                {{ ' ' + keeb.hearts?keeb.hearts.length:0 }}
+                                <b-icon icon="chat-square" style="margin-left: 1rem" />
+                                {{ ' ' + keeb.comments?keeb.comments.length:0 }}
+                            </div>
+                        </b-col>
                     </div>
-                </b-col>
-                <div style="position:absolute; bottom: 0.7rem; left: 1rem">
-                    <b-icon v-if="!hearted" icon="heart" style="cursor:pointer;" @click="toggleHeart(keeb)" />
-                    <b-icon v-else icon="heart-fill" variant="primary" />
-                    {{ ' ' + keeb.hearts?keeb.hearts.length:0 }}
-                    <b-icon icon="chat-square" style="margin-left: 1rem" />
-                    {{ ' ' + keeb.comments?keeb.comments.length:0 }}
-                </div>
-                <b-col cols="6" no-gutters>
-                    <div v-if="keeb.images.length === 0" id="no-img-parts-list-container">
-            <span style="font-weight: bold; margin-right: 1rem">
-              Switches
-            </span>
-                        {{ keeb.switches }} <br>
-                        <span style="font-weight: bold; margin-right: 1rem">
-              Keycaps
-            </span>
-                        {{ keeb.keycaps }} <br>
-                        <span style="font-weight: bold; margin-right: 1rem">
-              Pcb
-            </span>
-                        {{ keeb.pcb }} <br>
-                        <span style="font-weight: bold; margin-right: 1rem">
-              Case
-            </span>
-                        {{ keeb.case }} <br><br>
-                    </div>
-                    <b-carousel
-                        v-if="keeb.images.length > 0"
-                        id="carousel-1"
-                        v-model="keeb.slide"
-                        :interval="999999"
-                        background="#ababab"
-                        controls
-                        img-height="480"
-                        img-width="1024"
-                    >
-                        <b-carousel-slide
-                            v-for="(img, index) in keeb.images"
-                            :key="index"
-                            :img-src="`https://click-clack.cc:5000/files/images/${img}`"
-                        />
-                    </b-carousel>
                 </b-col>
             </b-row>
         </b-card>
@@ -442,6 +433,10 @@
 
 <style scoped>
 
+    #card {
+        /*min-height: 25rem;*/
+    }
+
     .name {
         margin-left: 1.2rem;
         margin-top: 0.5rem;
@@ -456,11 +451,18 @@
     }
 
     .keeb-info {
-        margin: 1rem;
+        margin: 0rem;
     }
 
     #container {
         margin-top: 1rem;
+    }
+
+    #carousel {
+        margin: auto;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        max-width: 40rem;
     }
 
     #no-img-parts-list-container {
@@ -468,7 +470,6 @@
     }
 
     #keebtitle {
-
         margin: 0.5rem;
         margin-top: 0;
         margin-bottom: 0;

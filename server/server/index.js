@@ -47,12 +47,12 @@ async function generateSitemap() {
         '/': {
             lastmod: '2020-06-12',
             changefreq: 'always',
-            priority: 0.5,
+            priority: 1.0,
         },
-        '/showroom': {
+        '/typing': {
             lastmod: '2020-06-12',
             changefreq: 'daily',
-            priority: 1.0,
+            priority: 0.5,
         },
         '/community': {
             lastmod: '2020-06-12',

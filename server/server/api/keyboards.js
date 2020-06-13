@@ -69,7 +69,7 @@ router.get('/new', async (req, res) => {
                 createdAt: true,
                 comments: true,
                 hearts: true,
-                userdata:  {
+                userdata: {
                     id: true,
                     firstname: true
                 },
@@ -81,11 +81,163 @@ router.get('/new', async (req, res) => {
 
         }
     ]).limit(100)
-        .sort({createdAt:-1})
+        .sort({createdAt: -1})
         .toArray();
     res.send(response);
 });
 
+router.get('/best', async (req, res) => {
+    let response = await result.aggregate([{
+        $addFields: {
+            "owner": {$toObjectId: '$owner'}
+        }
+    },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'owner',
+                foreignField: '_id',
+                as: 'userdata'
+            }
+        },
+        {
+            $project: {
+                _id: true,
+                owner: true,
+                name: true,
+                description: true,
+                layout: true,
+                switches: true,
+                keycaps: true,
+                pcb: true,
+                case: true,
+                images: true,
+                lastModified: true,
+                createdAt: true,
+                comments: true,
+                hearts: true,
+                userdata: {
+                    id: true,
+                    firstname: true
+                },
+                heartsNum: {"$size": "$hearts"}
+            }
+        },
+        {
+            $unwind:
+                "$userdata"
+
+        }
+    ]).limit(100)
+        .sort({heartsNum: -1})
+        .toArray();
+    res.send(response);
+});
+
+router.get('/best', async (req, res) => {
+    let response = await result.aggregate([{
+        $addFields: {
+            "owner": {$toObjectId: '$owner'}
+        }
+    },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'owner',
+                foreignField: '_id',
+                as: 'userdata'
+            }
+        },
+        {
+            $project: {
+                _id: true,
+                owner: true,
+                name: true,
+                description: true,
+                layout: true,
+                switches: true,
+                keycaps: true,
+                pcb: true,
+                case: true,
+                images: true,
+                lastModified: true,
+                createdAt: true,
+                comments: true,
+                hearts: true,
+                userdata: {
+                    id: true,
+                    firstname: true
+                },
+                heartsNum: {"$size": "$hearts"}
+            }
+        },
+        {
+            $unwind:
+                "$userdata"
+
+        }
+    ]).limit(100)
+        .sort({heartsNum: -1})
+        .toArray();
+    res.send(response);
+});
+
+router.get('/rising', async (req, res) => {
+    let response = await result.aggregate([
+        {
+            $match:
+                {
+                    createdAt: {
+                        $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000)
+                    }
+                }
+        },
+        {
+            $addFields: {
+                "owner": {$toObjectId: '$owner'}
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'owner',
+                foreignField: '_id',
+                as: 'userdata'
+            }
+        },
+        {
+            $project: {
+                _id: true,
+                owner: true,
+                name: true,
+                description: true,
+                layout: true,
+                switches: true,
+                keycaps: true,
+                pcb: true,
+                case: true,
+                images: true,
+                lastModified: true,
+                createdAt: true,
+                comments: true,
+                hearts: true,
+                userdata: {
+                    id: true,
+                    firstname: true
+                },
+                heartsNum: {"$size": "$hearts"}
+            }
+        },
+        {
+            $unwind:
+                "$userdata"
+
+        }
+    ]).limit(100)
+        .sort({heartsNum: -1})
+        .toArray();
+    res.send(response);
+});
 
 router.get('/search/', async (req, res) => {
     if (!req.query.text) return;
@@ -151,8 +303,8 @@ router.post('/update', isLoggedIn, async (req, res) => {
 
 router.post('/delete', isLoggedIn, async (req, res) => {
     await result.deleteOne({
-            _id: req.body.keyboard
-        }).then(() => {
+        _id: req.body.keyboard
+    }).then(() => {
         res.status(201).send();
     }).catch(() => {
         res.statusMessage = 'Failed to update keyboard'

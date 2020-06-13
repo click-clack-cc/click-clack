@@ -34,7 +34,7 @@
                 'the newest custom mech keeb builds in the showroom'
             const title = 'Click-Clack - Typing Test and Mechanical Keyboard Showroom'
             const image = 'https://click-clack.cc:5000/files/images/indeximage.jpg'
-            const url = 'https://click-clack.cc/'
+            const url = 'https://click-clack.cc/typing'
             return {
                 title,
                 htmlAttrs: {

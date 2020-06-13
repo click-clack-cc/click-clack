@@ -6,7 +6,7 @@
             <br>
         </h4>
         <p>
-            Hello there
+            Hello there, what are you looking for?
         </p>
     </div>
 </template>
@@ -20,7 +20,7 @@
         props: [],
         head () {
             return {
-                title: 'test page'
+                title: 'Test page'
             }
         }
     }

@@ -26,10 +26,10 @@ class keyboardService {
         })
     }
 
-    static getNewKeyboards () {
+    static getNewKeyboards (method) {
         return new Promise((resolve, reject) => {
             try {
-                axios.get(url + '/new').then((res) => {
+                axios.get(url + `/${method}`).then((res) => {
                     const data = res.data
                     resolve(
                         data.map(keyboard => ({

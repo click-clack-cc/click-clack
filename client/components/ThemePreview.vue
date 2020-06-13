@@ -12,7 +12,7 @@
     export default {
         name: 'ThemePreview',
         components: {
-            Typer
+             Typer
         },
         props: [
             'theme'
@@ -29,8 +29,8 @@
                 }
             }
         },
-        async created () {
-            await import(`../bootstrap-themes/${this.theme}.css`)
+        created () {
+            import(`../bootstrap-themes/${this.theme}.css`)
         },
         methods: {}
     }

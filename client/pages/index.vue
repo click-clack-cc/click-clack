@@ -1,5 +1,28 @@
 <template>
     <div>
+        <b-button
+            variant="outline-primary"
+            style="margin-right: 1rem"
+            @click="sortBy('best')">
+            <b-icon v-if="sortMethod === 'best'" icon="star-fill" />
+            <b-icon v-else icon="star" />
+            Best
+        </b-button>
+        <b-button
+            variant="outline-primary"
+            style="margin-right: 1rem"
+            @click="sortBy('rising')">
+            <b-icon v-if="sortMethod === 'rising'" icon="brightness-alt-high-fill" />
+            <b-icon v-else icon="brightness-alt-high" />
+            Rising
+        </b-button>
+        <b-button
+            variant="outline-primary"
+            @click="sortBy('new')">
+            <b-icon v-if="sortMethod === 'new'" icon="egg-fill" />
+            <b-icon v-else icon="egg" />
+            New
+        </b-button>
         <div v-if="keyboards">
             <KeyboardSmall
                 v-for="(keeb, index) in keyboards"
@@ -31,22 +54,32 @@
         props: [],
         data () {
             return {
-                keyboards: null
+                keyboards: null,
+                sortMethod: 'best'
             }
         },
         computed: mapState(['user', 'token', 'nightmode', 'zenmode', 'darktheme', 'lighttheme', 'search']),
         created () {
-            keyboardService.getNewKeyboards().then((keebs) => {
+            keyboardService.getNewKeyboards(this.sortMethod).then((keebs) => {
                 this.keyboards = keebs
                 this.loaded = true
             })
         },
-        methods: {},
+        methods: {
+            sortBy (method) {
+                this.sortMethod = method
+                this.loaded = false
+                keyboardService.getNewKeyboards(this.sortMethod).then((keebs) => {
+                    this.keyboards = keebs
+                    this.loaded = true
+                })
+            }
+        },
         head () {
             const description = ' Newest custom mechanical keyboard builds on click-clack. Check out the nicest custom mech keebs uploaded by our members!'
-            const title = 'Showroom - Newest Mechanical Keyboard Builds'
-            const image = 'https://click-clack.cc:5000/files/images/indeximage.jpg'
-            const url = 'https://click-clack.cc/showroom'
+            const title = 'Click-Clack - Newest Mechanical Keyboard Builds'
+            const image = 'https://click-clack.cc:5000/files/images/indeximage.JPG'
+            const url = 'https://click-clack.cc/'
             return {
                 title,
                 htmlAttrs: {
@@ -100,7 +133,7 @@
         background-position: center center;
     }
 
-    .keyboardcard-text {
+    .keyboardcard-title {
         margin: 1rem;
         margin-bottom: 0rem;
     }

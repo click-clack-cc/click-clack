@@ -111,17 +111,16 @@
     }
 
     #header-inside {
-        margin-bottom: -0.4rem;
+        margin-top: -1rem;
+        margin-bottom: -1rem;
     }
 
     #title {
         font-size: 1.6rem;
-        line-height: 0.9;
-        /*position: absolute;*/
+        line-height: 1.6;
         margin-left: 1rem;
-        /*color: #ff7700;*/
-        /*color: #000;*/
-        /*top: 1rem;*/
+        margin-top: 1rem;
+        margin: 0.5rem;
     }
 
     #beta {
@@ -134,7 +133,9 @@
     }
 
     #nav {
-        margin-top: -0.5rem;
+        width: 100%;
+        margin: 0.5rem;
+        margin-top: 0.45rem;
     }
 
     .active {
@@ -142,8 +143,9 @@
     }
 
     #search {
-        margin-top: -0.4rem;
+        margin: 0.5rem;
         height: 2.1rem;
+        margin-top: 0.55rem;
         width: 100%;
     }
 </style>
