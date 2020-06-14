@@ -227,6 +227,12 @@
                 handler () {
                     this.checkIsHearted()
                 }
+            },
+            keeb: {
+                immediate: true,
+                handler () {
+                    this.checkIsHearted()
+                }
             }
         },
         created () {
@@ -413,9 +419,11 @@
                     for (let i = 0; i < this.keeb.hearts.length; i++) {
                         if (this.keeb.hearts[i].submitter === this.user._id) {
                             this.hearted = true
+                            return;
                         }
                     }
                 }
+                this.hearted = false;
             },
             truncate (str, n, useWordBoundary) {
                 if (str.length <= n) {
