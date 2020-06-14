@@ -1,36 +1,17 @@
-import axios from 'axios'
+import { http } from "./index";
 
-const keyboardsurl = 'https://click-clack.cc:5000/api/keyboards/search'
-const usersurl = 'https://click-clack.cc:5000/api/users/search'
+const keyboardsurl = '/keyboards/search'
+const usersurl = '/users/search'
 
 class searchService {
-    static search (searchtext) {
-        if (searchtext.length < 1) {
-            return
-        }
-        return new Promise((resolve, reject) => {
-            try {
-                axios.all([
-                    axios.get(usersurl, {
-                        params: {
-                            text: searchtext
-                        }
-                    }),
-                    axios.get(keyboardsurl, {
-                        params: {
-                            text: searchtext
-                        }
-                    })
-                ]).then(axios.spread((userRes, keyboardRes) => {
-                    resolve({
-                        users: userRes.data,
-                        keyboards: keyboardRes.data
-                    })
-                }))
-            } catch (e) {
-                reject(e)
-            }
-        })
+    static async search (searchtext) {
+      if (searchtext.length < 1) return; // Could be moved to the component or backend validation?
+
+      const usersReq = http.get(usersurl, { params: { text: searchtext }});
+      const keyboardsReq = http.get(keyboardsurl, { params: { text: searchtext }});
+  
+      const [ { data: usersRes }, { data: keyboardsRes } ] = await Promise.all([ usersReq, keyboardsReq ]); // Retrieves the 'data' property of the Promise.all array
+      return { usersRes, keyboardsRes };
     }
 }
 

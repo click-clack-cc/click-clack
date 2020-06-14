@@ -1,56 +1,24 @@
-import axios from 'axios'
+import { http } from "./index";
 
-const url = 'https://click-clack.cc:5000/api/stats/'
+const url = '/stats'
 
 class statService {
-    static getStats (id) {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.get(url, {
-                    params: {
-                        id
-                    }
-                }).then((res) => {
-                    const data = res.data
-                    resolve(
-                        data.map(stat => ({
-                            ...stat,
-                            createdAt: new Date(stat.createdAt)
-                        }))
-                    )
-                })
-            } catch (e) {
-                reject(e)
-            }
-        })
+    static async getStats (id) {
+      const { data } = await http.get(url, { params: { id } });
+      return data.map(stat => ({ ...stat, createdAt: new Date(stat.createdAt) }));
     }
 
-    static getTop () {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.get(url + 'leaderboard').then((res) => {
-                    const data = res.data
-                    resolve(
-                        data
-                    )
-                })
-            } catch (e) {
-                reject(e)
-            }
-        })
+    static async getTop () {
+      const { data } = await http.get(`${url}/leaderboard`);
+      return data;
     }
 
     static insertStat (id, stat, token) {
-        return axios.post(url,
-            {
-                id,
-                stat
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        )
+      return http.post(url, { id, stat }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
     }
 }
 
