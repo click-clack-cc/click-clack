@@ -35,15 +35,10 @@
             RecommendationList
         },
         props: [],
-        async asyncData ({ params }) {
-            return await userService.getUser(params.id).then(async (u) => {
-                await keyboardService.getKeyboards(u._id).then((keebs) => {
-                    u.keyboards = keebs
-                })
-                return {
-                    inspectedUser: u
-                }
-            })
+        async asyncData({params}) {
+            const u = await userService.getUser(params.id)
+            u.keyboards = await keyboardService.getKeyboards(u._id)
+            return { inspectedUser: u }
         },
         data () {
             return {

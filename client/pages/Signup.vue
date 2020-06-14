@@ -73,32 +73,40 @@
                     </b-col>
                 </b-row>
 
-                <b-form-group
-                    description="Size matters - please make it long"
-                    label="Password"
-                    label-for="input"
-                >
-                    <b-form-input
-                        id="input"
-                        v-model="password"
-                        placeholder="Password"
-                        required
-                        type="password"
-                    />
-                </b-form-group>
+                <b-row>
+                    <b-col>
+                        <b-form-group
+                            description="Size matters - please make it long"
+                            label="Password"
+                            label-for="input"
+                        >
+                            <b-form-input
+                                id="input"
+                                v-model="password"
+                                placeholder="Password"
+                                required
+                                type="password"
+                            />
+                        </b-form-group>
 
-                <b-form-group
-                    label="Confirm Password"
-                    label-for="input"
-                >
-                    <b-form-input
-                        id="input"
-                        v-model="passwordconfirm"
-                        placeholder="Password"
-                        required
-                        type="password"
-                    />
-                </b-form-group>
+                    </b-col>
+                    <b-col>
+                        <b-form-group
+                            label="Confirm Password"
+                            label-for="input"
+                        >
+                            <b-form-input
+                                id="input"
+                                v-model="passwordconfirm"
+                                placeholder="Password"
+                                required
+                                type="password"
+                            />
+                        </b-form-group>
+
+                    </b-col>
+                </b-row>
+
 
                 <b-form-group>
                     <b-form-checkbox-group id="checkbox">

@@ -1,35 +1,41 @@
 <template>
-    <div id="footer-container">
-        <div id="title" />
-
-        <b-row>
-            <b-col align="left">
-                <div id="subtitle">
-                    <p id="contact">
-                        Contact us at
-                        <a href="mailto:support@click-clack.cc">
-                            support@click-clack.cc</a><br>
-                    </p>
-
+    <b-row id="footer-container">
+        <b-col>
+            <b-row>
+                <b-col align="left">
+                    <div id="subtitle">
+                        <p id="contact">
+                            Need help? Contact us at
+                            <a href="mailto:support@click-clack.cc">
+                                support@click-clack.cc</a><br>
+                        </p>
+                        <p id="contact">
+                            Want to contribute? Message <a href='/u/daniel'>@daniel</a> at
+                            <a href="mailto:support@click-clack.cc">
+                                daniel.szabo@click-clack.cc</a><br>
+                        </p>
+                        <p id="madeinhungary">
+                            Click-clack beta v0.9.3 proudly made in Hungary<br>
+                        </p>
+                    </div>
+                </b-col>
+            </b-row>
+        </b-col>
+        <b-col>
+            <b-row>
+                <b-col align="right">
                     <p id="support">
-                        <a href="https://www.patreon.com/danielszabo">
-
-                            Support click-clack
-                            <b-icon icon="heart-fill" />
+                        <a href="https://www.patreon.com/clickclackcc">
+                            <b-button variant='outline-primary'>
+                                Support click-clack
+                                <b-icon style='margin-left: 0.5rem' icon="heart"/>
+                            </b-button>
                         </a><br>
                     </p>
-
-                    <p id="madeinhungary">
-                        Made in Hungary<br>
-                    </p>
-
-                    <p id="version">
-                        Beta v0.9.2 b201212062020 <br>
-                    </p>
-                </div>
-            </b-col>
-        </b-row>
-    </div>
+                </b-col>
+            </b-row>
+        </b-col>
+    </b-row>
 </template>
 
 <script>

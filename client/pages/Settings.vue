@@ -80,6 +80,12 @@
                                 <b-icon icon="eye" />
                                 Preview
                             </b-button>
+                            <a v-if="isEnabled(theme.name) && theme.category === '❤️ Supporter only'" href="https://www.patreon.com/clickclackcc">
+                                <b-button style='margin-top: 1rem' variant='outline-primary'>
+                                    Support click-clack
+                                    <b-icon style='margin-left: 0.5rem' icon="heart"/>
+                                </b-button>
+                            </a><br>
                         </div>
                     </template>
                 </b-card>
@@ -295,15 +301,5 @@
 </script>
 
 <style scoped>
-    /*#preview_light */
 
-    /*#preview_dark*/
-
-    /*#preview_espresso*/
-
-    /*#preview_blueberry-cappucino*/
-
-    /*#preview_mint-latte*/
-
-    /*#preview_americano*/
 </style>

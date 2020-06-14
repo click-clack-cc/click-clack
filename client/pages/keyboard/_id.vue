@@ -80,12 +80,7 @@
                         </b-row>
                         <br>
                         <b-row>
-                            <b-col>
-                                <p>
-                                    {{ this.keeb.description }}
-                                </p>
-                            </b-col>
-                            <b-col>
+                            <b-col style='margin-left: 1rem'>
                                 <p>
                                     <span style="font-weight: bold">Switches</span> {{ this.keeb.switches }}
                                 </p>
@@ -97,6 +92,11 @@
                                 </p>
                                 <p>
                                     <span style="font-weight: bold">PCB</span> {{ this.keeb.pcb }}
+                                </p>
+                            </b-col>
+                            <b-col>
+                                <p >
+                                    {{ this.keeb.description }}
                                 </p>
                             </b-col>
                         </b-row>

@@ -47,6 +47,11 @@
                             <b-icon v-b-tooltip.hover.bottom="`Keyboard Showroom`" icon="view-stacked" />
                         </nuxt-link>
                     </b-nav-item>
+<!--                    <b-nav-item>-->
+<!--                        <nuxt-link exact-active-class="active" to="/market">-->
+<!--                            <b-icon v-b-tooltip.hover.bottom="`Market`" icon="shop-window" />-->
+<!--                        </nuxt-link>-->
+<!--                    </b-nav-item>-->
                     <b-nav-item>
                         <nuxt-link exact-active-class="active" to="/community">
                             <b-icon v-b-tooltip.hover.bottom="`Community`" icon="people" />

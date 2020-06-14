@@ -12,7 +12,7 @@ const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}
 let result = null;
 connect().then((db) => {
     result = db;
-    console.log('users.js connected to test.users')
+    console.log('users.js connected to ' + process.env.DB_NAME + '.users')
 })
 
 
@@ -151,7 +151,7 @@ function validateUsername(id) {
 //     let valid = true;
 //     let allowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.@".split("");
 //     const re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-//     valid = re.test(email);
+//     valid = re.no(email);
 //     if (email.length < 5 || email.length > 16) {
 //         valid = false;
 //     }
@@ -304,7 +304,7 @@ async function connect() {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
-    return client.db('test').collection('users');
+    return client.db(process.env.DB_NAME).collection('users');
 }
 
 function isLoggedIn(req, res, next) {

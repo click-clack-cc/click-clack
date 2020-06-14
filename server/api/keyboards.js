@@ -9,7 +9,7 @@ const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}
 let result = null;
 connect().then((db) => {
     result = db;
-    console.log('keyboards.js connected to test.keyboards')
+    console.log('keyboards.js connected to ' + process.env.DB_NAME + '.keyboards')
 })
 
 router.get('/u', async (req, res) => {
@@ -82,54 +82,6 @@ router.get('/new', async (req, res) => {
         }
     ]).limit(100)
         .sort({createdAt: -1})
-        .toArray();
-    res.send(response);
-});
-
-router.get('/best', async (req, res) => {
-    let response = await result.aggregate([{
-        $addFields: {
-            "owner": {$toObjectId: '$owner'}
-        }
-    },
-        {
-            $lookup: {
-                from: 'users',
-                localField: 'owner',
-                foreignField: '_id',
-                as: 'userdata'
-            }
-        },
-        {
-            $project: {
-                _id: true,
-                owner: true,
-                name: true,
-                description: true,
-                layout: true,
-                switches: true,
-                keycaps: true,
-                pcb: true,
-                case: true,
-                images: true,
-                lastModified: true,
-                createdAt: true,
-                comments: true,
-                hearts: true,
-                userdata: {
-                    id: true,
-                    firstname: true
-                },
-                heartsNum: {"$size": "$hearts"}
-            }
-        },
-        {
-            $unwind:
-                "$userdata"
-
-        }
-    ]).limit(100)
-        .sort({heartsNum: -1})
         .toArray();
     res.send(response);
 });
@@ -390,7 +342,7 @@ async function connect() {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
-    return client.db('test').collection('keyboards');
+    return client.db(process.env.DB_NAME).collection('keyboards');
 }
 
 function isLoggedIn(req, res, next) {

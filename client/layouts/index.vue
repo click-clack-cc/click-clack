@@ -3,15 +3,58 @@
         <b-card
             v-show="loaded"
             id="container"
-            :class="{ zen: (zenmode && $nuxt.$route.name === 'index') }"
+            :class="{ zen: (zenmode && $nuxt.$route.name === 'Typing') }"
             border-variant="light"
             footer-tag="footer"
             header-tag="header"
         >
-            <template v-if="!(zenmode && $nuxt.$route.name === 'index')" id="header" v-slot:header>
+            <template v-if="!(zenmode && $nuxt.$route.name === 'Typing')" id="header" v-slot:header>
                 <Header :user="user" @event="eventHandler" />
             </template>
 
+            <b-modal
+                ref='welcome-modal'
+                id='welcome-modal'
+                size='lg'
+                title="Welcome to Click-Clack ❤️"
+                ok-only
+                centered
+                no-close-on-backdrop
+                hide-backdrop
+                no-close-on-esc
+                content-class="shadow"
+                ok-variant='outline-primary'
+                ok-title='Cool, thanks'
+                @hidden='welcomeModalClosed'
+            >
+<!--                <b-card-text>If you're new here, let us tell you what this website is.-->
+<!--                    Click-Clack is a platform tailored specifically for mechanical keyboard enthusiasts.-->
+<!--                    We offer a highly customizable typing test with the option to track your performance, a powerful-->
+<!--                    and neat keyboard gallery and several other community features so you can talk to fellow-->
+<!--                    clackers and show off or even sell your builds and services. <br><br>-->
+<!--                    You will find the navigation on the top right corner.<br> <b-icon v-b-tooltip.hover.bottom="`Typing Test`" icon="lightning" /> will take you-->
+<!--                    to the typing test,<br> <b-icon v-b-tooltip.hover.bottom="`Keyboard Showroom`" icon="view-stacked" /> will-->
+<!--                    redirect you to the showroom-->
+<!--                    <br> <b-icon v-b-tooltip.hover.bottom="`Market`" icon="shop-window" /> is the market where you can trade items and services,-->
+<!--                    <br> and <b-icon v-b-tooltip.hover.bottom="`Community`" icon="people" /> is-->
+<!--                    where you can hang out and talk to fellow Click-Clack members.<br><br>-->
+<!--                    Please also note that we are using basic cookies to save your settings and for google analytics.<br><br>-->
+<!--                    Now go and explore the website, have fun!-->
+<!--                </b-card-text>-->
+
+                <b-card-text>If you're new here, let us tell you what this website is.
+                    Click-Clack is a platform tailored specifically for mechanical keyboard enthusiasts.
+                    We offer a highly customizable typing test with the option to track your performance, a powerful
+                    and neat keyboard gallery and several other community features. <br><br>
+                    You will find the navigation on the top right corner.<br> <b-icon v-b-tooltip.hover.bottom="`Typing Test`" icon="lightning" /> will take you
+                    to the typing test,<br> <b-icon v-b-tooltip.hover.bottom="`Keyboard Showroom`" icon="view-stacked" /> will
+                    redirect you to the showroom
+                    <br> and <b-icon v-b-tooltip.hover.bottom="`Community`" icon="people" /> is
+                    where you can check out fellow Click-Clack members.<br><br>
+                    Please also note that we are using basic cookies to save your settings and for google analytics.<br><br>
+                    Now go and explore the website, have fun!
+                </b-card-text>
+            </b-modal>
             <nuxt
                 id="routerview"
                 :nightmode="nightmode"
@@ -22,7 +65,7 @@
             />
 
             <template
-                v-if="!(zenmode && $nuxt.$route.name === 'index')"
+                v-if="!(zenmode && $nuxt.$route.name === 'Typing')"
                 v-slot:footer
             >
                 <div id="footer">
@@ -116,6 +159,12 @@
                 this.$store.commit('updateNightmode', false)
             }
 
+            if (this.$cookies.get('welcomeDone') === 'true') {
+
+            } else {
+                this.$bvModal.show('welcome-modal')
+            }
+
             console.log(`
 ░█████╗░██╗░░░░░██╗░█████╗░██╗░░██╗░░░░░░░█████╗░██╗░░░░░░█████╗░░█████╗░██╗░░██╗
 ██╔══██╗██║░░░░░██║██╔══██╗██║░██╔╝░░░░░░██╔══██╗██║░░░░░██╔══██╗██╔══██╗██║░██╔╝
@@ -166,6 +215,9 @@
                     this.search = event.value
                     this.$router.push('/search')
                 }
+            },
+            welcomeModalClosed (){
+                this.$cookies.set('welcomeDone', true, '7d')
             }
         }
     }
@@ -177,6 +229,12 @@
         max-width: 1000px;
         margin: auto;
         margin-bottom: 6rem;
+    }
+
+    #welcome-mdal {
+        max-width: 1000px;
+        margin: auto;
+        margin-bottom: 1rem;
     }
 
     #header {
@@ -196,7 +254,7 @@
     }
 
     @media only screen and (max-width: 900px) {
-        body, #routerview, #header, #footer {
+        body, #welcome-mdal, #routerview, #header, #footer {
             max-width: unset;
         }
     }

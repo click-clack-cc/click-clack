@@ -12,7 +12,7 @@ const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}
 let result = null;
 connect().then((db) => {
     result = db;
-    console.log('announcements.js connected to test.announcements')
+    console.log('announcements.js connected to ' + process.env.DB_NAME + '.announcements')
 })
 
 router.get('/', async (req, res) => {
@@ -38,7 +38,7 @@ async function connect() {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
-    return client.db('test').collection('announcements');
+    return client.db(process.env.DB_NAME).collection('announcements');
 }
 
 module.exports = router;

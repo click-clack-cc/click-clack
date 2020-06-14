@@ -17,8 +17,6 @@
             Typer
         },
         props: [],
-        asyncData () {
-        },
         mounted () {
             this.$store.commit('updateZenmode', false)
         },

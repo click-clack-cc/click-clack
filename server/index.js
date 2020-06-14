@@ -23,12 +23,14 @@ const users = require('./api/users');
 const img = require('./api/img');
 const announcements = require('./api/announcements');
 const keyboards = require('./api/keyboards');
+const listings = require('./api/listings');
 const stats = require('./api/stats');
 
 app.use('/api/stats', stats);
 app.use('/api/users', users);
 app.use('/api/img', img);
 app.use('/api/announcements', announcements);
+app.use('/api/listings', listings);
 app.use('/api/keyboards', keyboards);
 
 const port = process.env.PORT;
@@ -66,7 +68,7 @@ async function generateSitemap() {
             useNewUrlParser: true,
             useUnifiedTopology: true
         }).then(async (connection) => {
-        let users = await connection.db('test').collection('users').find({}).project({id: true, _id: false}).toArray();
+        let users = await connection.db( process.env.DB_NAME).collection('users').find({}).project({id: true, _id: false}).toArray();
         for (let i = 0; i < users.length; i++) {
             map['/u/' + users[i].id] = ['get'];
             route['/u/' + users[i].id] = {
@@ -79,7 +81,7 @@ async function generateSitemap() {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             }).then(async (connection) => {
-            let keyboards = await connection.db('test').collection('keyboards').find({}).project({_id: true}).toArray();
+            let keyboards = await connection.db(process.env.DB_NAME).collection('keyboards').find({}).project({_id: true}).toArray();
             for (let i = 0; i < keyboards.length; i++) {
                 map['/keyboard/' + keyboards[i]._id] = ['get'];
                 route['/keyboard/' + keyboards[i]._id] = {

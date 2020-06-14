@@ -9,13 +9,13 @@ const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}
 let result = null;
 connect().then((db) => {
     result = db;
-    console.log('stats.js connected to test.stats')
+    console.log('stats.js connected to ' + process.env.DB_NAME + '.stats')
 })
 
 let users = null;
 connectUsers().then((db) => {
     users = db;
-    console.log('stats.js connected to test.users')
+    console.log('stats.js connected to ' + process.env.DB_NAME + '.users')
 })
 
 router.get('/', async (req, res) => {
@@ -190,7 +190,7 @@ async function connect() {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
-    return client.db('test').collection('stats');
+    return client.db(process.env.DB_NAME).collection('stats');
 }
 
 async function connectUsers() {
@@ -199,7 +199,7 @@ async function connectUsers() {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
-    return client.db('test').collection('users');
+    return client.db(process.env.DB_NAME).collection('users');
 }
 
 
