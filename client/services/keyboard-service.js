@@ -1,190 +1,76 @@
-import axios from 'axios'
+import { http } from "./index";
 
-const url = 'https://click-clack.cc:5000/api/keyboards/'
+const url = '/keyboards'
 
 class keyboardService {
-    static getKeyboards (user) {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.get(url + '/u', {
-                    params: {
-                        user
-                    }
-                }).then((res) => {
-                    const data = res.data
-                    resolve(
-                        data.map(keyboard => ({
-                            ...keyboard,
-                            createdAt: new Date(keyboard.createdAt),
-                            lastModified: new Date(keyboard.lastModified)
-                        }))
-                    )
-                })
-            } catch (e) {
-                reject(e)
-            }
-        })
+    static async getKeyboards (user) {
+      const { data } = await http.get(`${url}/u`, { params: { user }});
+      return data.map(keyboard => ({ ...keyboard, createdAt: new Date(keyboard.createdAt), lastModified: new Date(keyboard.lastModified) }));
     }
 
-    static getNewKeyboards (method) {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.get(url + `/${method}`).then((res) => {
-                    const data = res.data
-                    resolve(
-                        data.map(keyboard => ({
-                            ...keyboard,
-                            createdAt: new Date(keyboard.createdAt),
-                            lastModified: new Date(keyboard.lastModified)
-                        }))
-                    )
-                })
-            } catch (e) {
-                reject(e)
-            }
+    static async getNewKeyboards (method) {
+      const { data } = await http.get(`${url}/${method}`);
+      return data.map(keyboard => ({
+          ...keyboard,
+          createdAt: new Date(keyboard.createdAt),
+          lastModified: new Date(keyboard.lastModified)
         })
+      );
     }
 
-    static getKeyboard (id) {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.get(url + '/id', {
-                    params: {
-                        id
-                    }
-                }).then((res) => {
-                    const data = res.data[0]
-                    data.createdAt = new Date(data.createdAt)
-                    data.lastModified = new Date(data.lastModified)
-                    resolve(
-                        data
-                    )
-                })
-            } catch (e) {
-                reject(e)
-            }
-        })
+    static async getKeyboard (id) {
+      const { data: [keyboard] } = await http.get(`${url}/id`, { params: { id }});
+      return { ...keyboard, createdAt: new Date(keyboard.createdAt), lastModified: new Date(keyboard.lastModified) };
     }
 
-    static newKeyboard (id, keyboard, token) {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.post(url + '/',
-                    {
-                        id,
-                        keyboard
-                    }, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                ).then((res) => {
-                    const data = res.data[0]
-                    resolve(
-                        data
-                    )
-                })
-            } catch (e) {
-                reject(e)
-            }
-        })
+    static async newKeyboard (id, keyboard, token) {
+      const { data: [kb] } = await http.post(`${url}`, { id, keyboard }, { 
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      return kb;
     }
 
-    static updateKeyboard (id, keyboard, token) {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.post(url + '/update',
-                    {
-                        id,
-                        keyboard
-                    }, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                ).then((res) => {
-                    const data = res.data[0]
-                    resolve(
-                        data
-                    )
-                })
-            } catch (e) {
-                reject(e)
-            }
-        })
+    static async updateKeyboard (id, keyboard, token) {
+      const { data: [kb] } = await http.post(`${url}/update`, { id, keyboard }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      return kb;
     }
 
-    static deleteKeyboard (id, keyboard, token) {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.post(url + '/delete',
-                    {
-                        id,
-                        keyboard
-                    }, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                ).then((res) => {
-                    const data = res.data[0]
-                    resolve(
-                        data
-                    )
-                })
-            } catch (e) {
-                reject(e)
-            }
-        })
+    static async deleteKeyboard (id, keyboard, token) {
+      const { data: [kb] } = await http.post(`${url}/delete`, { id, keyboard }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      return kb;
     }
 
-    static comment (id, keyboard, text, token) {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.post(url + '/comment',
-                    {
-                        id,
-                        keyboard,
-                        text
-                    }, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                ).then((res) => {
-                    const data = res.data[0]
-                    resolve(
-                        data
-                    )
-                })
-            } catch (e) {
-                reject(e)
-            }
-        })
+    static async comment (id, keyboard, text, token) {
+      const { data: [kb] } = await http.post(`${url}/comment`, { id, keyboard, text }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      return kb;
     }
 
-    static heart (id, keyboard, token) {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.post(url + '/heart',
-                    {
-                        id,
-                        keyboard
-                    }, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                ).then((res) => {
-                    const data = res.data[0]
-                    resolve(
-                        data
-                    )
-                })
-            } catch (e) {
-                reject(e)
-            }
-        })
+    static async heart (id, keyboard, token) {
+      const { data: [kb] } = await http.post(`${url}/heart`, { id, keyboard }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      return kb;
     }
 }
 

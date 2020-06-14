@@ -1,24 +1,11 @@
-import axios from 'axios'
+import { http } from './index'
 
-const url = 'https://click-clack.cc:5000/api/announcements/'
+const url = '/announcements'
 
 class announcementService {
-    static getAnnouncements () {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.get(url, {}).then((res) => {
-                    const data = res.data
-                    resolve(
-                        data.map(announcement => ({
-                            ...announcement,
-                            createdAt: new Date(announcement.createdAt)
-                        }))
-                    )
-                })
-            } catch (e) {
-                reject(e)
-            }
-        })
+    static async getAnnouncements () {
+      const { data } = await http.get(url)
+      return data.map(announcement => ({ ...announcement, createdAt: new Date(announcement.createdAt) }))
     }
 }
 

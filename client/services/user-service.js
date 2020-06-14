@@ -1,231 +1,119 @@
-import axios from 'axios'
+import { http } from "./index";
 
-const url = 'https://click-clack.cc:5000/api/users/'
+const url = '/users/'
 
 class userService {
-    static logIn (username, password) {
-        return new Promise((resolve, reject) => {
-            axios.post(url + 'login', {
-                id: username,
-                password
-            }).then((res) => {
-                const data = res.data
-                data.createdAt = new Date(data.createdAt)
-                resolve(
-                    data
-                )
-            }).catch((error) => {
-                reject(error)
-            })
-        })
+    static async logIn (username, password) {
+      const { data } = await http.post(`${url}/login`, { id: username, password })
+      return { ...data, createdAt: new Date(data.createdAt) }
     }
 
-    static signUp (id, email, firstname, lastname, password) {
-        return new Promise((resolve, reject) => {
-            axios.post(url + 'register', {
-                id,
-                email,
-                firstname,
-                lastname,
-                password
-            }).then((res) => {
-                const data = res.data
-                resolve(
-                    data
-                )
-            }).catch((error) => {
-                reject(error)
-            })
-        })
+    static async signUp (id, email, firstname, lastname, password) {
+      const { data } = await http.post(`${url}/register`, {
+        id,
+        email,
+        firstname,
+        lastname,
+        password
+      })
+
+      return data;
     }
 
-    static getUser (id) {
-        return new Promise((resolve, reject) => {
-            axios.get(url, {
-                params: {
-                    id
-                }
-            }).then((res) => {
-                const data = res.data[0]
-                data.createdAt = new Date(data.createdAt)
-                resolve(
-                    data
-                )
-            }).catch((error) => {
-                reject(error)
-            })
-        })
+    static async getUser (id) {
+      const { data: [ user ] }  = await http.get(url, { params: { id }})
+      return { ...user, createdAt: new Date(user.createdAt) }
     }
 
-    static resolveId (id) {
-        return new Promise((resolve, reject) => {
-            axios.get(url + 'resolveid', {
-                params: {
-                    id
-                }
-            }).then((res) => {
-                const data = res.data[0]
-                data.createdAt = new Date(data.createdAt)
-                resolve(
-                    data
-                )
-            }).catch((error) => {
-                reject(error)
-            })
-        })
+    static async resolveId (id) {
+      const { data: [ user ] } = await http.get(`${url}/resolveid`, { params: { id }})
+      return { ...user, createdAt: new Date(user.createdAt) }
     }
 
-    static getNewUsers () {
-        return new Promise((resolve, reject) => {
-            axios.get(url + 'new', {}).then((res) => {
-                const data = res.data
-                resolve(
-                    data.map(user => ({
-                        ...user,
-                        createdAt: new Date(user.createdAt)
-                    }))
-                )
-            }).catch((error) => {
-                reject(error)
-            })
-        })
+    static async getNewUsers () {
+      const { data } = await http.get(`${url}/new`)
+      return data.map(user => ({ ...user, createdAt: new Date(user.createdAt)} ))
     }
 
-    static changeId (oldid, newid, token) {
-        return axios.post(url + 'id',
-            {
-                id: oldid,
-                newid
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        )
+    static async changeId (oldid, newid, token) {
+      return http.post(url + 'id', { id: oldid, newid }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
     }
 
-    static changeUserBio (id, bio, token) {
-        return axios.post(url + 'bio',
-            {
-                id,
-                bio
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        )
+    static async changeUserBio (id, bio, token) {
+      return http.post(url + 'bio', { id, bio }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
     }
 
-    static changeKeebs (id, keyboards, token) {
-        return axios.post(url + 'keebs',
-            {
-                id,
-                keebs: keyboards
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        )
+    static async changeKeebs (id, keyboards, token) {
+      return http.post(url + 'keebs', { id, keebs: keyboards }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
     }
 
-    static recommend (submitterid, recommendedid, recommendationtext, token) {
-        return new Promise((resolve, reject) => {
-            axios.post(url + 'recommend', {
-                id: submitterid,
-                user: recommendedid,
-                text: recommendationtext
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }).then((res) => {
-                const data = res.data
-                resolve(
-                    data
-                )
-            }).catch((error) => {
-                reject(error)
-            })
-        })
+    static async recommend (submitterid, recommendedid, recommendationtext, token) {
+      const { data } = await http.post(`${url}/recommend`, { 
+        id: submitterid,
+        user: recommendedid,
+        text: recommendationtext
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      return data;
     }
 
-    static report (submitterid, reportedid, reporttext, token) {
-        return new Promise((resolve, reject) => {
-            axios.post(url + 'report', {
-                id: submitterid,
-                user: reportedid,
-                text: reporttext
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }).then((res) => {
-                const data = res.data
-                resolve(
-                    data
-                )
-            }).catch((error) => {
-                reject(error)
-            })
-        })
+    static async report (submitterid, reportedid, reporttext, token) {
+      const { data } = await http.post(url + 'report', { 
+        id: submitterid,
+        user: reportedid,
+        text: reporttext
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      return data;
     }
 
     static deleteUser (id, token) {
-        return axios.post(url + '/delete',
-            {
-                id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        )
+      return http.post(url + '/delete', { id }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
     }
 
-    static validateUsername (publicUserName) {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.get(url + 'validateUsername', {
-                    params: {
-                        id: publicUserName
-                    }
-                }).then((res) => {
-                    resolve(
-                        res.data
-                    )
-                })
-            } catch (e) {
-                reject(e)
-            }
-        })
+    static async validateUsername (publicUserName) {
+      const { data } = await http.get(`${url}/validateUsername`, { params: { id: publicUserName }})
+      return data;
     }
 
     static changeLastname (id, lastname, token) {
-        return axios.post(url + 'lastname',
-            {
-                id,
-                lastname
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        )
+      return http.post(url + 'lastname', { id, lastname }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
     }
 
     static changeFirstname (id, firstname, token) {
-        return axios.post(url + 'firstname',
-            {
-                id,
-                firstname
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        )
+      return http.post(url + 'firstname', { id, firstname }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
     }
 }
 
