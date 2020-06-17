@@ -14,16 +14,17 @@ app.use(cors());
 
 console.log('PORT: ' + process.env.PORT)
 console.log('DB_USERNAME: ' + process.env.DB_USERNAME)
-console.log('DB_PASSWORD: ' + process.env.DB_PASSWORD)
+console.log('DB_PASSWORD: ' + process.env.DB_PASSWORD.length + " characters")
 console.log('DB_CONNECT_URL: ' + process.env.DB_CONNECT_URL)
 
-const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
+const uri = `${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
 
 const users = require('./api/users');
 const img = require('./api/img');
 const announcements = require('./api/announcements');
 const keyboards = require('./api/keyboards');
 const listings = require('./api/listings');
+const messages = require('./api/messages');
 const stats = require('./api/stats');
 
 app.use('/api/stats', stats);
@@ -31,6 +32,7 @@ app.use('/api/users', users);
 app.use('/api/img', img);
 app.use('/api/announcements', announcements);
 app.use('/api/listings', listings);
+app.use('/api/messages', messages);
 app.use('/api/keyboards', keyboards);
 
 const port = process.env.PORT;
@@ -47,17 +49,22 @@ async function generateSitemap() {
     }
     let route = {
         '/': {
-            lastmod: '2020-06-12',
+            lastmod: '2020-06-16',
             changefreq: 'always',
             priority: 1.0,
         },
+        '/market': {
+            lastmod: '2020-06-16',
+            changefreq: 'daily',
+            priority: 1.0,
+        },
         '/typing': {
-            lastmod: '2020-06-12',
+            lastmod: '2020-06-16',
             changefreq: 'daily',
             priority: 0.5,
         },
         '/community': {
-            lastmod: '2020-06-12',
+            lastmod: '2020-06-16',
             changefreq: 'daily',
             priority: 0.5,
         },
@@ -68,7 +75,10 @@ async function generateSitemap() {
             useNewUrlParser: true,
             useUnifiedTopology: true
         }).then(async (connection) => {
-        let users = await connection.db( process.env.DB_NAME).collection('users').find({}).project({id: true, _id: false}).toArray();
+        let users = await connection.db(process.env.DB_NAME).collection('users').find({}).project({
+            id: true,
+            _id: false
+        }).toArray();
         for (let i = 0; i < users.length; i++) {
             map['/u/' + users[i].id] = ['get'];
             route['/u/' + users[i].id] = {
@@ -89,17 +99,33 @@ async function generateSitemap() {
                     changefreq: 'daily'
                 }
             }
-            sitemap({
-                http: 'https',
-                url: 'click-clack.cc',
-                sitemap: 'public/sitemap.xml',
-                robots: 'public/robots.txt',
-                generate: app,
-                sitemapSubmission: '/sitemap.xml',
-                map: map,
-                route: route
-            }).toFile();
-            console.log('sitemap generated')
+
+            mongodb.MongoClient.connect(uri,
+                {
+                    useNewUrlParser: true,
+                    useUnifiedTopology: true
+                }).then(async (connection) => {
+                let listings = await connection.db(process.env.DB_NAME).collection('listings').find({}).project({_id: true}).toArray();
+                for (let i = 0; i < listings.length; i++) {
+                    map['/listings/' + listings[i]._id] = ['get'];
+                    route['/listings/' + listings[i]._id] = {
+                        // lastmod: '2020-06-09',
+                        changefreq: 'daily'
+                    }
+                }
+
+                await sitemap({
+                    http: 'https',
+                    url: 'click-clack.cc',
+                    sitemap: 'public/sitemap.xml',
+                    robots: 'public/robots.txt',
+                    generate: app,
+                    sitemapSubmission: '/sitemap.xml',
+                    map: map,
+                    route: route
+                }).toFile();
+                console.log('sitemap generated')
+            })
         })
     })
 }
@@ -115,9 +141,9 @@ app.use('/files', express.static('files'))
 
 // app.use(bodyParser.urlencoded({ extended: true }));
 
-var privateKey = fs.readFileSync( 'certs/click-clack_cc.key' );
-var certificate = fs.readFileSync( 'certs/click-clack_cc.crt' );
-var ca = fs.readFileSync( 'certs/click-clack_cc.ca-bundle' );
+var privateKey = fs.readFileSync('certs/click-clack_cc.key');
+var certificate = fs.readFileSync('certs/click-clack_cc.crt');
+var ca = fs.readFileSync('certs/click-clack_cc.ca-bundle');
 
 // var http = express.createServer();
 //

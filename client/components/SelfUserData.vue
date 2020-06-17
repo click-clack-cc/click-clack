@@ -13,13 +13,13 @@
                                 variant="light"
                             >
                                 <template v-if="role == 'admin'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="shield-shaded" title="Administrator" />
+                                    <b-icon v-b-tooltip.right icon="shield-shaded" title="Administrator"/>
                                 </template>
                                 <template v-else-if="role == 'verified'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="check-circle" title="Verified user" />
+                                    <b-icon v-b-tooltip.right icon="check-circle" title="Verified user"/>
                                 </template>
                                 <template v-else-if="role == 'supporter'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="heart" title="Supporter" />
+                                    <b-icon v-b-tooltip.right icon="heart" title="Supporter"/>
                                 </template>
                                 <template v-else-if="role == 'betatester'" v-slot:badge>
                                     <b-icon
@@ -29,7 +29,7 @@
                                     />
                                 </template>
                                 <template v-else-if="role == 'developer'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="cup" title="Developer" />
+                                    <b-icon v-b-tooltip.right icon="cup" title="Developer"/>
                                 </template>
                             </b-avatar>
                         </b-col>
@@ -47,11 +47,12 @@
                         <b-col align="right">
                             <b-button
                                 id="edit-username-button"
+                                style='border: none'
                                 v-b-modal.username-edit-modal
                                 size="sm"
                                 variant="outline-primary"
                             >
-                                <b-icon icon="pencil-square" />
+                                <b-icon icon="pencil-square"/>
                             </b-button>
                         </b-col>
                     </b-row>
@@ -102,13 +103,13 @@
                                 size="6rem"
                             >
                                 <template v-if="role == 'admin'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="shield-shaded" title="Administrator" />
+                                    <b-icon v-b-tooltip.right icon="shield-shaded" title="Administrator"/>
                                 </template>
                                 <template v-else-if="role == 'verified'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="check-circle" title="Verified user" />
+                                    <b-icon v-b-tooltip.right icon="check-circle" title="Verified user"/>
                                 </template>
                                 <template v-else-if="role == 'supporter'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="heart" title="Supporter" />
+                                    <b-icon v-b-tooltip.right icon="heart" title="Supporter"/>
                                 </template>
                             </b-avatar>
                         </b-col>
@@ -258,12 +259,6 @@
                                     accept="image/jpeg, image/png"
                                     multiple
                                 >
-                                    <!--                                    <template slot="file-name" slot-scope="{ names }">-->
-                                    <!--                                        <b-badge variant="dark">{{ names[0] }}</b-badge>-->
-                                    <!--                                        <b-badge v-if="names.length > 1" variant="dark" class="ml-1">-->
-                                    <!--                                            + {{ names.length - 1 }} More files-->
-                                    <!--                                        </b-badge>-->
-                                    <!--                                    </template>-->
                                 </b-form-file>
                             </b-form-group>
                         </b-form>
@@ -280,17 +275,16 @@
                             <b-button
                                 id="edit-bio-button"
                                 v-b-modal.bio-edit-modal
+                                style='border: none'
                                 size="sm"
                                 variant="outline-primary"
                             >
-                                <b-icon icon="pencil-square" />
+                                <b-icon icon="pencil-square"/>
                             </b-button>
                         </b-col>
                     </b-row>
-                    <b-row>
-                        <p id="bio">
-                            {{ bio }}
-                        </p>
+                    <b-row id='bio'>
+                        {{bio}}
                     </b-row>
                 </b-list-group-item>
                 <b-list-group-item id="keyboards">
@@ -307,14 +301,12 @@
                                 size="sm"
                                 variant="outline-primary"
                             >
-                                <b-icon icon="plus" />
+                                <b-icon icon="plus"/>
                             </b-button>
                         </b-col>
                     </b-row>
-                    <div v-if="keyboards && keyboards.length > 0">
-                        <!--                        <b-list-group id="keeblist">-->
-                        <!--                            <b-list-group-item v-bind:key="keeb" v-for="keeb in keyboards">{{keeb}}</b-list-group-item>-->
-                        <!--                        </b-list-group>-->
+                    <b-card-group columns :style='`column-count: ${this.keyboards.length>1?2:1}`'
+                                  v-if="keyboards && keyboards.length > 0">
                         <Keyboard
                             v-for="(keeb, index) in keyboards"
                             :key="index"
@@ -325,7 +317,40 @@
                             :token="token"
                             :user="user"
                         />
-                    </div>
+                    </b-card-group>
+
+                </b-list-group-item>
+                <b-list-group-item id="listings">
+                    <b-row>
+                        <b-col cols="10">
+                            <h4>
+                                Listings
+                            </h4>
+                        </b-col>
+                        <b-col align="right">
+                            <b-button
+                                id="edit-listings-button"
+                                @click='$nuxt.$router.push(`/newlisting`)'
+                                size="sm"
+                                variant="outline-primary"
+                            >
+                                <b-icon icon="plus"/>
+                            </b-button>
+                        </b-col>
+                    </b-row>
+                    <br>
+                    <b-card-group columns :style='`column-count: ${listings.length>1?2:1}`' v-if="listings">
+                        <ListingSmall style='display: inline-block; width: 100%'
+                                      v-for="(listing, index) in listings"
+                                      :listing="listing"
+                                      :owner="user"
+                                      :show-owner="true"
+                                      :token="token"
+                                      :user="user"
+                                      :showEdit="true"
+                                      :key="index">
+                        </ListingSmall>
+                    </b-card-group>
                 </b-list-group-item>
             </b-list-group>
         </b-overlay>
@@ -337,17 +362,20 @@
     import keyboardService from '../services/keyboard-service'
     import fileService from '../services/file-service'
     import Keyboard from './KeyboardSmall'
+    import listingService from "../services/listing-service";
+    import ListingSmall from "./ListingSmall";
 
     export default {
         name: 'SelfUserData',
         components: {
-            Keyboard
+            Keyboard,
+            ListingSmall
         },
         props: [
             'user',
             'token'
         ],
-        data () {
+        data() {
             return {
                 img: this.img,
                 userName: this.userName,
@@ -355,8 +383,9 @@
                 bio: this.bio,
                 role: this.role,
                 keyboards: this.keyboards,
+                listings: this.listings,
                 editBio: this.editBio,
-                editKeyboard: { layout: null },
+                editKeyboard: {layout: null},
                 editBioState: this.editBioState,
                 loading: true,
                 publicUserName: this.publicUserName,
@@ -372,7 +401,7 @@
                 recommendations: this.recommendations
             }
         },
-        created () {
+        created() {
             this.img = `https://click-clack.cc:5000/files/images/${this.user._id}.jpg`
             this.userName = this.user.firstname + (this.user.lastname == null ? '' : (' ' + this.user.lastname))
             this.publicUserName = this.user.id
@@ -387,11 +416,10 @@
             }
             keyboardService.getKeyboards(this.user._id).then((keebs) => {
                 this.keyboards = keebs
-                // for (let i = 0; i < this.keyboards.length; i++) {
-                //     for (let j = 0; j < this.keyboards[i].images.length; j++) {
-                //         this.keyboards[i].images[j] = `http://click-clack.cc:5000/files/images/${this.keyboards[i].images[j]}`;
-                //     }
-                // }
+            })
+
+            listingService.getOwn(this.user._id).then((listings) => {
+                this.listings = listings
             })
 
             this.newKeyboard = this.user.keyboards
@@ -405,12 +433,12 @@
             }
         },
         methods: {
-            checkFormValidity () {
+            checkFormValidity() {
                 const valid = this.$refs.form.checkValidity()
                 this.editBioState = valid
                 return valid
             },
-            async checkUsernameValidity () {
+            async checkUsernameValidity() {
                 let usernameValid = true
                 let firstnameValid = true
                 let secondnameValid = true
@@ -448,11 +476,11 @@
 
                 return usernameValid && firstnameValid && secondnameValid
             },
-            resetModal () {
+            resetModal() {
                 this.editBio = this.bio
                 this.editBioState = null
             },
-            resetUsernameEditModal () {
+            resetUsernameEditModal() {
                 this.editUsername = this.publicUserName
                 this.editUsernameState = null
                 this.editFirstname = this.user.firstname
@@ -460,19 +488,19 @@
                 this.editSecondname = this.user.lastname
                 this.editSecondnameState = null
             },
-            handleOk (bvModalEvt) {
+            handleOk(bvModalEvt) {
                 bvModalEvt.preventDefault()
                 this.handleSubmit()
             },
-            handleKeebOk (bvModalEvt) {
+            handleKeebOk(bvModalEvt) {
                 bvModalEvt.preventDefault()
                 this.handleKeebSubmit()
             },
-            handleUsernameOk (bvModalEvt) {
+            handleUsernameOk(bvModalEvt) {
                 bvModalEvt.preventDefault()
                 this.handleUsernameSubmit()
             },
-            handleSubmit () {
+            handleSubmit() {
                 if (!this.checkFormValidity()) {
                     return
                 }
@@ -491,7 +519,7 @@
                     this.$bvModal.hide('bio-edit-modal')
                 })
             },
-            handleKeebSubmit () {
+            handleKeebSubmit() {
                 if (!this.editKeyboard.name ||
                     !this.editKeyboard.description ||
                     !this.editKeyboard.layout ||
@@ -582,7 +610,7 @@
                     this.$bvModal.hide('keeb-edit-modal')
                 })
             },
-            async handleUsernameSubmit () {
+            async handleUsernameSubmit() {
                 let changed = false
                 if (this.editUsername !== this.publicUserName) {
                     if (!await this.checkUsernameValidity()) {
@@ -631,7 +659,7 @@
                     this.$bvModal.hide('username-edit-modal')
                 })
             },
-            uploadImage () {
+            uploadImage() {
                 fileService.uploadProfileImage(
                     this.user._id,
                     this.file,

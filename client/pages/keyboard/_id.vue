@@ -29,13 +29,13 @@
                 </b-row>
                     <b-card>
                         <b-row>
-                            <b-col cols='6'>
+                            <b-col cols='4'>
                                 <h1 style='font-size: 1.6rem;' class="keyboardcard-title">
                                     {{ this.keeb.name }}
                                 </h1>
                             </b-col>
 
-                            <b-col cols='3' align='left' class="user-thumbnail">
+                            <b-col cols='4' align='left' class="user-thumbnail">
                                 <b-avatar
                                     :src="`https://click-clack.cc:5000/files/images/${this.keeb.owner._id}.jpg`"
                                     badge-offset="-0.2rem"
@@ -70,7 +70,7 @@
                                     <span class="text-muted"> @{{ this.keeb.owner.id }} </span>
                                 </b-link>
                             </b-col>
-                            <b-col cols='3' align='left'>
+                            <b-col cols='4' align='right'>
                                 <div class="timeago">
                             <span class="text-muted">
                                 {{ format(this.keeb.lastModified) }}
@@ -80,7 +80,7 @@
                         </b-row>
                         <br>
                         <b-row>
-                            <b-col style='margin-left: 1rem'>
+                            <b-col cols='4' style='margin-left: 1rem'>
                                 <p>
                                     <span style="font-weight: bold">Switches</span> {{ this.keeb.switches }}
                                 </p>

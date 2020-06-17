@@ -79,6 +79,39 @@
             <br>
             <b-icon icon="x" scale="2" style="width: 100%; margin: auto" />
         </div>
+        <br>
+        <h2>Listings</h2>
+        <br>
+
+        <b-card-group columns style='column-count: 2' v-if="listings">
+            <ListingSmall style='display: inline-block; width: 100%'
+                          :listing="listing"
+                          :owner="listing.userdata"
+                          :show-owner="true"
+                          :token="token"
+                          :user="user"
+                          v-for="(listing, index) in listings"
+                          :key="index">
+                {{index}}
+            </ListingSmall>
+            <!--            <b-row v-if="listings">-->
+            <!--            <b-col sm='12' lg='6' v-for="(listing, index) in listings"-->
+            <!--                   :key="index">-->
+            <!--                <ListingSmall-->
+            <!--                    :listing="listing"-->
+            <!--                    :owner="listing.userdata"-->
+            <!--                    :show-owner="true"-->
+            <!--                    :token="token"-->
+            <!--                    :user="user"-->
+            <!--                >-->
+            <!--                    {{index}}-->
+            <!--                </ListingSmall>-->
+            <!--            </b-col>-->
+        </b-card-group>
+        <div v-else>
+            <br>
+            <b-icon icon="x" scale="2" style="width: 100%; margin: auto" />
+        </div>
     </div>
 </template>
 
@@ -89,11 +122,13 @@
     import userService from '../services/user-service.js'
     import Keyboard from '../components/KeyboardSmall'
     import OtherUserDataPreview from '../components/OtherUserDataPreview'
+    import ListingSmall from "../components/ListingSmall";
 
     export default {
         name: 'Search',
         layout: 'index',
         components: {
+            ListingSmall,
             Keyboard,
             OtherUserDataPreview
         },
@@ -102,6 +137,7 @@
             return {
                 keyboards: null,
                 users: null,
+                listings: null,
                 userSelected: null
             }
         },
@@ -128,6 +164,7 @@
                         })
                     }
                     this.users = results.users
+                    this.listings = results.listings
                 })
             },
             previewUser (userid) {
@@ -199,7 +236,7 @@
     }
 
     .user-thumbnail {
-        margin-top: 0;
+        margin-bottom: 0.5rem;
     }
 
     .keyboard-owner-thumbnal {

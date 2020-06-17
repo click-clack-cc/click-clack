@@ -2,7 +2,7 @@
     <div role="tablist">
         <b-card class="mb-1" no-body>
             <b-card-header class="p-1" header-tag="header" role="tab">
-                <b-button v-b-toggle.accordion-1 block variant="">
+                <b-button v-b-toggle.accordion-1 block variant="light">
                     Statistics
                 </b-button>
             </b-card-header>

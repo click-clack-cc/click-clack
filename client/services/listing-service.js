@@ -1,141 +1,58 @@
-import axios from 'axios'
+import { http } from "./index";
 
-const url = 'https://click-clack.cc:5000/api/listings/'
+const url = '/listings'
 
 class listingService {
-    static getListings (user) {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.get(url + '/u', {
-                    params: {
-                        user
-                    }
-                }).then((res) => {
-                    const data = res.data
-                    resolve(
-                        data.map(keyboard => ({
-                            ...keyboard,
-                            createdAt: new Date(keyboard.createdAt),
-                            lastModified: new Date(keyboard.lastModified)
-                        }))
-                    )
-                })
-            } catch (e) {
-                reject(e)
-            }
-        })
+    static async getListings (user) {
+        const { data } = await http.get(`${url}/u`, { params: { user }});
+        return data.map(listing => ({ ...listing, createdAt: new Date(listing.createdAt), lastModified: new Date(listing.lastModified) }));
+    }
+    static async getOwn (user) {
+        const { data } = await http.get(`${url}/own`, { params: { user }});
+        return data.map(listing => ({ ...listing, createdAt: new Date(listing.createdAt), lastModified: new Date(listing.lastModified) }));
     }
 
-    static getNewListings (method) {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.get(url + `/${method}`).then((res) => {
-                    const data = res.data
-                    resolve(
-                        data.map(keyboard => ({
-                            ...keyboard,
-                            createdAt: new Date(keyboard.createdAt),
-                            lastModified: new Date(keyboard.lastModified)
-                        }))
-                    )
-                })
-            } catch (e) {
-                reject(e)
-            }
-        })
+    static async getNewListings (method) {
+        const { data } = await http.get(`${url}/${method}`);
+        return data.map(listing => ({
+                ...listing,
+                createdAt: new Date(listing.createdAt),
+                lastModified: new Date(listing.lastModified)
+            })
+        );
     }
 
-    static getListing (id) {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.get(url + '/id', {
-                    params: {
-                        id
-                    }
-                }).then((res) => {
-                    const data = res.data[0]
-                    data.createdAt = new Date(data.createdAt)
-                    data.lastModified = new Date(data.lastModified)
-                    resolve(
-                        data
-                    )
-                })
-            } catch (e) {
-                reject(e)
-            }
-        })
+    static async getFilteredListings (filter) {
+        const { data } = await http.post(`${url}/filter`,  filter );
+        return data.map(listing => ({
+                ...listing,
+                createdAt: new Date(listing.createdAt),
+                lastModified: new Date(listing.lastModified)
+            })
+        );
     }
 
-    static newListing (id, keyboard, token) {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.post(url + '/',
-                    {
-                        id,
-                        keyboard
-                    }, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                ).then((res) => {
-                    const data = res.data[0]
-                    resolve(
-                        data
-                    )
-                })
-            } catch (e) {
-                reject(e)
-            }
-        })
+    static async getListing (id) {
+        const { data: [lt] } = await http.get(`${url}/id`, { params: { id }});
+        return { ...lt, createdAt: new Date(lt.createdAt), lastModified: new Date(lt.lastModified) };
     }
 
-    static updateListing (id, keyboard, token) {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.post(url + '/update',
-                    {
-                        id,
-                        keyboard
-                    }, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                ).then((res) => {
-                    const data = res.data[0]
-                    resolve(
-                        data
-                    )
-                })
-            } catch (e) {
-                reject(e)
+    static async newListing (id, edit, listing, token) {
+        const { data: [lt] } = await http.post(`${url + (edit?"/update":"")}`, { id, listing }, {
+            headers: {
+                Authorization: `Bearer ${token}`
             }
-        })
+        });
+        return lt;
     }
 
-    static deleteListing (id, keyboard, token) {
-        return new Promise((resolve, reject) => {
-            try {
-                axios.post(url + '/delete',
-                    {
-                        id,
-                        keyboard
-                    }, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                ).then((res) => {
-                    const data = res.data[0]
-                    resolve(
-                        data
-                    )
-                })
-            } catch (e) {
-                reject(e)
+    static async deleteListing (id, listing, token) {
+        const { data: [lt] } = await http.post(`${url}/delete`, { id, listing }, {
+            headers: {
+                Authorization: `Bearer ${token}`
             }
-        })
+        });
+        return lt;
     }
 }
 

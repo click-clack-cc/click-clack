@@ -24,7 +24,7 @@
                     />
                     <b-input-group-append>
                         <b-button variant="outline" @click="search">
-                            <b-icon icon="search" />
+                            <b-icon icon="search"/>
                         </b-button>
                     </b-input-group-append>
                 </b-input-group>
@@ -39,48 +39,106 @@
                 >
                     <b-nav-item>
                         <nuxt-link exact exact-active-class="active" to="/typing">
-                            <b-icon v-b-tooltip.hover.bottom="`Typing Test`" icon="lightning" />
+                            <b-icon v-b-tooltip.hover.bottom="`Typing Test`" icon="lightning"/>
                         </nuxt-link>
                     </b-nav-item>
                     <b-nav-item>
                         <nuxt-link exact-active-class="active" to="/">
-                            <b-icon v-b-tooltip.hover.bottom="`Keyboard Showroom`" icon="view-stacked" />
+                            <b-icon v-b-tooltip.hover.bottom="`Keyboard Showroom`" icon="view-stacked"/>
                         </nuxt-link>
                     </b-nav-item>
-<!--                    <b-nav-item>-->
-<!--                        <nuxt-link exact-active-class="active" to="/market">-->
-<!--                            <b-icon v-b-tooltip.hover.bottom="`Market`" icon="shop-window" />-->
-<!--                        </nuxt-link>-->
-<!--                    </b-nav-item>-->
                     <b-nav-item>
-                        <nuxt-link exact-active-class="active" to="/community">
-                            <b-icon v-b-tooltip.hover.bottom="`Community`" icon="people" />
-                        </nuxt-link>
-                    </b-nav-item>
-                    <!--                    <b-nav-item>-->
-                    <!--                        <nuxt-link to="/profile" exact exact-active-class="active">-->
-                    <!--                            Profile-->
-                    <!--                        </nuxt-link>-->
-                    <!--                    </b-nav-item>-->
-                    <b-avatar
-                        v-if="this.user"
-                        id="mini-avatar"
-                        v-b-tooltip.hover.bottom="`Profile`"
-                        :src="`https://click-clack.cc:5000/files/images/${this.user._id}.jpg`"
-                        size="2.3rem"
-                        to="/profile"
-                        variant="light"
-                    />
-                    <b-nav-item v-else>
-                        <nuxt-link exact-active-class="active" to="/profile">
-                            Sign in
+                        <nuxt-link exact-active-class="active" to="/market">
+                            <b-icon v-b-tooltip.hover.bottom="`Market`" icon="shop-window"/>
                         </nuxt-link>
                     </b-nav-item>
                     <b-nav-item>
-                        <nuxt-link exact exact-active-class="active" to="/settings">
-                            <b-icon v-b-tooltip.hover.bottom="`Settings`" icon="three-dots-vertical" />
+                        <nuxt-link exact-active-class="active" to="/community">
+                            <b-icon v-b-tooltip.hover.bottom="`Community`" icon="people"/>
                         </nuxt-link>
                     </b-nav-item>
+                    <b-dropdown no-caret right variant="link" style='margin-top: -0.5rem; margin-bottom: -0.5rem' toggle-class="text-decoration-none">
+                        <template v-slot:button-content>
+                            <b-avatar
+                                v-if="user"
+                                class="mini-avatar"
+                                :src="`https://click-clack.cc:5000/files/images/${user._id}.jpg`"
+                                size="2.3rem"
+                                variant="light"
+                                badge-top
+                                badge-variant='danger'
+                                badge-offset='-0.23rem'
+                            >
+                                <template v-if='unseen > 0' v-slot:badge>{{unseen}}</template>
+                            </b-avatar>
+                            <nuxt-link v-else exact-active-class="active" to="/profile">
+                                <b-avatar
+                                    class="mini-avatar"
+                                    v-b-tooltip.hover.bottom="`Sign in`"
+                                    size="2.3rem"
+                                    to="/profile"
+                                    variant="light"
+                                />
+                            </nuxt-link>
+                        </template>
+                        <b-dropdown-item @click='$nuxt.$router.push(`/profile`)'>
+                            <nuxt-link to="/profile">
+                                <b-icon icon='person'></b-icon>
+                                <span v-if='this.user'>Profile</span>
+                                <span v-else>Sign in</span>
+                            </nuxt-link>
+                        </b-dropdown-item>
+                        <b-dropdown-item v-if='this.user' @click='$nuxt.$router.push(`/messages`)'>
+                            <nuxt-link to="/messages">
+                                <b-icon v-if='unseen === 0' icon='envelope-open'></b-icon>
+                                <b-icon v-else icon='envelope'></b-icon>
+                                Messages
+                                <b-badge variant='danger' v-if='unseen > 0'>{{unseen}}</b-badge>
+                            </nuxt-link>
+                        </b-dropdown-item>
+                        <b-dropdown-item  v-if='this.user'  @click='$nuxt.$router.push(`/settings`)'>
+                            <nuxt-link exact exact-active-class="active" to="/settings">
+                                <b-icon icon='window'></b-icon>
+                                Themes
+                            </nuxt-link>
+                        </b-dropdown-item>
+                        <b-dropdown-item-btn>
+                            <a href="https://www.patreon.com/clickclackcc">
+                                <b-icon icon='heart'></b-icon>
+                                Become a supporter
+                            </a>
+                        </b-dropdown-item-btn>
+                        <b-dropdown-divider></b-dropdown-divider>
+                        <b-dropdown-item @click='$nuxt.$router.push(`/wip`)'>
+                            <nuxt-link to="/wip">
+                                <b-icon icon='question-circle'></b-icon>
+                                FAQ
+                            </nuxt-link>
+                        </b-dropdown-item>
+                        <b-dropdown-item @click='$nuxt.$router.push(`/wip`)'>
+                            <nuxt-link to="/wip">
+                                <b-icon icon='justify'></b-icon>
+                                T&C
+                            </nuxt-link>
+                        </b-dropdown-item>
+                        <b-dropdown-item-btn>
+                            <a href='mailto:support@click-clack.cc'>
+                                <b-icon icon='person'></b-icon>
+                                Contact support
+                            </a>
+                        </b-dropdown-item-btn>
+                        <b-dropdown-item @click='$nuxt.$router.push(`/wip`)'>
+                            <nuxt-link to="/wip">
+                                <b-icon icon='exclamation-square'></b-icon>
+                                Report bug
+                            </nuxt-link>
+                        </b-dropdown-item>
+                        <b-dropdown-divider></b-dropdown-divider>
+                        <b-dropdown-item-btn @click='signOut'>
+                            <b-icon icon='arrow-right-circle'></b-icon>
+                            Sign out
+                        </b-dropdown-item-btn>
+                    </b-dropdown>
                 </b-nav>
             </b-col>
         </b-row>
@@ -88,24 +146,86 @@
 </template>
 
 <script>
+    import messageService from "../services/message-service";
+    import {mapState} from "vuex";
+
     export default {
         name: 'Header',
         props: [
             'user'
         ],
-        data () {
+        computed: mapState(['user', 'token', 'nightmode', 'zenmode', 'darktheme', 'lighttheme']),
+        data() {
             return {
-                searchinput: this.searchinput
+                searchinput: this.searchinput,
+                unseen: 0
+            }
+        },
+        created() {
+            if (this.user && this.token) {
+                this.getUnseenMessages()
+                if(this.messagePollerStarted) return
+                if(!this.interval) this.interval = setInterval(this.getUnseenMessages, 5000)
+                this.messagePollerStarted = true
+            }
+        },
+        watch: {
+            user: {
+                immediate: true,
+                handler() {
+                    if (this.user && this.token) {
+                        this.getUnseenMessages()
+                        if(this.messagePollerStarted) return
+                        if(!this.interval) this.interval = setInterval(this.getUnseenMessages, 5000)
+                        this.messagePollerStarted = true
+                    }
+                }
             }
         },
         methods: {
-            search () {
+            search() {
                 if (this.searchinput) {
                     this.$store.commit('updateSearch', this.searchinput)
                     this.$router.push('/search')
                     this.searchinput = null
                 }
-            }
+            },
+            signOut() {
+                this.$bvModal.msgBoxConfirm('Are you sure you want to sign out?', {
+                    title: 'Signing Out',
+                    size: 'sm',
+                    buttonSize: 'sm',
+                    okVariant: 'danger',
+                    okTitle: 'Yes please',
+                    cancelTitle: 'No',
+                    footerClass: 'p-2',
+                    hideHeaderClose: false,
+                    centered: true
+                }).then((value) => {
+                    if (value) {
+                        this.$cookies.remove('token')
+                        this.$cookies.remove('id')
+                        this.$bvToast.toast('Stay safe and see you soon! You will be redirected in 5 seconds', {
+                            title: 'Bye bye',
+                            toaster: 'b-toaster-top-center'
+                        })
+                        setTimeout(() => {
+                            this.$router.go()
+                        }, 5000)
+                    }
+                })
+            },
+            getUnseenMessages() {
+                messageService.getUnseenMessageCount(this.user._id, this.token).then((res) => {
+                    this.unseen = res
+                }).catch((error) => {
+                    // this.$bvToast.toast(error.response.statusText, {
+                    //     title: 'Error',
+                    //     variant: 'danger',
+                    //     toaster: 'b-toaster-top-center'
+                    // })
+                })
+            },
         }
     }
 </script>
@@ -132,9 +252,9 @@
         font-size: 1rem;
     }
 
-    #mini-avatar {
+    .mini-avatar {
         margin-top: 0.2rem;
-        margin-left: 0.5rem;
+        margin-left: 0rem;
     }
 
     #nav {

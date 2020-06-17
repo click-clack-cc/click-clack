@@ -4,7 +4,7 @@ const mongodb = require('mongodb');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 
-const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
+const uri = `${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
 
 let result = null;
 connect().then((db) => {
@@ -12,10 +12,50 @@ connect().then((db) => {
     console.log('listings.js connected to ' + process.env.DB_NAME + '.listings')
 })
 
+
+router.get('/u', async (req, res) => {
+    if (!req.query.user) return;
+    if (req.query.user === '') return;
+    let response = await result.find({
+            user: req.query.user,
+            state: "approved"
+        }).limit(100)
+            .sort({lastModified: -1}).toArray()
+    res.send(response);
+});
+
+router.get('/own', async (req, res) => {
+    if (!req.query.user) return;
+    if (req.query.user === '') return;
+    let response;
+    response = await result.find({
+        user: req.query.user
+    }).limit(100)
+        .sort({lastModified: -1}).toArray()
+    res.send(response);
+});
+
+router.get('/id', async (req, res) => {
+    if (!req.query.id) return;
+    if (req.query.id === '') return;
+    try {
+        let response = await result.find({
+            _id: mongodb.ObjectID(req.query.id)
+        }).limit(100).toArray()
+        res.send(response);
+    } catch (e) {
+        let response = await result.find({
+            _id: req.query.id
+        }).limit(100)
+            .sort({lastModified: -1}).toArray()
+        res.send(response);
+    }
+});
+
 router.get('/new', async (req, res) => {
     let response = await result.aggregate([{
         $addFields: {
-            "user": {$toObjectId: 'user'}
+            "user": {$toObjectId: '$user'}
         }
     },
         {
@@ -30,19 +70,23 @@ router.get('/new', async (req, res) => {
             $project: {
                 _id: true,
                 user: true,
-                title: true,
-                type: true,
+                name: true,
+                description: true,
                 category1: true,
                 category2: true,
+                type: true,
                 new: true,
                 createdAt: true,
                 lastBump: true,
                 images: true,
                 premium: true,
                 location: true,
-                shipping: true,
+                location2: true,
                 state: true,
+                shipping: true,
+                condition: true,
                 price: true,
+                lastModified: true,
                 userdata: {
                     id: true,
                     firstname: true
@@ -53,80 +97,47 @@ router.get('/new', async (req, res) => {
             $unwind:
                 "$userdata"
 
+        },
+        {
+            $match: {
+                state: "approved"
+            }
         }
     ]).limit(100)
         .sort({createdAt: -1})
         .toArray();
     res.send(response);
-});
+})
 
-router.get('/best', async (req, res) => {
-    let response = await result.aggregate([{
-        $addFields: {
-            "owner": {$toObjectId: '$owner'}
-        }
-    },
-        {
-            $lookup: {
-                from: 'users',
-                localField: 'owner',
-                foreignField: '_id',
-                as: 'userdata'
-            }
-        },
-        {
-            $project: {
-                _id: true,
-                owner: true,
-                name: true,
-                description: true,
-                layout: true,
-                switches: true,
-                keycaps: true,
-                pcb: true,
-                case: true,
-                images: true,
-                lastModified: true,
-                createdAt: true,
-                comments: true,
-                hearts: true,
-                userdata: {
-                    id: true,
-                    firstname: true
-                },
-                heartsNum: {"$size": "$hearts"}
-            }
-        },
-        {
-            $unwind:
-                "$userdata"
-
-        }
-    ]).limit(100)
-        .sort({heartsNum: -1})
-        .toArray();
-    res.send(response);
-});
-
-router.get('/rising', async (req, res) => {
+router.post('/filter', async (req, res) => {
+    let match = {
+        type: req.body.type === "looking" ? "buy" : "sell",
+    }
+    if (req.body.keywords) {
+        match.$text = {$search: req.body.keywords}
+    }
+    match.price = {
+        $gte: req.body.minPrice ? req.body.minPrice : 0,
+        $lte: req.body.maxPrice ? req.body.maxPrice : 9999999
+    }
+    if (req.body.freeShipping === "buyer") match.freeShipping = "seller"
+    if (req.body.category1) match.category1 = req.body.category1
+    if (req.body.category2) match.category1 = req.body.category2
+    if (req.body.location) match.location = req.body.location
+    if (req.body.new) match.new = true
     let response = await result.aggregate([
         {
-            $match:
-                {
-                    createdAt: {
-                        $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000)
-                    }
-                }
+            $match: match
         },
         {
             $addFields: {
-                "owner": {$toObjectId: '$owner'}
+                "user": {$toObjectId: '$user'}
             }
         },
         {
             $lookup: {
                 from: 'users',
-                localField: 'owner',
+                localField: 'user',
                 foreignField: '_id',
                 as: 'userdata'
             }
@@ -134,102 +145,182 @@ router.get('/rising', async (req, res) => {
         {
             $project: {
                 _id: true,
-                owner: true,
+                user: true,
                 name: true,
                 description: true,
-                layout: true,
-                switches: true,
-                keycaps: true,
-                pcb: true,
-                case: true,
-                images: true,
-                lastModified: true,
+                category1: true,
+                category2: true,
+                type: true,
+                new: true,
                 createdAt: true,
-                comments: true,
-                hearts: true,
+                lastBump: true,
+                images: true,
+                state: true,
+                premium: true,
+                location: true,
+                location2: true,
+                shipping: true,
+                condition: true,
+                price: true,
+                lastModified: true,
                 userdata: {
                     id: true,
                     firstname: true
                 },
-                heartsNum: {"$size": "$hearts"}
             }
         },
         {
             $unwind:
                 "$userdata"
 
+        },
+        {
+            $match: {
+                state: "approved"
+            }
         }
     ]).limit(100)
-        .sort({heartsNum: -1})
-        .toArray();
+        .sort({createdAt: -1}).toArray()
     res.send(response);
 });
 
 router.get('/search/', async (req, res) => {
     if (!req.query.text) return;
     if (req.query.text === '') return;
-    let response = await result.find({
-        $text: {
-            $search: req.query.text
+    let response = await result.aggregate([{
+        $match: {
+            $text: {
+                $search: req.query.text
+            }
         }
-    }).limit(100)
+    }, {
+        $addFields: {
+            "user": {$toObjectId: '$user'}
+        }
+    },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'user',
+                foreignField: '_id',
+                as: 'userdata'
+            }
+        },
+        {
+            $project: {
+                _id: true,
+                user: true,
+                name: true,
+                description: true,
+                category1: true,
+                category2: true,
+                type: true,
+                new: true,
+                createdAt: true,
+                lastBump: true,
+                images: true,
+                premium: true,
+                location: true,
+                location2: true,
+                shipping: true,
+                state: true,
+                condition: true,
+                price: true,
+                lastModified: true,
+                userdata: {
+                    id: true,
+                    firstname: true
+                },
+            }
+        },
+        {
+            $unwind:
+                "$userdata"
+
+        },
+        {
+            $match: {
+                state: "approved"
+            }
+        }]).limit(100)
         .sort({createdAt: -1}).toArray()
     res.send(response);
 });
 
 router.post('/', isLoggedIn, async (req, res) => {
-    console.log(req.body)
-    let num = await result.find({_id: req.body.listings.name.replace(' ', '-').replace(/[^a-zd-]/ig, '').toLowerCase()}).count();
+    let num = await result.find({_id: req.body.listing.name.replace(' ', '-').replace(/[^a-zd-]/ig, '').toLowerCase()}).count();
+    req.statusMessage = null
+    if (!req.body.id) res.statusMessage = 'Failed to authenticate. Please try logging out and back in.'
+    if (!req.body.listing.category1) res.statusMessage = 'Please choose a category for your listing'
+    if (!req.body.listing.name) res.statusMessage = 'Please enter a name for your listing'
+    if (!req.body.listing.price) res.statusMessage = 'Please set a price for your listing'
+    if (!req.body.listing.description) res.statusMessage = 'Please enter a description for your listing'
+    if (req.statusMessage) res.status(401).send();
     await result.insertOne({
-        _id: (req.body.keyboard.name.replace(' ', '-').replace(/[^a-zd-]/ig, '').toLowerCase()) + (num === 0 ? '' : (num + 1)),
-        owner: req.body.id,
-        name: req.body.keyboard.name,
-        description: req.body.keyboard.description,
-        layout: req.body.keyboard.layout,
-        switches: req.body.keyboard.switches,
-        keycaps: req.body.keyboard.keycaps,
-        pcb: req.body.keyboard.pcb,
-        case: req.body.keyboard.case,
-        images: req.body.keyboard.images,
-        comments: [],
-        hearts: [],
+        _id: (req.body.listing.name.replace(' ', '-').replace(/[^a-zd-]/ig, '').toLowerCase()) + (num === 0 ? '' : (num + 1)),
+        user: req.body.id,
+        type: req.body.listing.type,
+        category1: req.body.listing.category1,
+        category2: req.body.listing.category2,
+        name: req.body.listing.name,
+        description: req.body.listing.description,
+        lastBump: new Date(),
+        images: req.body.listing.images,
+        premium: false,
+        location: req.body.listing.location,
+        location2: req.body.listing.location2,
+        shipping: req.body.listing.shipping,
+        condition: req.body.listing.condition,
+        state: "pending",
+        price: req.body.listing.price,
         lastModified: new Date(),
-        createdAt: new Date()
+        createdAt: new Date(),
     }).then(() => {
         res.status(201).send();
     }).catch(() => {
-        res.statusMessage = 'Failed to add listings'
-        res.status(401);
+        res.status(401).send();
     });
 });
 
 
 router.post('/update', isLoggedIn, async (req, res) => {
-    await result.findOneAndUpdate({
-            _id: req.body.listings._id
-        },
+    req.statusMessage = null
+    if (!req.body.id) res.statusMessage = 'Failed to authenticate. Please try logging out and back in.'
+    if (!req.body.listing.category1) res.statusMessage = 'Please choose a category for your listing'
+    if (!req.body.listing.name) res.statusMessage = 'Please enter a name for your listing'
+    if (!req.body.listing.price) res.statusMessage = 'Please set a price for your listing'
+    if (!req.body.listing.description) res.statusMessage = 'Please enter a description for your listing'
+    if (req.statusMessage) res.status(401).send();
+    await result.findOneAndUpdate(
         {
+            _id: req.body.listing._id
+        }, {
             $set: {
-                description: req.body.keyboard.description,
-                layout: req.body.keyboard.layout,
-                switches: req.body.keyboard.switches,
-                keycaps: req.body.keyboard.keycaps,
-                pcb: req.body.keyboard.pcb,
-                case: req.body.keyboard.case,
-                images: req.body.keyboard.images,
+                type: req.body.listing.type,
+                category1: req.body.listing.category1,
+                category2: req.body.listing.category2,
+                name: req.body.listing.name,
+                description: req.body.listing.description,
+                images: req.body.listing.images,
+                premium: false,
+                location: req.body.listing.location,
+                location2: req.body.listing.location2,
+                shipping: req.body.listing.shipping,
+                condition: req.body.listing.condition,
+                state: "pending",
+                price: req.body.listing.price,
                 lastModified: new Date()
             }
         }).then(() => {
         res.status(201).send();
     }).catch(() => {
-        res.statusMessage = 'Failed to update listings'
-        res.status(401);
+        res.status(401).send();
     });
 });
 
 router.post('/delete', isLoggedIn, async (req, res) => {
     await result.deleteOne({
-        _id: req.body.listings
+        _id: req.body.listing
     }).then(() => {
         res.status(201).send();
     }).catch(() => {
@@ -252,7 +343,7 @@ function isLoggedIn(req, res, next) {
         const token = req.headers.authorization.split(' ')[1];
         const decoded = jwt.verify(
             token,
-            process.env.SALT
+            process.env.SECRET_KEY
         );
         req.tokenData = decoded;
         if (req.tokenData.id === req.body.id || req.tokenData.id === req.query.id) {

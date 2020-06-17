@@ -1,5 +1,19 @@
 <template>
     <div>
+        <b-modal centered id="businessModal" title="Business users" ok-only>
+            <b-row class='text-muted' >
+                <b-col cols='2' align='middle'>
+                    <b-icon scale='2' shift-v='-50' icon='info-circle'></b-icon>
+                </b-col>
+                <b-col>
+                    <p >
+                        If you are registering as/on behalf of a business, please proceed with the registration normally and
+                        contact <a href="mailto:support@click-clack.cc">support@click-clack.cc</a> at your earliest convenience so we can verify your account and provide
+                        business support.
+                    </p>
+                </b-col>
+            </b-row>
+        </b-modal>
         <b-card
             id="signup-form-card"
             footer-tag="footer"
@@ -59,7 +73,7 @@
                     </b-col>
                     <b-col>
                         <b-form-group
-                            description="Your last name - this is optional, you can just go by your nickname"
+                            description="Your last name - this is optional"
                             label="Last name (optional)"
                             label-for="input"
                         >
@@ -76,7 +90,7 @@
                 <b-row>
                     <b-col>
                         <b-form-group
-                            description="Size matters - please make it long"
+                            description="Please make it long"
                             label="Password"
                             label-for="input"
                         >
@@ -407,6 +421,13 @@
                 </b-row>
             </template>
         </b-card>
+        <br>
+        <b-row align="middle">
+            <b-col>
+                <b-button v-b-modal.businessModal variant='outline-primary'>I'm a business user</b-button>
+            </b-col>
+        </b-row>
+
     </div>
 </template>
 

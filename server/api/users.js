@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const salt = 10
 
-const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
+const uri = `${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
 
 let result = null;
 connect().then((db) => {
@@ -42,7 +42,7 @@ router.post('/register', async (req, res) => {
             const token = jwt.sign({
                     id: user._id
                 },
-                process.env.SALT, {
+                process.env.SECRET_KEY, {
                     expiresIn: '7d'
                 }
             );
@@ -74,7 +74,7 @@ router.post('/login', async (req, response) => {
                 const token = jwt.sign({
                         id: user._id
                     },
-                    process.env.SALT, {
+                    process.env.SECRET_KEY, {
                         expiresIn: '7d'
                     }
                 );
@@ -313,7 +313,7 @@ function isLoggedIn(req, res, next) {
         const token = req.headers.authorization.split(' ')[1];
         const decoded = jwt.verify(
             token,
-            process.env.SALT
+            process.env.SECRET_KEY
         );
         req.tokenData = decoded;
         console.log(req.tokenData.id)

@@ -71,10 +71,27 @@ export default {
     ],
     buildModules: [
         // '@nuxtjs/eslint-module',
-        '@nuxtjs/dotenv'
+        '@nuxtjs/dotenv',
+        ['@nuxtjs/google-analytics', {
+            id: process.env.GOOGLE_ANALYTICS_ID,
+            debug: { sendHitTask: true }
+        }]
+    ],
+    plugins: [
+        {src: '~/plugins/VueChatScroll.js', ssr: true}
     ],
     modules: [
+        '@nuxtjs/markdownit',
         'cookie-universal-nuxt',
-        'bootstrap-vue/nuxt'
-    ]
+        'bootstrap-vue/nuxt',
+    ],
+    markdownit: {
+        preset: 'default',
+        linkify: true,
+        breaks: true,
+        use: [
+            'markdown-it-div',
+            'markdown-it-attrs'
+        ]
+    }
 }

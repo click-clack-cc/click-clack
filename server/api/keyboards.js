@@ -4,7 +4,7 @@ const mongodb = require('mongodb');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 
-const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
+const uri = `${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
 
 let result = null;
 connect().then((db) => {
@@ -350,7 +350,7 @@ function isLoggedIn(req, res, next) {
         const token = req.headers.authorization.split(' ')[1];
         const decoded = jwt.verify(
             token,
-            process.env.SALT
+            process.env.SECRET_KEY
         );
         req.tokenData = decoded;
         if (req.tokenData.id === req.body.id || req.tokenData.id === req.query.id) {

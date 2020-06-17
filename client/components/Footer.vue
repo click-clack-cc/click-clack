@@ -9,13 +9,13 @@
                             <a href="mailto:support@click-clack.cc">
                                 support@click-clack.cc</a><br>
                         </p>
-                        <p id="contact">
+                        <p id="contribute">
                             Want to contribute? Message <a href='/u/daniel'>@daniel</a> at
                             <a href="mailto:support@click-clack.cc">
                                 daniel.szabo@click-clack.cc</a><br>
                         </p>
                         <p id="madeinhungary">
-                            Click-clack beta v0.9.3 proudly made in Hungary<br>
+                            Click-clack beta v1.0 proudly made in Hungary<br>
                         </p>
                     </div>
                 </b-col>
@@ -73,7 +73,7 @@
         transform: scale(0.35);
     }
 
-    #contact, #support {
+    #contact, #contribute, #support {
         line-height: 0.5;
     }
 

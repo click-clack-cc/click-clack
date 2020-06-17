@@ -23,6 +23,7 @@
     import userService from '../../services/user-service'
     import RecommendationList from '../../components/RecommendationList'
     import keyboardService from '../../services/keyboard-service'
+    import listingService from "../../services/listing-service";
 
     const signedIn = false
 
@@ -37,6 +38,7 @@
         props: [],
         async asyncData({params}) {
             const u = await userService.getUser(params.id)
+            u.listings = await listingService.getListings(u._id)
             u.keyboards = await keyboardService.getKeyboards(u._id)
             return { inspectedUser: u }
         },

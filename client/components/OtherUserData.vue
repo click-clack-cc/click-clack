@@ -1,5 +1,32 @@
 <template>
     <div id="self-user-data-container">
+        <b-modal
+            id="message-modal"
+            ref="message-modal"
+            centered
+            hide-header
+            ok-title='Send'
+            @ok='sendMessage'
+        >
+            <h4>
+                Messaging user
+            </h4>
+            <br>
+                <b-row class='text-muted' style='margin-left: auto; margin-right:auto; margin-bottom: 1rem; max-width: 80%'>
+                    <b-col cols='2' align='middle'>
+                        <b-icon scale='1.4' shift-v='-45' icon='info-circle'></b-icon>
+                    </b-col>
+                    <b-col style='font-size: small'>
+                        <p >
+                            When contacting other users please make sure to follow our community guidelines - be respectful and kind.
+                        </p>
+                        <p >
+                            After sending the first message to {{inspectedUser.firstname}} you can continue the conversation in your messages.
+                        </p>
+                    </b-col>
+                </b-row>
+            <b-form-input v-model="messageInput" :placeholder='`Say hi to ${inspectedUser.firstname}`'></b-form-input>
+        </b-modal>
         <b-overlay :show="loading" blur="0.5rem" opacity="1" variant="transparent">
             <b-list-group>
                 <b-list-group-item>
@@ -39,6 +66,15 @@
                             </h2>
                         </b-col>
                         <b-col v-if="showStarReportButtons" id="star-report-button-group" align="right" cols="4">
+                            <b-button-group>
+                                <b-button
+                                    @click='messageUser'
+                                    variant='outline-primary'
+                                    size="sm"
+                                >
+                                    <b-icon icon='envelope'></b-icon> Message
+                                </b-button>
+                            </b-button-group>
                             <b-button-group>
                                 <b-button
                                     id="star-button"
@@ -150,6 +186,37 @@
                         />
                     </div>
                 </b-list-group-item>
+                <b-list-group-item id="listings">
+                    <b-row>
+                        <b-col cols="10">
+                            <h4>
+                                Listings
+                            </h4>
+                        </b-col>
+                        <b-col align="right">
+                            <b-button
+                                id="edit-listings-button"
+                                @click='$nuxt.$router.push(`/newlisting`)'
+                                size="sm"
+                                variant="outline-primary"
+                            >
+                                <b-icon icon="plus"/>
+                            </b-button>
+                        </b-col>
+                    </b-row>
+                    <br>
+                    <b-card-group columns :style='`column-count: ${listings.length>1?2:1}`' v-if="listings">
+                        <ListingSmall style='display: inline-block; width: 100%'
+                                      v-for="(listing, index) in listings"
+                                      :listing="listing"
+                                      :owner="inspectedUser"
+                                      :show-owner="true"
+                                      :token="token"
+                                      :user="user"
+                                      :key="index">
+                        </ListingSmall>
+                    </b-card-group>
+                </b-list-group-item>
             </b-list-group>
         </b-overlay>
     </div>
@@ -160,8 +227,9 @@
     import VueMeta from 'vue-meta'
     import Vue from 'vue'
     import userService from '../services/user-service'
-    // import keyboardService from "../services/keyboard-service";
     import Keyboard from './KeyboardSmall'
+    import ListingSmall from "./ListingSmall";
+    import messageService from "../services/message-service";
 
     Vue.use(VueMeta, {
         refreshOnceOnNavigation: true
@@ -169,7 +237,8 @@
     export default {
         name: 'OtherUserData',
         components: {
-            Keyboard
+            Keyboard,
+            ListingSmall
         },
         props: [
             'inspectedUser',
@@ -184,6 +253,7 @@
                 bio: this.bio,
                 role: this.role,
                 keyboards: null,
+                listings: null,
                 editBio: this.editBio,
                 editKeebs: this.editKeebs,
                 editBioState: null,
@@ -194,7 +264,8 @@
                 recommendations: null,
                 showStarCount: false,
                 canGiveStar: true,
-                showStarReportButtons: false
+                showStarReportButtons: false,
+                messageInput: null
             }
         },
         watch: {
@@ -229,6 +300,7 @@
                         this.keyboards = []
                     }
                     this.keyboards = this.inspectedUser.keyboards
+                    this.listings = this.inspectedUser.listings
                     this.loading = false
                     this.recommendations = this.inspectedUser.recommendations
                     if (this.user) {
@@ -330,7 +402,26 @@
                 this.$nextTick(() => {
                     this.$bvModal.hide('bio-edit-modal')
                 })
-            }
+            },
+            messageUser() {
+                if(this.user) this.$bvModal.show('message-modal')
+                else this.$router.push("/profile")
+            },
+            sendMessage() {
+                messageService.sendMessage(this.user._id, this.inspectedUser._id, this.messageInput, this.token).then(() => {
+                    this.$bvToast.toast('Message sent', {
+                        title: 'Success',
+                        variant: 'success',
+                        toaster: 'b-toaster-top-center'
+                    })
+                }).catch((error) => {
+                    this.$bvToast.toast(error.response.statusText, {
+                        title: 'Error',
+                        variant: 'danger',
+                        toaster: 'b-toaster-top-center'
+                    })
+                })
+            },
         },
         metaInfo () {
             if (!this.inspectedUser) {

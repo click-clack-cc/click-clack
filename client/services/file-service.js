@@ -12,9 +12,8 @@ class imgService {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`
-        } 
+        }
       });
-      
       return data;
     }
 
@@ -33,8 +32,25 @@ class imgService {
           Authorization: `Bearer ${token}`
         }
       });
-
       return data;
+    }
+
+    static async uploadListingImages (id, listing, imageNames, images, token) {
+        const formData = new FormData()
+        formData.append('id', id)
+        formData.append('listing', listing)
+
+        images.forEach((image, index) => {
+            formData.append('image', image, imageNames[index])
+        })
+
+        const { data } = await http.post(`${url}/listingphotos`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return data;
     }
 }
 

@@ -27,33 +27,22 @@
                 ok-title='Cool, thanks'
                 @hidden='welcomeModalClosed'
             >
-<!--                <b-card-text>If you're new here, let us tell you what this website is.-->
-<!--                    Click-Clack is a platform tailored specifically for mechanical keyboard enthusiasts.-->
-<!--                    We offer a highly customizable typing test with the option to track your performance, a powerful-->
-<!--                    and neat keyboard gallery and several other community features so you can talk to fellow-->
-<!--                    clackers and show off or even sell your builds and services. <br><br>-->
-<!--                    You will find the navigation on the top right corner.<br> <b-icon v-b-tooltip.hover.bottom="`Typing Test`" icon="lightning" /> will take you-->
-<!--                    to the typing test,<br> <b-icon v-b-tooltip.hover.bottom="`Keyboard Showroom`" icon="view-stacked" /> will-->
-<!--                    redirect you to the showroom-->
-<!--                    <br> <b-icon v-b-tooltip.hover.bottom="`Market`" icon="shop-window" /> is the market where you can trade items and services,-->
-<!--                    <br> and <b-icon v-b-tooltip.hover.bottom="`Community`" icon="people" /> is-->
-<!--                    where you can hang out and talk to fellow Click-Clack members.<br><br>-->
-<!--                    Please also note that we are using basic cookies to save your settings and for google analytics.<br><br>-->
-<!--                    Now go and explore the website, have fun!-->
-<!--                </b-card-text>-->
-
-                <b-card-text>If you're new here, let us tell you what this website is.
+                <b-card-text>
                     Click-Clack is a platform tailored specifically for mechanical keyboard enthusiasts.
-                    We offer a highly customizable typing test with the option to track your performance, a powerful
-                    and neat keyboard gallery and several other community features. <br><br>
+                    We offer a customizable and clean typing test with performance tracking, a powerful
+                    and neat keyboard gallery, a marketplace where you can list your items and services
+                    and several other community features so you can talk to fellow
+                    clackers and show off or even sell your builds and services. <br><br>
                     You will find the navigation on the top right corner.<br> <b-icon v-b-tooltip.hover.bottom="`Typing Test`" icon="lightning" /> will take you
                     to the typing test,<br> <b-icon v-b-tooltip.hover.bottom="`Keyboard Showroom`" icon="view-stacked" /> will
                     redirect you to the showroom
+                    <br> <b-icon v-b-tooltip.hover.bottom="`Market`" icon="shop-window" /> is the market where you can trade items and services,
                     <br> and <b-icon v-b-tooltip.hover.bottom="`Community`" icon="people" /> is
-                    where you can check out fellow Click-Clack members.<br><br>
+                    where you can hang out and talk to fellow Click-Clack members.<br><br>
                     Please also note that we are using basic cookies to save your settings and for google analytics.<br><br>
                     Now go and explore the website, have fun!
                 </b-card-text>
+
             </b-modal>
             <nuxt
                 id="routerview"

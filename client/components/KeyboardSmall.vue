@@ -112,7 +112,7 @@
                     <div v-if="showEdit === true" id="keeb-edit-button">
                         <b-button
                             size="sm"
-                            style="margin-left: 1rem; margin-right: 1rem"
+                            style="margin-left: 1rem; margin-right: 1rem; border: none"
                             variant="outline-primary"
                             @click="editExistingKeyboard(keeb)"
                         >
@@ -121,6 +121,7 @@
 
                         <b-button
                             size="sm"
+                            style='border: none'
                             variant="outline-danger"
                             @click="removeExistingKeyboard(keeb)"
                         >
@@ -157,7 +158,7 @@
                             {{ truncate(keeb.description,350,true) }}
                             <br>
                             <br>
-                            <div style="">
+                             <div style="">
                                     <span style="font-weight: bold; margin-right: 1rem">
                                       Switches
                                     </span>
@@ -339,9 +340,6 @@
                     if (this.photos) {
                         if (this.photos.length > 0) {
                             this.uploading = true
-                            console.log(this.editKeyboard)
-                            console.log(this.photos)
-                            console.log(this.token)
                             fileService.uploadKeyboardImages(
                                 this.owner._id,
                                 this.editKeyboard.name.replace(' ', '-').replace(/[^a-z0-9d-]/ig, '').toLowerCase(),
