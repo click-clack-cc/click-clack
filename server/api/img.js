@@ -61,6 +61,23 @@ router.post('/listingphotos', upload.array('image'), async function (req, res) {
     }
 });
 
+router.post('/postphotos', upload.array('image'), async function (req, res) {
+    try {
+        const fileUpload = new Resize('files/images');
+        if (!req.files) {
+            res.statusText = 'Please provide an image'
+            res.status(401).send();
+        }
+        for (let i = 0; i < req.files.length; i++) {
+            await fileUpload.save(req.files[i].originalname, req.files[i].buffer);
+        }
+        res.status(200).send();
+    } catch (e) {
+        res.statusText = e
+        res.status(401).send();
+    }
+});
+
 
 function isLoggedIn(req, res, next) {
     try {

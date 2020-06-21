@@ -116,39 +116,39 @@
                         </b-dropdown-item>
                     </b-dropdown>
                 </b-button-group>
-                <b-button-group v-if="showToolbar" class="mx-1">
+                <span >
+                <b-button-group v-if="showToolbar">
                     <b-button
-                        v-b-tooltip.hover
+                        size='sm'
                         title="Resets default settings"
-                        variant="light"
+                        variant="transparent"
                         @click="resetSettings"
                     >
-                        <b-icon icon="arrow-repeat" />
+                        <b-icon icon="arrow-repeat"/>
                     </b-button>
                 </b-button-group>
-                <b-button-group v-if="showToolbar" class="mx-1">
+                <b-button-group v-if="showToolbar">
                     <b-button
-                        variant="outline"
+                        size='sm'
+                        variant="transparent"
                         @click="toggleZenmode"
                     >
-                        <span v-if="!zenMode">
-                        <b-icon icon="arrows-expand" />
-                        </span>
-                        <span v-else style="font-weight: bold">
-                            <b-icon icon="arrows-collapse" />
-                        </span>
+                        <b-icon v-if="!zenMode" icon="arrows-expand"/>
+                        <b-icon v-else icon="arrows-collapse"/>
                     </b-button>
                 </b-button-group>
-                <b-button-group class="mx-1">
+                <b-button-group>
                     <b-button
+                        size='sm'
                         v-b-tooltip.hover.top="`Toggle toolbar`"
-                        variant="outline"
+                        variant="transparent"
                         @click="toggleToolbar"
                     >
-                        <b-icon v-if="showToolbar" icon="chevron-double-left" />
-                        <b-icon v-else icon="chevron-double-right" />
+                        <b-icon v-if="showToolbar" icon="chevron-double-left"/>
+                        <b-icon v-else icon="chevron-double-right"/>
                     </b-button>
                 </b-button-group>
+                    </span>
             </div>
         </b-row>
         <b-card id="typer-card">
@@ -214,7 +214,7 @@
                 v-for="word in words"
                 :key="word.id"
                 :class="word.state"
-                :style="{fontFamily : textFont}"
+                :style="{fontFamily : textFont, fontSize: `20px`}"
             >{{ word.word +' ' }}</span>
             <br>
         </b-card>
@@ -252,7 +252,7 @@
                         style="font-weight: bold"
                         variant="success"
                     />
-                    <b-progress-bar :value="mistakeCounter" style="font-weight: bold" variant="danger" />
+                    <b-progress-bar :value="mistakeCounter" style="font-weight: bold" variant="danger"/>
                 </b-progress>
             </b-col>
         </b-row>
@@ -316,14 +316,14 @@
     const showText = '50 words'
     const selectedKeyboard = 'No keyboard selected'
 
-    function shuffle (array) {
+    function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]]
         }
     }
 
-    function resetWords (words) {
+    function resetWords(words) {
         for (let i = 0; i < words.length; i++) {
             if (showText === '10 words') {
                 if (i >= 10) {
@@ -354,7 +354,7 @@
             'user',
             'token'
         ],
-        data () {
+        data() {
             return {
                 wordCounter,
                 mistakeCounter,
@@ -379,7 +379,7 @@
             }
         },
         computed: {
-            inputState () {
+            inputState() {
                 if (this.uinput === '') {
                     return null
                 }
@@ -397,13 +397,13 @@
         watch: {
             user: {
                 immediate: true,
-                handler () {
+                handler() {
                     this.loadCookies()
                     Vue.prototype.$forceUpdate()
                 }
             }
         },
-        created () {
+        created() {
             this.zenMode = false
             this.$emit('event', {
                 name: 'zen',
@@ -413,7 +413,7 @@
             this.redo()
         },
         methods: {
-            getWords (wordLimit, wordType) {
+            getWords(wordLimit, wordType) {
                 const newwordlist = []
                 for (let i = 0; i < wordLimit; i++) {
                     let newword = null
@@ -458,7 +458,7 @@
                 newwordlist[0].state = 'next'
                 return newwordlist
             },
-            nextWord () {
+            nextWord() {
                 if (this.uinput === '') {
                     return
                 }
@@ -542,7 +542,7 @@
                     this.uinput = ''
                 }
             },
-            async done () {
+            async done() {
                 this.$refs['done-modal'].show()
                 this.finishTime = new Date().getTime()
                 this.resultTime = this.finishTime - this.startTime
@@ -602,12 +602,12 @@
                 this.startTime = null
                 this.currentwpm = 0
             },
-            enterRedo () {
+            enterRedo() {
                 if (this.enterToRedo) {
                     this.redo()
                 }
             },
-            redo () {
+            redo() {
                 this.words = this.getWords(this.wordLimit, this.wordType)
                 this.characters = 0
                 for (let i = 0; i < this.words.length; i++) {
@@ -621,7 +621,7 @@
                 this.wordtimes = []
                 this.enterToRedo = true
             },
-            redoSame () {
+            redoSame() {
                 this.words = resetWords(this.words)
                 this.wordCounter = 0
                 this.mistakeCounter = 0
@@ -630,12 +630,12 @@
                 this.wordtimes = []
                 this.enterToRedo = true
             },
-            setWordLimit (wordNumber) {
+            setWordLimit(wordNumber) {
                 this.wordLimit = wordNumber
                 this.$cookies.set('typer.wordLimit', wordNumber, '7d')
                 this.redo()
             },
-            setShowText (showText) {
+            setShowText(showText) {
                 this.showText = showText
                 for (let i = 0; i < this.words.length; i++) {
                     if (showText === '10 words') {
@@ -657,7 +657,7 @@
                 this.words[0].state = 'next'
                 this.$cookies.set('typer.showText', showText, '7d')
             },
-            setWordType (wordType) {
+            setWordType(wordType) {
                 this.wordType = wordType
                 this.words = this.getWords(this.wordLimit, this.wordType)
                 this.wordCounter = 0
@@ -666,12 +666,12 @@
                 this.startTime = null
                 this.$cookies.set('typer.wordType', wordType, '7d')
             },
-            setKeyboard (keyboard) {
+            setKeyboard(keyboard) {
                 this.selectedKeyboard = keyboard
 
                 this.$cookies.set('typer.keyboard', keyboard._id, '7d')
             },
-            setKeyboardByID (id) {
+            setKeyboardByID(id) {
                 if (this.user) {
                     if (!this.user.keyboards) {
                         return
@@ -685,7 +685,7 @@
                     }
                 }
             },
-            checkState () {
+            checkState() {
                 if (this.wordCounter < this.words.length) {
                     if (!this.words[this.wordCounter].word.startsWith(this.uinput)) {
                         this.words[this.wordCounter].state = 'next danger'
@@ -703,29 +703,29 @@
                     }
                 }
             },
-            setTextBehaviour (behaviour) {
+            setTextBehaviour(behaviour) {
                 this.textBehaviour = behaviour
                 this.$cookies.set('typer.textBehaviour', behaviour, '7d')
             },
-            setTextFont (font) {
+            setTextFont(font) {
                 this.textFont = font
                 this.$cookies.set('typer.textFont', font, '7d')
             },
-            resetSettings () {
+            resetSettings() {
                 this.textFont = 'Poppins'
                 this.setWordType('Easy')
                 this.setWordLimit(100)
                 this.setTextBehaviour('Keep typed')
                 this.setKeyboard('No keyboard selected')
             },
-            closeModal () {
+            closeModal() {
                 this.$refs['done-modal'].hide()
                 this.redo()
             },
-            toggleToolbar () {
+            toggleToolbar() {
                 this.showToolbar = !this.showToolbar
             },
-            toggleZenmode () {
+            toggleZenmode() {
                 this.zenMode = !this.zenMode
                 this.$emit('event', {
                     name: 'zen',
@@ -733,7 +733,7 @@
                 })
                 this.$store.commit('updateZenmode', this.zenMode)
             },
-            loadCookies () {
+            loadCookies() {
                 if (process.server) {
                     return
                 }
@@ -756,7 +756,7 @@
                     this.setShowText(this.$cookies.get('typer.showText'))
                 }
             },
-            truncate (str, n, useWordBoundary) {
+            truncate(str, n, useWordBoundary) {
                 if (!str) {
                     return 'Keyboard'
                 }

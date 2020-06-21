@@ -1,15 +1,15 @@
 <template>
-    <b-card id="announcements-container" header-tag="header">
+    <b-card id="announcements-container" header-tag="header" no-body>
         <template v-slot:header>
             <h4 class="mb-0">
                 Announcements
             </h4>
         </template>
-        <div v-if="announcements">
+        <div id="announcements-body" v-if="announcements">
             <div v-for="(ann, index) in announcements" :key="index">
                 <span class="text-muted">{{ format(ann.createdAt) }}</span><br>
-                {{ ann.text }}
-                <br><br>
+                <div v-html='$md.render(ann.text)'>
+                </div>
             </div>
         </div>
         <div v-else id="loading" class="text-center">
@@ -45,30 +45,10 @@
 </script>
 
 <style scoped>
-    .avatar {
-        margin-left: 1rem;
-    }
-
-    .name {
-        margin-left: 1rem;
-        margin-top: 0.3rem;
-    }
-
-    .user-thumbnail {
-        margin-top: 0.5rem;
-    }
-
-    .timeago {
-        margin-left: 1rem;
-        margin-top: 0.3rem;
-    }
-
-    #newest-members-body {
-        min-height: 10rem;
-    }
-
-    #new-users-container {
-        height: 500px;
+    #announcements-body {
+        max-height: 30rem;
+        padding: 1rem;
+        overflow-y: scroll;
     }
 
     #loading {

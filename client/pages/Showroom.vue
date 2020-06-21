@@ -1,102 +1,10 @@
 <template>
     <div>
-        <b-row class="d-none d-lg-inline-flex" id='topcards'>
-            <b-col>
-                <nuxt-link to="/typing">
-                    <b-card no-body>
-                        <b-row no-gutters>
-                            <b-col cols='3'>
-                                <b-row align='middle' style='margin-top: 2.6rem; margin-left: 2rem'>
-                                    <b-icon scale='1.4' v-b-tooltip.hover.bottom="`Typing Test`" icon="lightning"/>
-                                </b-row>
-                            </b-col>
-                            <b-col style='margin: 1rem'>
-                                <b-row no-gutters style='font-weight: bold' align='middle'>
-                                    Typing Test
-                                </b-row>
-                                <b-row no-gutters>
-                                    Test your typing speed
-                                </b-row>
-                            </b-col>
-                        </b-row>
-                    </b-card>
-                </nuxt-link>
-            </b-col>
-            <b-col>
-                <nuxt-link to="/market">
-                    <b-card no-body>
-                        <b-row no-gutters>
-                            <b-col cols='3'>
-                                <b-row align='middle' style='margin-top: 2.6rem; margin-left: 2rem'>
-                                    <b-icon scale='1.4' v-b-tooltip.hover.bottom="`Market`" icon="shop-window"/>
-                                </b-row>
-                            </b-col>
-                            <b-col style='margin: 1rem'>
-                                <b-row no-gutters style='font-weight: bold' align='middle'>
-                                    Market
-                                </b-row>
-                                <b-row no-gutters>
-                                    Buy and sell items, services
-                                </b-row>
-                            </b-col>
-                        </b-row>
-                    </b-card>
-                </nuxt-link>
-            </b-col>
-            <b-col  >
-                <nuxt-link to="/showroom">
-                    <b-card no-body>
-                        <b-row no-gutters>
-                            <b-col cols='3'>
-                                <b-row align='middle' style='margin-top: 2.6rem; margin-left: 2rem'>
-                                    <b-icon scale='1.4' v-b-tooltip.hover.bottom="`Showroom`" icon="star"/>
-                                </b-row>
-                            </b-col>
-                            <b-col style='margin: 1rem'>
-                                <b-row no-gutters style='font-weight: bold' align='middle'>
-                                    Showroom
-                                </b-row>
-                                <b-row no-gutters>
-                                    Custom keyboard showroom
-                                </b-row>
-                            </b-col>
-                        </b-row>
-                    </b-card>
-                </nuxt-link>
-            </b-col>
-            <b-col>
-                <nuxt-link to="/settings">
-                    <b-card no-body>
-                        <b-row no-gutters>
-                            <b-col cols='3'>
-                                <b-row align='middle' style='margin-top: 2.6rem; margin-left: 2rem'>
-                                    <b-icon scale='1.4' v-b-tooltip.hover.bottom="`Themes`" icon="window"/>
-                                </b-row>
-                            </b-col>
-                            <b-col style='margin: 1rem'>
-                                <b-row no-gutters style='font-weight: bold' align='middle'>
-                                    Themes
-                                </b-row>
-                                <b-row no-gutters>
-                                    Customize click-clack with themes
-                                </b-row>
-                            </b-col>
-                        </b-row>
-                    </b-card>
-                </nuxt-link>
-            </b-col>
-        </b-row>
         <b-row class='posts'>
-            <b-col md='12' lg='8'>
-                <b-row id='postbuttons'>
-                    <b-col align='right'>
-                        <b-button block  pill @click='$nuxt.$router.push(user?"/editpost":"/profile")'>
-                            <b-icon icon='pencil'></b-icon>
-                            Write post
-                        </b-button>
-                    </b-col>
-                    <b-col>
-                        <b-button block  pill  @click='$nuxt.$router.push(user?"/editkeyboard":"/profile")'>
+            <b-col cols='12'>
+                <b-row id='postbuttons' >
+                    <b-col align='middle'>
+                        <b-button style='width: 13rem' block pill  @click='$nuxt.$router.push(user?"/editkeyboard":"/profile")'>
                             <b-icon icon='file-plus'></b-icon>
                             Submit a keyboard
                         </b-button>
@@ -139,20 +47,11 @@
 
                 <div v-if="allContent">
                     <b-card-group columns style='column-count: 1'
-                                  v-for="(content, index) in allContent"  :key="index">
-                        <PostSmall
-                            style='display: inline-block; width: 100%; margin-bottom: 0.5rem'
-                            v-if='posts.includes(content)'
-                            :post='content'
-                            :author="content.userdata"
-                            :showAuthor="true"
-                            :token="token"
-                            :user="user"
-                        >
-                        </PostSmall>
+                                  v-for="(content, index) in allContent">
                         <KeyboardSmall
-                            style='display: inline-block; width: 100%; margin-bottom: 0.5rem'
+                            style='display: inline-block; width: 100%; margin-bottom: 2rem; margin-top: 2rem'
                             v-if='keyboards.includes(content)'
+                            :key="index"
                             :keeb="content"
                             :owner="content.userdata"
                             :show-owner="true"
@@ -162,13 +61,6 @@
                         </KeyboardSmall>
                     </b-card-group>
                 </div>
-            </b-col>
-            <b-col  class="d-none d-lg-block" >
-                <announcements id="announcements"/>
-                <Leaderboard id="leaderboard"/>
-<!--                <NewUsers id="new-users"/>-->
-                <Footer >
-                </Footer>
             </b-col>
         </b-row>
     </div>
@@ -184,7 +76,6 @@
     import Leaderboard from '../components/LeaderboardSmall'
     import Footer from "../components/Footer";
     import postService from "../services/post-service";
-    import PostSmall from "../components/PostSmall";
 
     export default {
         name: 'Showroom',
@@ -194,8 +85,7 @@
             NewUsers,
             Announcements,
             Leaderboard,
-            Footer,
-            PostSmall
+            Footer
         },
         props: [],
         data() {
@@ -224,10 +114,10 @@
                 this.posts = posts
 
                 allContent = allContent.concat(posts)
-                if(method===("new")){
+                if(method===("new") || method===("rising")){
                     allContent.sort((b,a) => a.createdAt - b.createdAt)
                 }
-                if(method===("best")  || method===("rising")) {
+                if(method===("best")) {
                     allContent.sort((b, a) => a.heartsNum - b.heartsNum)
                 }
                 this.allContent = allContent
@@ -235,10 +125,10 @@
             }
         },
         head() {
-            const description = ' Newest custom mechanical keyboard builds on click-clack. Join our community, check out the nicest custom mech keebs uploaded by our members and share yur own keyboards!'
-            const title = 'Click-Clack - Newest Mechanical Keyboard Builds'
+            const description = 'The Click-Clack mechanical keyboard showroom has the prettiest custom mechanical keyboards. Come and share your own build as well!'
+            const title = 'Click-Clack - Showroom'
             const image = 'https://click-clack.cc:5000/files/images/indeximage.JPG'
-            const url = 'https://click-clack.cc/'
+            const url = 'https://click-clack.cc/showroom'
             return {
                 title,
                 htmlAttrs: {

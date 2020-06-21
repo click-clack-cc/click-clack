@@ -77,8 +77,7 @@
                                             <a :href="`/u/${message.fromuserdata.id}`" style='font-weight: bold'> {{ message.fromuserdata.firstname }}
                                                 <span class="text-muted"> @{{ message.fromuserdata.id }} </span></a>
                                         </div>
-                                        <div class='message-text'>
-                                            {{message.text}}
+                                        <div v-html='$md.renderInline(message.text)' class='message-text'>
                                         </div>
                                     </b-col>
                                     <b-col cols='3' align='right' >

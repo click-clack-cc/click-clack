@@ -3,61 +3,87 @@
         <b-col>
             <br>
             <b-row>
-                <b-col cols='8'>
-                    <b-button v-b-toggle.collapse-1 variant="outline-primary">
-                        <b-icon icon='funnel'></b-icon>
-                        Filters
-                    </b-button>
-                    <b-collapse v-model='filtersVisible' id="collapse-1" class="mt-2">
-                        <b-card style='max-width: 600px'>
-                            <b-form-input v-model='keywords' placeholder='Keywords'>
+                <b-col class="d-none d-lg-block"  lg='4'>
+                    <b-row>
+                        <b-col>
+                            <div align='right' style='margin: auto; width: 100%; margin-top: 4rem'>
+                                <b-button block pill style='padding-left: 2rem; padding-right: 2rem;  margin-bottom: 2rem' v-if='this.user'
+                                          to='/editlisting'
+                                          variant="primary">
+                                    <b-icon icon='file-plus'></b-icon>
+                                    Add new listing
+                                </b-button>
+                                <b-button block style='padding-left: 2rem; padding-right: 2rem; margin-bottom: 2rem' v-else pill
+                                          to='/profile'
+                                          variant="primary">
+                                    <b-icon icon='file-plus'></b-icon>
+                                    Add new listing
+                                </b-button>
+                            </div>
+                        </b-col>
+                    </b-row>
+                    <b-card style='max-width: 600px'>
+                        <b-form-input v-model='keywords' placeholder='Keywords'>
+                        </b-form-input>
+                        <br>
+                        <b-input-group>
+                            <b-input-group-prepend is-text>
+                                <b-form-checkbox v-model='priceRangeEnabled' switch class="mr-n2">
+                                    <span class="sr-only">Switch for following text input</span>
+                                </b-form-checkbox>
+                            </b-input-group-prepend>
+                            <b-form-input v-model='minPrice' placeholder='Min. price'>
                             </b-form-input>
-                            <br>
-                            <b-input-group>
-                                <b-input-group-prepend is-text>
-                                    <b-form-checkbox v-model='priceRangeEnabled' switch class="mr-n2">
-                                        <span class="sr-only">Switch for following text input</span>
-                                    </b-form-checkbox>
-                                </b-input-group-prepend>
-                                <b-form-input v-model='minPrice' placeholder='Minimum price'>
-                                </b-form-input>
-                                <b-form-input v-model='maxPrice' placeholder='Maximum price'>
-                                </b-form-input>
-                            </b-input-group>
-                            <br>
-                            <b-button-toolbar id='toolbar'>
-                                <b-dropdown class="m-2" variant='outline-primary' left
-                                            :text="searchType?searchType.text:'Looking for'">
-                                    <b-dropdown-item
-                                        v-for='(type, index) in searchTypeOptions'
-                                        v-bind:key='index'
-                                        @click='setSearchType(type)'>
-                                        {{type.text}}
-                                    </b-dropdown-item>
-                                </b-dropdown>
-                                <b-dropdown class="m-2" variant='outline-primary' left
-                                            :text="cat1?cat1.text:'Category'">
-                                    <b-dropdown-item @click='setCat1(null)'>
-                                        Any
-                                    </b-dropdown-item>
-                                    <b-dropdown-divider></b-dropdown-divider>
-                                    <b-dropdown-item
-                                        v-for='(cat, index) in cat1options1'
-                                        v-bind:key='index'
-                                        @click='setCat1(cat)'>
-                                        {{cat.text}}
-                                    </b-dropdown-item>
-                                    <b-dropdown-divider></b-dropdown-divider>
-                                    <b-dropdown-item
-                                        v-for='(cat, index) in cat1options2'
-                                        v-bind:key='index'
-                                        @click='setCat1(cat)'>
-                                        {{cat.text}}
-                                    </b-dropdown-item>
-                                </b-dropdown>
-                                <b-dropdown :disabled='!(cat1 && subcats[cat1.value])' class="m-2"
-                                            variant='outline-primary'
-                                            left :text="cat2?cat2.text:'Subcategory'">
+                            <b-form-input v-model='maxPrice' placeholder='Max. price'>
+                            </b-form-input>
+                        </b-input-group>
+                        <br>
+                        <b-button-toolbar id='toolbar'>
+                            <b-dropdown class="m-2" variant='outline-primary' left
+                                        :text="searchType?searchType.text:'Looking for'">
+                                <b-dropdown-item
+                                    v-for='(type, index) in searchTypeOptions'
+                                    v-bind:key='index'
+                                    @click='setSearchType(type)'>
+                                    {{type.text}}
+                                </b-dropdown-item>
+                            </b-dropdown>
+                            <b-dropdown class="m-2" variant='outline-primary' left
+                                        :text="location?location.text:'Location'">
+                                <b-dropdown-item @click='setLocation(null)'>
+                                    Globally
+                                </b-dropdown-item>
+                                <b-dropdown-divider></b-dropdown-divider>
+                                <b-dropdown-item
+                                    v-for='(loc, index) in locationOptions'
+                                    v-bind:key='index'
+                                    @click='setLocation(loc)'>
+                                    {{loc.text}}
+                                </b-dropdown-item>
+                            </b-dropdown>
+                            <b-dropdown class="m-2" variant='outline-primary' left
+                                        :text="cat1?cat1.text:'Category'">
+                                <b-dropdown-item @click='setCat1(null)'>
+                                    Any
+                                </b-dropdown-item>
+                                <b-dropdown-divider></b-dropdown-divider>
+                                <b-dropdown-item
+                                    v-for='(cat, index) in cat1options1'
+                                    v-bind:key='index'
+                                    @click='setCat1(cat)'>
+                                    {{cat.text}}
+                                </b-dropdown-item>
+                                <b-dropdown-divider></b-dropdown-divider>
+                                <b-dropdown-item
+                                    v-for='(cat, index) in cat1options2'
+                                    v-bind:key='index'
+                                    @click='setCat1(cat)'>
+                                    {{cat.text}}
+                                </b-dropdown-item>
+                            </b-dropdown>
+                            <b-dropdown :disabled='!(cat1 && subcats[cat1.value])' class="m-2"
+                                        variant='outline-primary'
+                                        left :text="cat2?cat2.text:'Subcategory'">
                                 <span v-if='cat1 && subcats[cat1.value]'>
                                 <b-dropdown-item @click='setCat2(null)'>
                                     Any
@@ -70,99 +96,79 @@
                                     {{subcat.text}}
                                 </b-dropdown-item>
                                     </span>
-                                </b-dropdown>
-                                <b-dropdown class="m-2" variant='outline-primary' left
-                                            :text="location?location.text:'Location'">
-                                    <b-dropdown-item @click='setLocation(null)'>
-                                        Globally
-                                    </b-dropdown-item>
-                                    <b-dropdown-divider></b-dropdown-divider>
-                                    <b-dropdown-item
-                                        v-for='(loc, index) in locationOptions'
-                                        v-bind:key='index'
-                                        @click='setLocation(loc)'>
-                                        {{loc.text}}
-                                    </b-dropdown-item>
-                                </b-dropdown>
-                            </b-button-toolbar>
-                            <br>
+                            </b-dropdown>
+                        </b-button-toolbar>
+                        <br>
 
-                            <b-form-checkbox v-model='newOnly' name="check-button" switch>
-                                New items only
-                            </b-form-checkbox>
-                            <br>
-                            <b-form-checkbox v-model='freeShipping' name="check-button" switch>
-                                Free shipping
-                            </b-form-checkbox>
-                            <br>
-                            <br>
-                            <b-row>
-                                <b-col cols='9'>
-                                    <b-button-group style='width: 100%'>
-                                        <b-button @click='filter' variant='outline-primary'>
-                                            <b-icon icon='search'></b-icon>
-                                            Search
-                                        </b-button>
-                                    </b-button-group>
-                                </b-col>
-                                <b-col>
-                                    <b-button-group style='width: 100%'>
-                                        <b-button @click='$nuxt.$router.go()' variant='outline-primary'>
-                                            <b-icon icon='arrow-repeat'></b-icon>
-                                            Reset
-                                        </b-button>
-                                    </b-button-group>
-                                </b-col>
-                            </b-row>
-
-                        </b-card>
-                    </b-collapse>
+                        <b-form-checkbox v-model='newOnly' name="check-button" switch>
+                            New items only
+                        </b-form-checkbox>
+                        <br>
+                        <b-form-checkbox v-model='freeShipping' name="check-button" switch>
+                            Free shipping
+                        </b-form-checkbox>
+                        <br>
+                        <br>
+                        <b-row>
+                            <b-col>
+                                <b-button-group style='width: 100%; margin-bottom: 1rem'>
+                                    <b-button block @click='filter' variant='outline-primary'>
+                                        <b-icon icon='search'></b-icon>
+                                        Search
+                                    </b-button>
+                                </b-button-group>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col>
+                                <b-button-group style='width: 100%'>
+                                    <b-button block @click='$nuxt.$router.go()' variant='outline-primary'>
+                                        <b-icon icon='arrow-repeat'></b-icon>
+                                        Reset
+                                    </b-button>
+                                </b-button-group>
+                            </b-col>
+                        </b-row>
+                    </b-card>
                 </b-col>
-                <b-col cols='4'>
-                    <div align='right' style='margin: auto; width: 100%'>
-                        <b-button v-if='this.user' to='/editlisting' variant="primary">
-                            <b-icon icon='file-plus'></b-icon>
-                            Add new listing
-                        </b-button>
-                        <b-button v-else to='/profile' variant="primary" >
-                            <b-icon icon='file-plus'></b-icon>
-                            Add new listing
-                        </b-button>
-                    </div>
-                </b-col>
-                <b-col cols='12'>
+                <b-col lg='8' sm='12'>
                     <b-row align='center'>
                         <b-breadcrumb id='breadcrumb'>
-                        <b-breadcrumb-item>
-                            <b-icon style='margin-right: 0.5rem' icon="shop-window" scale="1.25" shift-v="1.25" aria-hidden="true"></b-icon>
-                            Market
-                        </b-breadcrumb-item>
-                        <b-breadcrumb-item>{{this.searchType.value===`looking`?`Looking to buy`:`Looking to sell`}}</b-breadcrumb-item>
-                        <b-breadcrumb-item v-if='location'>{{location.text}}</b-breadcrumb-item>
-                        <b-breadcrumb-item v-if='cat1'>{{cat1.text}}</b-breadcrumb-item>
-                        <b-breadcrumb-item v-if='cat2'>{{cat2.text}}</b-breadcrumb-item>
-                        <b-breadcrumb-item v-if='newOnly'>New items</b-breadcrumb-item>
+                            <b-breadcrumb-item>
+                                <b-icon style='margin-right: 0.5rem' icon="shop-window" scale="1.25" shift-v="1.25"
+                                        aria-hidden="true"></b-icon>
+                                Market
+                            </b-breadcrumb-item>
+                            <b-breadcrumb-item>{{this.searchType.value===`looking`?`Looking to buy`:`Looking to sell`}}
+                            </b-breadcrumb-item>
+                            <b-breadcrumb-item v-if='location'>{{location.text}}</b-breadcrumb-item>
+                            <b-breadcrumb-item v-if='cat1'>{{cat1.text}}</b-breadcrumb-item>
+                            <b-breadcrumb-item v-if='cat2'>{{cat2.text}}</b-breadcrumb-item>
+                            <b-breadcrumb-item v-if='newOnly'>New items</b-breadcrumb-item>
                         </b-breadcrumb>
                     </b-row>
+                    <b-card-group columns style='column-count: 1' v-if="listings">
+                        <ListingSmall style='display: inline-block; width: 100%'
+                                      :listing="listing"
+                                      :owner="listing.userdata"
+                                      :show-owner="true"
+                                      :token="token"
+                                      :user="user"
+                                      v-for="(listing, index) in listings"
+                                      :key="index">
+                            {{index}}
+                        </ListingSmall>
+                    </b-card-group>
+                    <div v-if='listings.length === 0'>
+                        <br>
+                        <b-icon icon="x" scale="2" style="width: 100%; margin: auto"/>
+                    </div>
                 </b-col>
+
+
             </b-row>
         </b-col>
-        <b-card-group columns style='column-count: 2' v-if="listings">
-                <ListingSmall style='display: inline-block; width: 100%'
-                    :listing="listing"
-                    :owner="listing.userdata"
-                    :show-owner="true"
-                    :token="token"
-                    :user="user"
-                    v-for="(listing, index) in listings"
-                    :key="index">
-                    {{index}}
-                </ListingSmall>
-        </b-card-group>
-        <div v-if='listings.length === 0'>
-            <br>
-            <b-icon icon="x" scale="2" style="width: 100%; margin: auto" />
-        </div>
+
     </div>
 </template>
 
@@ -282,7 +288,7 @@
                     accessory: [{
                         value: 'carrycase',
                         text: 'Carrying cases'
-                    },{
+                    }, {
                         value: 'deskmat',
                         text: 'Deskmats'
                     }, {
@@ -447,13 +453,13 @@
                 this.loaded = false
                 this.minPrice = parseInt(this.minPrice)
                 this.maxPrice = parseInt(this.maxPrice)
-                if(isNaN(this.minPrice)) this.minPrice = null
-                if(isNaN(this.maxPrice)) this.maxPrice = null
+                if (isNaN(this.minPrice)) this.minPrice = null
+                if (isNaN(this.maxPrice)) this.maxPrice = null
                 this.listings = await listingService.getFilteredListings({
                     keywords: this.keywords,
-                    cat1: this.cat1?this.cat1.value:null,
-                    cat2: this.cat2?this.cat2.value:null,
-                    location: this.location?this.location.value:null,
+                    cat1: this.cat1 ? this.cat1.value : null,
+                    cat2: this.cat2 ? this.cat2.value : null,
+                    location: this.location ? this.location.value : null,
                     minPrice: this.minPrice ? this.minPrice : 0,
                     maxPrice: this.maxPrice ? this.maxPrice : 9999999,
                     newOnly: this.newOnly,
@@ -514,9 +520,9 @@
     }
 
     #breadcrumb {
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 1rem;
+        /*margin-left: auto;*/
+        /*margin-right: auto;*/
+        /*margin-top: 1rem;*/
         background-color: unset;
     }
 

@@ -17,7 +17,7 @@
                     <b-form-input
                         v-model="searchinput"
                         autocomplete="off"
-                        placeholder="Search"
+                        placeholder="Search for anything"
                         variant="light"
                         @keydown.enter="search"
                         @submit.prevent
@@ -38,13 +38,8 @@
                     pill
                 >
                     <b-nav-item>
-                        <nuxt-link exact exact-active-class="active" to="/typing">
-                            <b-icon v-b-tooltip.hover.bottom="`Typing Test`" icon="lightning"/>
-                        </nuxt-link>
-                    </b-nav-item>
-                    <b-nav-item>
                         <nuxt-link exact-active-class="active" to="/">
-                            <b-icon v-b-tooltip.hover.bottom="`Keyboard Showroom`" icon="view-stacked"/>
+                            <b-icon v-b-tooltip.hover.bottom="`Home`" icon="view-stacked"/>
                         </nuxt-link>
                     </b-nav-item>
                     <b-nav-item>
@@ -53,8 +48,13 @@
                         </nuxt-link>
                     </b-nav-item>
                     <b-nav-item>
-                        <nuxt-link exact-active-class="active" to="/community">
-                            <b-icon v-b-tooltip.hover.bottom="`Community`" icon="people"/>
+                        <nuxt-link exact-active-class="active" to="/showroom">
+                            <b-icon v-b-tooltip.hover.bottom="`Showroom`" icon="star"/>
+                        </nuxt-link>
+                    </b-nav-item>
+                    <b-nav-item>
+                        <nuxt-link exact exact-active-class="active" to="/typing">
+                            <b-icon v-b-tooltip.hover.bottom="`Typing Test`" icon="lightning"/>
                         </nuxt-link>
                     </b-nav-item>
                     <b-dropdown no-caret right variant="link" style='margin-top: -0.5rem; margin-bottom: -0.5rem' toggle-class="text-decoration-none">
@@ -71,21 +71,29 @@
                             >
                                 <template v-if='unseen > 0' v-slot:badge>{{unseen}}</template>
                             </b-avatar>
-                            <nuxt-link v-else exact-active-class="active" to="/profile">
-                                <b-avatar
+                                <b-avatar v-else
                                     class="mini-avatar"
-                                    v-b-tooltip.hover.bottom="`Sign in`"
                                     size="2.3rem"
-                                    to="/profile"
                                     variant="light"
                                 />
-                            </nuxt-link>
                         </template>
                         <b-dropdown-item @click='$nuxt.$router.push(`/profile`)'>
                             <nuxt-link to="/profile">
                                 <b-icon icon='person'></b-icon>
                                 <span v-if='this.user'>Profile</span>
                                 <span v-else>Sign in</span>
+                            </nuxt-link>
+                        </b-dropdown-item>
+                        <b-dropdown-item v-if='user && (user.role === "admin" || user.role ==="developer")' @click='$nuxt.$router.push(`/admintools`)'>
+                            <nuxt-link to="/profile">
+                                <b-icon icon='shield'></b-icon>
+                                <span>AdminTools</span>
+                            </nuxt-link>
+                        </b-dropdown-item>
+                        <b-dropdown-item v-if='!this.user' @click='$nuxt.$router.push(`/signup`)'>
+                            <nuxt-link to="/profile">
+                                <b-icon icon='person-plus'></b-icon>
+                                <span>Sign up</span>
                             </nuxt-link>
                         </b-dropdown-item>
                         <b-dropdown-item v-if='this.user' @click='$nuxt.$router.push(`/messages`)'>
@@ -102,6 +110,15 @@
                                 Themes
                             </nuxt-link>
                         </b-dropdown-item>
+                            <b-form-checkbox
+                                :checked="nightmode"
+                                name="check-button"
+                                style='margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem'
+                                switch
+                                @change="changeTheme"
+                                >
+                                Night mode
+                            </b-form-checkbox>
                         <b-dropdown-item-btn>
                             <a href="https://www.patreon.com/clickclackcc">
                                 <b-icon icon='heart'></b-icon>
@@ -115,8 +132,8 @@
                                 FAQ
                             </nuxt-link>
                         </b-dropdown-item>
-                        <b-dropdown-item @click='$nuxt.$router.push(`/wip`)'>
-                            <nuxt-link to="/wip">
+                        <b-dropdown-item @click='$nuxt.$router.push(`/termsandconditions`)'>
+                            <nuxt-link to="/termsandconditions">
                                 <b-icon icon='justify'></b-icon>
                                 T&C
                             </nuxt-link>
@@ -127,11 +144,9 @@
                                 Contact support
                             </a>
                         </b-dropdown-item-btn>
-                        <b-dropdown-item @click='$nuxt.$router.push(`/wip`)'>
-                            <nuxt-link to="/wip">
+                        <b-dropdown-item @click='$nuxt.$router.push(`/bugreport`)'>
                                 <b-icon icon='exclamation-square'></b-icon>
                                 Report bug
-                            </nuxt-link>
                         </b-dropdown-item>
                         <b-dropdown-divider></b-dropdown-divider>
                         <b-dropdown-item-btn @click='signOut'>
@@ -215,6 +230,13 @@
                     }
                 })
             },
+            changeTheme () {
+                this.setTheme(!this.nightmode)
+            },
+            setTheme (nightmode) {
+                this.$cookies.set('darkmode', nightmode, '7d')
+                this.$router.go()
+            },
             getUnseenMessages() {
                 messageService.getUnseenMessageCount(this.user._id, this.token).then((res) => {
                     this.unseen = res
@@ -236,7 +258,7 @@
     }
 
     #header-inside {
-        margin-top: -1rem;
+        margin-top: -0.9rem;
         margin-bottom: -1rem;
     }
 

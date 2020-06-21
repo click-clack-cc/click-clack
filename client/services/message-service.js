@@ -17,7 +17,6 @@ class messageService {
             headers: {
                 Authorization: `Bearer ${token}`
             }});
-        console.log(unseen)
         return unseen?unseen.unseen:0
     }
 

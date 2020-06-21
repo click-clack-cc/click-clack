@@ -12,38 +12,38 @@
                 <Header :user="user" @event="eventHandler" />
             </template>
 
-            <b-modal
-                ref='welcome-modal'
-                id='welcome-modal'
-                size='lg'
-                title="Welcome to Click-Clack ❤️"
-                ok-only
-                centered
-                no-close-on-backdrop
-                hide-backdrop
-                no-close-on-esc
-                content-class="shadow"
-                ok-variant='outline-primary'
-                ok-title='Cool, thanks'
-                @hidden='welcomeModalClosed'
-            >
-                <b-card-text>
-                    Click-Clack is a platform tailored specifically for mechanical keyboard enthusiasts.
-                    We offer a customizable and clean typing test with performance tracking, a powerful
-                    and neat keyboard gallery, a marketplace where you can list your items and services
-                    and several other community features so you can talk to fellow
-                    clackers and show off or even sell your builds and services. <br><br>
-                    You will find the navigation on the top right corner.<br> <b-icon v-b-tooltip.hover.bottom="`Typing Test`" icon="lightning" /> will take you
-                    to the typing test,<br> <b-icon v-b-tooltip.hover.bottom="`Keyboard Showroom`" icon="view-stacked" /> will
-                    redirect you to the showroom
-                    <br> <b-icon v-b-tooltip.hover.bottom="`Market`" icon="shop-window" /> is the market where you can trade items and services,
-                    <br> and <b-icon v-b-tooltip.hover.bottom="`Community`" icon="people" /> is
-                    where you can hang out and talk to fellow Click-Clack members.<br><br>
-                    Please also note that we are using basic cookies to save your settings and for google analytics.<br><br>
-                    Now go and explore the website, have fun!
-                </b-card-text>
+<!--            <b-modal-->
+<!--                ref='welcome-modal'-->
+<!--                id='welcome-modal'-->
+<!--                size='lg'-->
+<!--                title="Welcome to Click-Clack ❤️"-->
+<!--                ok-only-->
+<!--                centered-->
+<!--                no-close-on-backdrop-->
+<!--                hide-backdrop-->
+<!--                no-close-on-esc-->
+<!--                content-class="shadow"-->
+<!--                ok-variant='outline-primary'-->
+<!--                ok-title='Cool, thanks'-->
+<!--                @hidden='welcomeModalClosed'-->
+<!--            >-->
+<!--                <b-card-text>-->
+<!--                    Click-Clack is a platform tailored specifically for mechanical keyboard enthusiasts.-->
+<!--                    We offer a customizable and clean typing test with performance tracking, a powerful-->
+<!--                    and neat keyboard gallery, a marketplace where you can list your items and services-->
+<!--                    and several other community features so you can talk to fellow-->
+<!--                    clackers and show off or even sell your builds and services. <br><br>-->
+<!--                    You will find the navigation on the top right corner.<br> <b-icon v-b-tooltip.hover.bottom="`Typing Test`" icon="lightning" /> will take you-->
+<!--                    to the typing test,<br> <b-icon v-b-tooltip.hover.bottom="`Keyboard Showroom`" icon="view-stacked" /> will-->
+<!--                    redirect you to the showroom-->
+<!--                    <br> <b-icon v-b-tooltip.hover.bottom="`Market`" icon="shop-window" /> is the market where you can trade items and services,-->
+<!--                    <br> and <b-icon v-b-tooltip.hover.bottom="`Community`" icon="people" /> is-->
+<!--                    where you can hang out and talk to fellow Click-Clack members.<br><br>-->
+<!--                    Please also note that we are using basic cookies to save your settings and for google analytics.<br><br>-->
+<!--                    Now go and explore the website, have fun!-->
+<!--                </b-card-text>-->
 
-            </b-modal>
+<!--            </b-modal>-->
             <nuxt
                 id="routerview"
                 :nightmode="nightmode"
@@ -53,26 +53,26 @@
                 @event="eventHandler"
             />
 
-            <template
-                v-if="!(zenmode && $nuxt.$route.name === 'Typing')"
-                v-slot:footer
-            >
-                <div id="footer">
-                    <Footer />
-                    <b-form-checkbox
-                        :checked="nightmode"
-                        align="right"
-                        name="check-button"
-                        style="margin-top: -0.5rem"
-                        switch
-                        @change="changeTheme"
-                    >
-                        <p style="font-size: 0.7rem; margin-top: 0.2rem; font-weight: lighter">
-                            Night mode
-                        </p>
-                    </b-form-checkbox>
-                </div>
-            </template>
+<!--            <template-->
+<!--                v-if="!(zenmode && $nuxt.$route.name === 'Typing')"-->
+<!--                v-slot:footer-->
+<!--            >-->
+<!--                <div id="footer">-->
+<!--                    <Footer />-->
+<!--                    <b-form-checkbox-->
+<!--                        :checked="nightmode"-->
+<!--                        align="right"-->
+<!--                        name="check-button"-->
+<!--                        style="margin-top: -0.5rem"-->
+<!--                        switch-->
+<!--                        @change="changeTheme"-->
+<!--                    >-->
+<!--                        <p style="font-size: 0.7rem; margin-top: 0.2rem; font-weight: lighter">-->
+<!--                            Night mode-->
+<!--                        </p>-->
+<!--                    </b-form-checkbox>-->
+<!--                </div>-->
+<!--            </template>-->
         </b-card>
         <div v-show="!loaded" class="loading-page">
             <div class="loader" />
@@ -189,13 +189,6 @@
                     this.$store.commit('updateToken', this.$cookies.get('token'))
                 }
             },
-            changeTheme () {
-                this.setTheme(!this.nightmode)
-            },
-            setTheme (nightmode) {
-                this.$cookies.set('darkmode', nightmode, '7d')
-                this.$router.go()
-            },
             eventHandler (event) {
                 if (event.name === 'zen') {
                     this.$store.commit('updateZenmode', event.value)
@@ -205,9 +198,9 @@
                     this.$router.push('/search')
                 }
             },
-            welcomeModalClosed (){
-                this.$cookies.set('welcomeDone', true, '7d')
-            }
+            // welcomeModalClosed (){
+            //     this.$cookies.set('welcomeDone', true, '7d')
+            // }
         }
     }
 </script>

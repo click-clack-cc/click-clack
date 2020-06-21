@@ -1,5 +1,5 @@
 <template>
-    <b-card id="new-users-container" header-tag="header">
+    <b-card id="new-users-container" header-tag="header" no-body>
         <b-modal
             id="new-members-user-preview-modal"
             ref="new-members-user-preview-modal"
@@ -14,20 +14,15 @@
                 Newest Members
             </h4>
         </template>
-        <div v-if="!newMembersLoading" id="newest-members-body">
-            <b-row v-for="(user, index) in users" :key="index" class="user-thumbnail">
-                <b-avatar
-                    :src="`https://click-clack.cc:5000/files/images/${user._id}.jpg`"
-                    button
-                    class="avatar"
-                    size="2rem"
-                    variant="light"
-                    @click="previewUser(user.id)"
-                />
-                <b-link :href="`/u/${user.id}`" class="name">
-                    {{ user.firstname }} {{ user.lastname }}
-                    <span class="text-muted"> @{{ user.id }} </span>
-                </b-link>
+        <div v-if="!newMembersLoading" id="newest-members-body" >
+            <b-row no-gutters v-for="(user, index) in users" :key="index" class="user-thumbnail">
+                <b-col>
+                    <b-link :href="`/u/${user.id}`" class="name">
+                        {{ user.firstname }} {{ user.lastname }} <br>
+                        <span class="text-muted"> @{{ user.id }} </span>
+                    </b-link>
+                </b-col>
+
                 <b-col>
                     <p align="right" class="text-muted timeago">
                         {{ format(user.createdAt) }}
@@ -88,7 +83,7 @@
     }
 
     .name {
-        margin-left: 1rem;
+        margin-left: 0rem;
         margin-top: 0.3rem;
     }
 
@@ -102,11 +97,13 @@
     }
 
     #newest-members-body {
-        min-height: 10rem;
+        overflow-y: scroll;
+        padding: 1rem;
+        max-height: 30rem;
     }
 
     #new-users-container {
-        height: 500px;
+        max-height: 30rem;
     }
 
     #loading {

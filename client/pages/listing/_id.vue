@@ -7,7 +7,7 @@
                 centered
                 hide-header
             >
-                <OtherUserDataPreview :inspected-user="this.listing.user"/>
+                <OtherUserDataPreview :inspected-user="listing.userdata"/>
             </b-modal>
 
             <b-modal
@@ -42,14 +42,27 @@
                 <b-col>
                     <b-row id="carousel" cols="8" v-if='listing.images'>
                         <b-carousel
-
+                            v-if='listing.length > 1'
                             fade
                             img-height="500"
                             img-width="1000"
                             indicators
                         >
                             <b-carousel-slide
-                                v-for="(img, index) in this.listing.images"
+                                v-for="(img, index) in listing.images"
+                                :key="index"
+                                :img-src="img"
+                                :img-alt="altDesc"
+                            />
+                        </b-carousel>
+                        <b-carousel
+                            v-else
+                            fade
+                            img-height="500"
+                            img-width="1000"
+                        >
+                            <b-carousel-slide
+                                v-for="(img, index) in listing.images"
                                 :key="index"
                                 :img-src="img"
                                 :img-alt="altDesc"
@@ -79,43 +92,43 @@
                             </b-col>
                             <b-col cols='4' align='right' class="user-thumbnail">
                                 <b-avatar
-                                    :src="`https://click-clack.cc:5000/files/images/${this.listing.userdata._id}.jpg`"
+                                    :src="`https://click-clack.cc:5000/files/images/${listing.userdata._id}.jpg`"
                                     badge-offset="-0.2rem"
                                     button
                                     class="avatar"
                                     size="2rem"
                                     variant="light"
-                                    @click="previewUser(this.listing.userdata.id)"
+                                    @click="previewUser(listing.userdata.id)"
                                 >
-                                    <template v-if="this.listing.userdata.role == 'admin'" v-slot:badge>
+                                    <template v-if="listing.userdata.role == 'admin'" v-slot:badge>
                                         <b-icon v-b-tooltip.right icon="shield-shaded" title="Administrator"/>
                                     </template>
-                                    <template v-else-if="this.listing.userdata.role == 'verified'" v-slot:badge>
+                                    <template v-else-if="listing.userdata.role == 'verified'" v-slot:badge>
                                         <b-icon v-b-tooltip.right icon="check-circle" title="Verified user"/>
                                     </template>
-                                    <template v-else-if="this.listing.userdata.role == 'supporter'" v-slot:badge>
+                                    <template v-else-if="listing.userdata.role == 'supporter'" v-slot:badge>
                                         <b-icon v-b-tooltip.right icon="heart" title="Supporter"/>
                                     </template>
-                                    <template v-else-if="this.listing.userdata.role == 'betatester'" v-slot:badge>
+                                    <template v-else-if="listing.userdata.role == 'betatester'" v-slot:badge>
                                         <b-icon
                                             v-b-tooltip.right
                                             icon="egg"
                                             title="I was there when it all started"
                                         />
                                     </template>
-                                    <template v-else-if="this.listing.userdata.role == 'developer'" v-slot:badge>
+                                    <template v-else-if="listing.userdata.role == 'developer'" v-slot:badge>
                                         <b-icon v-b-tooltip.right icon="cup" title="Developer"/>
                                     </template>
                                 </b-avatar>
-                                <b-link :href="`/u/${this.listing.userdata.id}`" class="name">
-                                    {{ this.listing.userdata.firstname }} {{ this.listing.userdata.lastname }}
-                                    <span class="text-muted"> @{{ this.listing.userdata.id }} </span>
+                                <b-link :href="`/u/${listing.userdata.id}`" class="name">
+                                    {{ listing.userdata.firstname }} {{ listing.userdata.lastname }}
+                                    <span class="text-muted"> @{{ listing.userdata.id }} </span>
                                 </b-link>
                             </b-col>
                             <b-col cols='2' align='right'>
                                 <div class="timeago">
                             <span class="text-muted">
-                                {{ format(this.listing.createdAt) }}
+                                {{ format(listing.createdAt) }}
                             </span>
                                 </div>
                             </b-col>
@@ -123,7 +136,7 @@
                         <br>
                         <b-row>
                             <b-col style='margin-left: 1rem'>
-                                <b-icon icon='geo-alt'></b-icon> {{(listing.location?getLocationName(this.listing.location):"International")+ (this.listing.location2?` - ${this.listing.location2}`:``)}}
+                                <b-icon icon='geo-alt'></b-icon> {{(listing.location?getLocationName(listing.location):"International")+ (listing.location2?` - ${listing.location2}`:``)}}
                             </b-col>
                         </b-row>
                         <br>
@@ -131,7 +144,7 @@
                             <b-col no-gutters>
                                 <div id="no-img-parts-list-container">
                                     <b-col class="listing-info">
-                                        {{ listing.description }}
+                                        <div v-html='$md.render(listing.description)'></div>
                                     </b-col>
                                 </div>
                             </b-col>
@@ -168,7 +181,6 @@
                 </b-col>
             </b-row>
         </div>
-
     </client-only>
 </template>
 
@@ -383,8 +395,8 @@
 
     #comment-input {
         width: 100%;
-        margin-left: auto;
-        margin-right: auto;
+        margin-left: 1rem;
+        margin-right: 1rem;
     }
 
     #carousel {

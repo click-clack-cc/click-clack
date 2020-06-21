@@ -24,6 +24,7 @@ const img = require('./api/img');
 const announcements = require('./api/announcements');
 const keyboards = require('./api/keyboards');
 const listings = require('./api/listings');
+const posts = require('./api/posts');
 const messages = require('./api/messages');
 const stats = require('./api/stats');
 
@@ -32,6 +33,7 @@ app.use('/api/users', users);
 app.use('/api/img', img);
 app.use('/api/announcements', announcements);
 app.use('/api/listings', listings);
+app.use('/api/posts', posts);
 app.use('/api/messages', messages);
 app.use('/api/keyboards', keyboards);
 
@@ -60,14 +62,29 @@ async function generateSitemap() {
         },
         '/typing': {
             lastmod: '2020-06-16',
-            changefreq: 'daily',
-            priority: 0.5,
+            changefreq: 'weekly',
+            priority: 0.3,
         },
-        '/community': {
+        '/showroom': {
             lastmod: '2020-06-16',
             changefreq: 'daily',
             priority: 0.5,
         },
+        '/termsandconditions': {
+            lastmod: '2020-06-16',
+            changefreq: 'weekly',
+            priority: 0.2,
+        },
+        '/markdown': {
+            lastmod: '2020-06-16',
+            changefreq: 'weekly',
+            priority: 0.2,
+        },
+        '/bugreport': {
+            lastmod: '2020-06-16',
+            changefreq: 'weekly',
+            priority: 0.2,
+        }
     }
 
     mongodb.MongoClient.connect(uri,
@@ -96,7 +113,7 @@ async function generateSitemap() {
                 map['/keyboard/' + keyboards[i]._id] = ['get'];
                 route['/keyboard/' + keyboards[i]._id] = {
                     // lastmod: '2020-06-09',
-                    changefreq: 'daily'
+                    changefreq: 'weekly'
                 }
             }
 
@@ -107,24 +124,39 @@ async function generateSitemap() {
                 }).then(async (connection) => {
                 let listings = await connection.db(process.env.DB_NAME).collection('listings').find({}).project({_id: true}).toArray();
                 for (let i = 0; i < listings.length; i++) {
-                    map['/listings/' + listings[i]._id] = ['get'];
-                    route['/listings/' + listings[i]._id] = {
+                    map['/listing/' + listings[i]._id] = ['get'];
+                    route['/listing/' + listings[i]._id] = {
                         // lastmod: '2020-06-09',
-                        changefreq: 'daily'
+                        changefreq: 'weekly'
                     }
                 }
 
-                await sitemap({
-                    http: 'https',
-                    url: 'click-clack.cc',
-                    sitemap: 'public/sitemap.xml',
-                    robots: 'public/robots.txt',
-                    generate: app,
-                    sitemapSubmission: '/sitemap.xml',
-                    map: map,
-                    route: route
-                }).toFile();
-                console.log('sitemap generated')
+                mongodb.MongoClient.connect(uri,
+                    {
+                        useNewUrlParser: true,
+                        useUnifiedTopology: true
+                    }).then(async (connection) => {
+                    let listings = await connection.db(process.env.DB_NAME).collection('posts').find({}).project({_id: true}).toArray();
+                    for (let i = 0; i < listings.length; i++) {
+                        map['/post/' + listings[i]._id] = ['get'];
+                        route['/post/' + listings[i]._id] = {
+                            // lastmod: '2020-06-09',
+                            changefreq: 'weekly'
+                        }
+                    }
+
+                    await sitemap({
+                        http: 'https',
+                        url: 'click-clack.cc',
+                        sitemap: 'public/sitemap.xml',
+                        robots: 'public/robots.txt',
+                        generate: app,
+                        sitemapSubmission: '/sitemap.xml',
+                        map: map,
+                        route: route
+                    }).toFile();
+                    console.log('sitemap generated')
+                })
             })
         })
     })

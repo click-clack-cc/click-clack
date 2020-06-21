@@ -26,12 +26,12 @@ router.post('/register', async (req, res) => {
                 email: req.body.email,
                 img: "",
                 firstname: req.body.firstname,
-                lastname: req.body.lastname,
+                lastname: "",
                 bio: `Hello everyone, it's me, ${req.body.firstname}!`,
                 keyboards: [],
                 recommendations: [],
                 achievements: [],
-                role: 'user',
+                role: 'betatester',
                 password: encrypted,
                 createdAt: new Date(),
                 lastLogIn: new Date()
@@ -90,8 +90,8 @@ router.post('/login', async (req, response) => {
             }
         });
     } else {
-        res.statusMessage = 'Authentication failed'
-        res.status(401).send();
+        response.statusMessage = 'Authentication failed'
+        response.status(401).send();
     }
 });
 
@@ -178,7 +178,7 @@ router.get('/new/', async (req, res) => {
     res.send(await result.find({})
         .project({id: true, img: true, firstname: true, lastname: true, createdAt: true})
         .sort({createdAt: -1})
-        .limit(12).toArray());
+        .limit(100).toArray());
 });
 
 router.post('/id/', isLoggedIn, async (req, res) => {
@@ -248,9 +248,9 @@ router.post('/keebs/', isLoggedIn, async (req, res) => {
     res.status(201).send();
 });
 
-router.post('/delete', isLoggedIn, async (req, res) => {
+router.post('/delete/', isLoggedIn, async (req, res) => {
     if (req.body.id === 'test') return;
-    await result.deleteOne({id: req.body.id});
+    await result.deleteOne({_id: mongodb.ObjectID(req.body.id)});
     res.status(200).send();
 });
 

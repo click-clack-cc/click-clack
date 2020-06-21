@@ -109,6 +109,58 @@ router.get('/new', async (req, res) => {
     res.send(response);
 })
 
+router.get('/mod', isAdmin, async (req, res) => {
+    let response = await result.aggregate([{
+        $addFields: {
+            "user": {$toObjectId: '$user'}
+        }
+    },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'user',
+                foreignField: '_id',
+                as: 'userdata'
+            }
+        },
+        {
+            $project: {
+                _id: true,
+                user: true,
+                name: true,
+                description: true,
+                category1: true,
+                category2: true,
+                type: true,
+                new: true,
+                createdAt: true,
+                lastBump: true,
+                images: true,
+                premium: true,
+                location: true,
+                location2: true,
+                state: true,
+                shipping: true,
+                condition: true,
+                price: true,
+                lastModified: true,
+                userdata: {
+                    id: true,
+                    firstname: true
+                },
+            }
+        },
+        {
+            $unwind:
+                "$userdata"
+
+        }
+    ]).limit(100)
+        .sort({createdAt: -1})
+        .toArray();
+    res.send(response);
+})
+
 router.post('/filter', async (req, res) => {
     let match = {
         type: req.body.type === "looking" ? "buy" : "sell",
@@ -248,7 +300,7 @@ router.get('/search/', async (req, res) => {
 });
 
 router.post('/', isLoggedIn, async (req, res) => {
-    let num = await result.find({_id: req.body.listing.name.replace(' ', '-').replace(/[^a-zd-]/ig, '').toLowerCase()}).count();
+    let num = await result.find({_id: req.body.listing.name.replaceAll(' ', '-').replace(/[^a-zd-]/ig, '').toLowerCase()}).count();
     req.statusMessage = null
     if (!req.body.id) res.statusMessage = 'Failed to authenticate. Please try logging out and back in.'
     if (!req.body.listing.category1) res.statusMessage = 'Please choose a category for your listing'
@@ -257,7 +309,7 @@ router.post('/', isLoggedIn, async (req, res) => {
     if (!req.body.listing.description) res.statusMessage = 'Please enter a description for your listing'
     if (req.statusMessage) res.status(401).send();
     await result.insertOne({
-        _id: (req.body.listing.name.replace(' ', '-').replace(/[^a-zd-]/ig, '').toLowerCase()) + (num === 0 ? '' : (num + 1)),
+        _id: (req.body.listing.name.replaceAll(' ', '-').replace(/[^a-zd-]/ig, '').toLowerCase()) + (num === 0 ? '' : (num + 1)),
         user: req.body.id,
         type: req.body.listing.type,
         category1: req.body.listing.category1,
@@ -282,6 +334,36 @@ router.post('/', isLoggedIn, async (req, res) => {
     });
 });
 
+
+router.post('/approve', isAdmin, async (req, res) => {
+    await result.findOneAndUpdate(
+        {
+            _id: req.body.listing
+        }, {
+            $set: {
+                state: "approved",
+            }
+        }).then(() => {
+        res.status(201).send();
+    }).catch(() => {
+        res.status(401).send();
+    });
+});
+
+router.post('/decline', isAdmin, async (req, res) => {
+    await result.findOneAndUpdate(
+        {
+            _id: req.body.listing
+        }, {
+            $set: {
+                state: "declined",
+            }
+        }).then(() => {
+        res.status(201).send();
+    }).catch(() => {
+        res.status(401).send();
+    });
+});
 
 router.post('/update', isLoggedIn, async (req, res) => {
     req.statusMessage = null
@@ -355,6 +437,26 @@ function isLoggedIn(req, res, next) {
     } catch (err) {
         res.statusMessage = 'Authentication failed'
         res.status(401).send();
+    }
+}
+
+function isAdmin(req, res, next) {
+    try {
+        const token = req.headers.authorization.split(' ')[1];
+        const decoded = jwt.verify(
+            token,
+            process.env.SECRET_KEY
+        );
+        req.tokenData = decoded;
+        if (process.env.ADMINS.split(' ').includes(req.tokenData.id) && (req.tokenData.id === req.body.id || req.tokenData.id === req.query.id)) {
+            next();
+        } else {
+            res.statusMessage = 'Successful authentication'
+            res.status(201).send();
+        }
+    } catch (err) {
+        res.statusMessage = 'Successful authentication'
+        res.status(201).send();
     }
 }
 

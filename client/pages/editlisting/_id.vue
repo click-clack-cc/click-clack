@@ -1,42 +1,61 @@
 <template>
     <div>
-    <b-card v-if='!success'>
-        <h4>
-            {{this.edit?"Update Listing":"New Listing"}}
-        </h4>
-        <br>
-        <b-button-toolbar id='toolbar'>
-            <b-dropdown style='margin-right: 1rem' variant='outline-primary' left
-                        :text="listing.type?listing.type.text:'Looking for'">
-                <b-dropdown-item
-                    v-for='(type, index) in typeOptions'
-                    v-bind:key='index'
-                    @click='settype(type)'>
-                    {{type.text}}
-                </b-dropdown-item>
-            </b-dropdown>
-            <b-dropdown style='margin-right: 1rem' variant='outline-primary' left
-                        :text="listing.category1?listing.category1.text:'Category'">
-                <b-dropdown-item @click='setLocation(null)'>
-                    Any
-                </b-dropdown-item>
-                <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item
-                    v-for='(cat, index) in category1options1'
-                    v-bind:key='index'
-                    @click='setcategory1(cat)'>
-                    {{cat.text}}
-                </b-dropdown-item>
-                <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item
-                    v-for='(cat, index) in category1options2'
-                    v-bind:key='index'
-                    @click='setcategory1(cat)'>
-                    {{cat.text}}
-                </b-dropdown-item>
-            </b-dropdown>
-            <b-dropdown :disabled='!(listing.category1 && subcats[listing.category1.value])' style='margin-right: 1rem' variant='outline-primary'
-                        left :text="listing.category2?listing.category2.text:'Subcategory'">
+        <b-card  id='container' v-if='!success'>
+            <h4>
+                {{this.edit?"Update Listing":"New Listing"}}
+            </h4>
+            <br>
+            <b-form-group label="Photos">
+                <b-form-file
+                    v-model="photos"
+                    accept=".jpg, .jpeg, .png"
+                    multiple
+                >
+                    <template slot="file-name" slot-scope="{ names }">
+                        <b-badge variant="dark">
+                            {{ names[0] }}
+                        </b-badge>
+                        <b-badge v-if="names.length > 1" class="ml-1" variant="dark">
+                            + {{ names.length - 1 }} More files
+                        </b-badge>
+                    </template>
+                </b-form-file>
+            </b-form-group>
+            <b-row>
+                <b-col>
+                    <b-button-toolbar id='toolbar'>
+                        <b-dropdown style='margin-right: 1rem' variant='outline-primary' left
+                                    :text="listing.type?listing.type.text:'Looking for'">
+                            <b-dropdown-item
+                                v-for='(type, index) in typeOptions'
+                                v-bind:key='index'
+                                @click='settype(type)'>
+                                {{type.text}}
+                            </b-dropdown-item>
+                        </b-dropdown>
+                        <b-dropdown style='margin-right: 1rem' variant='outline-primary' left
+                                    :text="listing.category1?listing.category1.text:'Category'">
+                            <b-dropdown-item @click='setLocation(null)'>
+                                Any
+                            </b-dropdown-item>
+                            <b-dropdown-divider></b-dropdown-divider>
+                            <b-dropdown-item
+                                v-for='(cat, index) in category1options1'
+                                v-bind:key='index'
+                                @click='setcategory1(cat)'>
+                                {{cat.text}}
+                            </b-dropdown-item>
+                            <b-dropdown-divider></b-dropdown-divider>
+                            <b-dropdown-item
+                                v-for='(cat, index) in category1options2'
+                                v-bind:key='index'
+                                @click='setcategory1(cat)'>
+                                {{cat.text}}
+                            </b-dropdown-item>
+                        </b-dropdown>
+                        <b-dropdown :disabled='!(listing.category1 && subcats[listing.category1.value])'
+                                    style='margin-right: 1rem' variant='outline-primary'
+                                    left :text="listing.category2?listing.category2.text:'Subcategory'">
                 <span v-if='listing.category1 && subcats[listing.category1.value]'>
                 <b-dropdown-item @click='setcategory2(null)'>
                     Any
@@ -49,137 +68,131 @@
                     {{subcat.text}}
                 </b-dropdown-item>
                     </span>
-            </b-dropdown>
-            <b-dropdown variant='outline-primary' left :text="listing.location?listing.location.text:'Region'">
-                <b-dropdown-item @click='setLocation(null)'>
-                    Globally
-                </b-dropdown-item>
-                <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item
-                    v-for='(loc, index) in locationOptions'
-                    v-bind:key='index'
-                    @click='setLocation(loc)'>
-                    {{loc.text}}
-                </b-dropdown-item>
-            </b-dropdown>
-            <b-col align='left'>
-                <b-form-input :disabled='!listing.location' v-model='listing.location2' placeholder='Country, town (optional)'>
-                </b-form-input>
-            </b-col>
-        </b-button-toolbar>
-        <br>
-        <br>
-        <b-form-input v-model='listing.name' placeholder='name'>
-        </b-form-input>
-        <br>
-        <b-textarea v-model='listing.description' placeholder='Description'>
-        </b-textarea>
-        <br>
-        <b-row class='text-muted'>
-            <b-col cols='1' align='middle'>
-                <b-icon scale='2' shift-v='-12' icon='info-circle'></b-icon>
-            </b-col>
-            <b-col>
-                <p>
-                    Please include a photo that shows all your items and your name on a written note next to them.
-                    This photo can be the last one, it is for us to validate your listing. If your item has a serial
-                    number, please include a photo of that too.
-                </p>
-            </b-col>
-        </b-row>
-        <b-form-group label="Photos">
-            <b-form-file
-                v-model="photos"
-                accept=".jpg, .jpeg, .png"
-                multiple
-            >
-                <template slot="file-name" slot-scope="{ names }">
-                    <b-badge variant="dark">
-                        {{ names[0] }}
-                    </b-badge>
-                    <b-badge v-if="names.length > 1" class="ml-1" variant="dark">
-                        + {{ names.length - 1 }} More files
-                    </b-badge>
-                </template>
-            </b-form-file>
-        </b-form-group>
-        <card style='max-width: 10rem; max-height: 10rem; margin: 0.5rem' v-for='(img, index) in listing.images' v-bind:key='index'>
-            <b-card-img style='max-width: 10rem; max-height: 10rem'  :src='"https://click-clack.cc:5000/files/images/"+img'></b-card-img>
-            <b-button
-                size="sm"
-                variant="outline-danger"
-                @click="listing.images.splice(index,1)"
-            >
-                <b-icon icon="trash" />
-            </b-button>
-        </card>
-        <br v-if='listing.images && listing.images.length > 0'>
-        <br>
-        <b-input-group>
-            <b-input-group-prepend is-text>
-                <b-form-checkbox :disabled='listing.price === 0' v-model='listing.price === 0' name="check-button" switch @change='freeCheck'>
-                    <b-icon v-if='listing.price !== 0' icon='gift'></b-icon>
-                    <b-icon v-else icon='gift-fill'></b-icon>
-                    Free
-                </b-form-checkbox>
-            </b-input-group-prepend>
-            <b-input-group-prepend is-text><b>US $</b></b-input-group-prepend>
-            <b-form-input number v-model='listing.price' placeholder='Price'>
+                        </b-dropdown>
+                        <b-dropdown variant='outline-primary' left :text="listing.location?listing.location.text:'Region'">
+                            <b-dropdown-item @click='setLocation(null)'>
+                                Globally
+                            </b-dropdown-item>
+                            <b-dropdown-divider></b-dropdown-divider>
+                            <b-dropdown-item
+                                v-for='(loc, index) in locationOptions'
+                                v-bind:key='index'
+                                @click='setLocation(loc)'>
+                                {{loc.text}}
+                            </b-dropdown-item>
+                        </b-dropdown>
+                    </b-button-toolbar>
+                </b-col>
+                <b-col>
+
+                        <b-form-input :disabled='!listing.location' v-model='listing.location2'
+                                      placeholder='Country, town (optional)'>
+                        </b-form-input>
+                </b-col>
+            </b-row>
+
+            <br>
+            <br>
+            <b-form-input :disabled='this.edit' v-model='listing.name' placeholder='Name'>
             </b-form-input>
-        </b-input-group>
-        <br>
-        <b-form-checkbox v-model='listing.newItem' name='check-button' switch>
-            New item
-        </b-form-checkbox>
-        <br>
-        <b-form-checkbox v-model='listing.freeShipping' name="check-button" switch>
-            Free shipping
-        </b-form-checkbox>
-        <br>
-        <br>
-        <b-button-group style='width: 100%'>
-            <b-button :disabled="loading" @click='submit' variant='outline-primary'>
+            <br>
+            <b-textarea v-model='listing.description' placeholder='Description'>
+            </b-textarea>
+            <br>
+            <b-row class='text-muted'>
+                <b-col cols='1' align='middle'>
+                    <b-icon scale='2' shift-v='-12' icon='info-circle'></b-icon>
+                </b-col>
+                <b-col>
+                    <p>
+                        Please include a photo that shows all your items and your name on a written note next to them.
+                        This photo can be the last one, it is for us to validate your listing. If your item has a serial
+                        number, please include a photo of that too.
+                    </p>
+                </b-col>
+            </b-row>
+            <card style='max-width: 10rem; max-height: 10rem; margin: 0.5rem' v-for='(img, index) in listing.images'
+                  v-bind:key='index'>
+                <b-card-img style='max-width: 10rem; max-height: 10rem'
+                            :src='"https://click-clack.cc:5000/files/images/"+img'></b-card-img>
+                <b-button
+                    size="sm"
+                    variant="outline-danger"
+                    @click="listing.images.splice(index,1)"
+                >
+                    <b-icon icon="trash"/>
+                </b-button>
+            </card>
+            <br v-if='listing.images && listing.images.length > 0'>
+            <br>
+            <b-input-group>
+                <b-input-group-prepend is-text>
+                    <b-form-checkbox :disabled='listing.price === 0' v-model='listing.price === 0' name="check-button"
+                                     switch @change='freeCheck'>
+                        <b-icon v-if='listing.price !== 0' icon='gift'></b-icon>
+                        <b-icon v-else icon='gift-fill'></b-icon>
+                        Free
+                    </b-form-checkbox>
+                </b-input-group-prepend>
+                <b-input-group-prepend is-text><b>US $</b></b-input-group-prepend>
+                <b-form-input number v-model='listing.price' placeholder='Price'>
+                </b-form-input>
+            </b-input-group>
+            <br>
+            <b-form-checkbox v-model='listing.newItem' name='check-button' switch>
+                New item
+            </b-form-checkbox>
+            <br>
+            <b-form-checkbox v-model='listing.freeShipping' name="check-button" switch>
+                Free shipping
+            </b-form-checkbox>
+            <br>
+            <br>
+            <b-button-group style='width: 100%'>
+                <b-button :disabled="loading" @click='submit' variant='primary'>
                 <span v-if='!loading'>
                     <b-icon icon='file-earmark-check'></b-icon>
                     Submit Listing
                 </span>
-                <b-spinner v-else></b-spinner>
-            </b-button>
-        </b-button-group>
-    </b-card>
-        <b-card style='max-width: 40rem; margin: auto; margin-top: 10rem' v-else>
-            <h4>
-                Listing submitted <b-icon icon='check-circle' variant='success'></b-icon>
-            </h4>
-            {{listing.name}} has been successfully submitted!
-            It will remain invisible until our moderators verify your listing.
-            <br>
-            <br>
-            <b-row class='text-muted' >
-                <b-col cols='2' align='middle'>
-                    <b-icon scale='2' shift-v='-40' icon='info-circle'></b-icon>
-                </b-col>
-                <b-col>
-                    <p >
-                        You can make changes to your listing while it is pending. Changes made
-                        after your listing has been approved will have to be approved again.
-                        Please note that if your listing is not appropriate, for example
-                        if you did not include a photo of your item with a written note of your name
-                        on it, it might be rejected.
-                    </p>
+                    <b-spinner v-else></b-spinner>
+                </b-button>
+            </b-button-group>
+        </b-card>
+        <div v-else>
+            <b-card style='max-width: 40rem; margin: auto; margin-top: 10rem'>
+                <h4>
+                    Listing submitted
+                    <b-icon icon='check-circle' variant='success'></b-icon>
+                </h4>
+                {{listing.name}} has been successfully submitted!
+                It will remain invisible until our moderators verify your listing.
+                <br>
+                <br>
+                <b-row class='text-muted'>
+                    <b-col cols='2' align='middle'>
+                        <b-icon scale='2' shift-v='-40' icon='info-circle'></b-icon>
+                    </b-col>
+                    <b-col>
+                        <p>
+                            You can make changes to your listing while it is pending. Changes made
+                            after your listing has been approved will have to be approved again.
+                            Please note that if your listing is not appropriate, for example
+                            if you did not include a photo of your item with a written note of your name
+                            on it, it might be rejected.
+                        </p>
+                    </b-col>
+                </b-row>
+                <br>
+            </b-card>
+            <b-row style='max-width: 40rem; margin: auto; margin-top: 2rem'>
+                <b-col align='middle'>
+                    <b-button to="/" variant="primary" style='margin: auto; '>
+                        Thank you
+                    </b-button>
                 </b-col>
             </b-row>
-            <br>
-        </b-card>
-        <b-row style='max-width: 40rem; margin: auto; margin-top: 2rem' >
-            <b-col align='middle'>
-                <b-button to="/" variant="primary" style='margin: auto; '>
-                    Thank you
-                </b-button>
-            </b-col>
-        </b-row>
+        </div>
     </div>
-
 </template>
 
 <script>
@@ -206,7 +219,6 @@
                     price: null,
                     newItem: false,
                     freeShipping: false,
-                    freeItem: false,
                     location2: null,
                     type: {
                         value: 'offering',
@@ -452,7 +464,7 @@
             }
         },
         created() {
-            if(!this.category1) return
+            if (!this.listing.category1) return
             this.listing.category1 = this.getCategory1(this.listing.category1)
             this.listing.category2 = this.getCategory2(this.listing.category1.value, this.listing.category2)
             this.listing.location = this.getLocation(this.listing.location)
@@ -461,7 +473,7 @@
             this.listing.freeShipping = this.listing.shipping === "seller"
         },
         methods: {
-            freeCheck(){
+            freeCheck() {
                 this.listing.price = 0
             },
             setcategory1(cat) {
@@ -477,31 +489,31 @@
             settype(type) {
                 this.listing.type = type
             },
-            getLocation(loc){
+            getLocation(loc) {
                 for (let i = 0; i < this.locationOptions.length; i++) {
-                    if(this.locationOptions[i].value === loc) return this.locationOptions[i];
+                    if (this.locationOptions[i].value === loc) return this.locationOptions[i];
                 }
                 return null
             },
-            getCategory1(cat){
+            getCategory1(cat) {
                 for (let i = 0; i < this.category1options1.length; i++) {
-                    if(this.category1options1[i].value === cat) return this.category1options1[i];
+                    if (this.category1options1[i].value === cat) return this.category1options1[i];
                 }
                 for (let i = 0; i < this.category1options2.length; i++) {
-                    if(this.category1options2[i].value === cat) return this.category1options2[i];
+                    if (this.category1options2[i].value === cat) return this.category1options2[i];
                 }
                 return cat
             },
-            getCategory2(cat1, cat2){
-                if(!this.subcats[cat1]) return null;
+            getCategory2(cat1, cat2) {
+                if (!this.subcats[cat1]) return null;
                 for (let i = 0; i < this.subcats[cat1].length; i++) {
-                    if(this.subcats[cat1][i].value === cat2) return this.subcats[cat1][i];
+                    if (this.subcats[cat1][i].value === cat2) return this.subcats[cat1][i];
                 }
                 return null
             },
-            getType(type){
+            getType(type) {
                 for (let i = 0; i < this.typeOptions.length; i++) {
-                    if(this.typeOptions[i].value === type) return this.typeOptions[i];
+                    if (this.typeOptions[i].value === type) return this.typeOptions[i];
                 }
             },
             async submit() {
@@ -538,7 +550,7 @@
                     })
                     this.loading = false;
                     return;
-                } else if ((!this.listing.price && !this.freeItem) || (this.listing.price < 0 || this.listing.price > 1000000)) {
+                } else if ((this.listing.price === null) || (this.listing.price < 0 || this.listing.price > 1000000)) {
                     variant: `danger`,
                         this.$bvToast.toast(`Please set a price`, {
                             variant: `danger`,
@@ -619,7 +631,7 @@
         },
         head() {
             const description = 'List your items and services, buy mechanical keyboards from fellow enthusiasts!'
-            const title = 'Click-Clack - ' + this.edit?"Update Listing":"New Listing"
+            const title = 'Click-Clack - ' + this.edit ? "Update Listing" : "New Listing"
             const image = 'https://click-clack.cc:5000/files/images/indeximage.JPG'
             const url = 'https://click-clack.cc/newlisting'
             return {
@@ -663,57 +675,7 @@
 </script>
 
 <style scoped>
-    #toolbar {
+    #container {
+        margin-top: 3rem;
     }
-
-    #breadcrumb {
-        /*background-color: unset;*/
-    }
-
-    .listingcard {
-        max-width: 50%;
-    }
-
-    .image {
-        float: left;
-        background-size: cover;
-        background-repeat: no-repeat;
-        margin: 1px;
-        background-position: center center;
-    }
-
-    .listingcard-name {
-        margin: 1rem;
-        margin-bottom: 0rem;
-    }
-
-    .listing-preview {
-        margin-top: 2rem;
-        margin-bottom: 6rem;
-    }
-
-    .user-thumbnail {
-        margin-top: 0.5rem;
-    }
-
-    .avatar {
-        margin-left: 1rem;
-    }
-
-    .name {
-        margin-left: 1rem;
-        margin-top: 0.3rem;
-    }
-
-    #search-bar {
-        margin-bottom: 2rem;
-    }
-
-    .gallery-item-name {
-        padding: 0.2rem;
-        background: rgba(255, 255, 255, 0.7);
-        font-weight: bold;
-        color: #000000;
-    }
-
 </style>

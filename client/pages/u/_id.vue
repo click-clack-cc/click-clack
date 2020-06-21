@@ -6,12 +6,7 @@
             </b-row>
         </div>
         <br>
-        <h4 v-if="inspectedUser.recommendations">
-            Recommendations
-        </h4>
-        <recommendation-list v-if="inspectedUser" :inspected-user="inspectedUser" />
-        <br>
-        <h4>Latest results</h4>
+        <h5>Latest results</h5>
         <StatsList v-if="inspectedUser" :user="inspectedUser" />
     </div>
 </template>
@@ -24,6 +19,7 @@
     import RecommendationList from '../../components/RecommendationList'
     import keyboardService from '../../services/keyboard-service'
     import listingService from "../../services/listing-service";
+    import postService from "../../services/post-service";
 
     const signedIn = false
 
@@ -40,6 +36,7 @@
             const u = await userService.getUser(params.id)
             u.listings = await listingService.getListings(u._id)
             u.keyboards = await keyboardService.getKeyboards(u._id)
+            u.posts = await postService.getPosts(u._id)
             return { inspectedUser: u }
         },
         data () {

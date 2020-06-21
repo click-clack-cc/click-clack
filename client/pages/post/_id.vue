@@ -1,27 +1,27 @@
 <template>
     <div>
         <b-modal
-            id="keyboard-user-preview-modal"
-            ref="keyboard-user-preview-modal"
+            id="post-user-preview-modal"
+            ref="post-user-preview-modal"
             centered
             hide-header
             ok-only
         >
-            <OtherUserDataPreview :inspected-user="this.keeb.owner"/>
+            <OtherUserDataPreview :inspected-user="this.post.author"/>
         </b-modal>
-        <div class="keyboard-preview overflow-hidden">
+        <div class="post-preview overflow-hidden">
             <b-col>
-                <b-card id='carousel-card' no-body>
+                <b-card id='carousel-card' no-body v-if='this.post.images && post.images.length > 0'>
                     <b-row id="carousel" cols="8">
                         <b-carousel
-                            v-if='this.keeb.images.length > 1'
+                            v-if='this.post.images.length > 1'
                             fade
                             img-height="500"
                             img-width="1000"
                             indicators
                         >
                             <b-carousel-slide
-                                v-for="(img, index) in this.keeb.images"
+                                v-for="(img, index) in this.post.images"
                                 :key="index"
                                 :img-src="img"
                                 :img-alt="altDesc"
@@ -34,7 +34,7 @@
                             img-width="1000"
                         >
                             <b-carousel-slide
-                                v-for="(img, index) in this.keeb.images"
+                                v-for="(img, index) in this.post.images"
                                 :key="index"
                                 :img-src="img"
                                 :img-alt="altDesc"
@@ -44,91 +44,91 @@
                 </b-card>
                 <b-card>
                     <b-row>
-                        <b-col cols='4'>
-                            <h1 style='font-size: 1.6rem;' class="keyboardcard-title">
-                                {{ this.keeb.name }}
+                        <b-col cols='3'>
+                            <h1 style='font-size: 1.6rem;' class="postcard-title">
+                                {{ this.post.title }}
                             </h1>
                         </b-col>
 
-                        <b-col cols='4' align='left' class="user-thumbnail">
+                        <b-col cols='3' align='left' class="user-thumbnail">
                             <b-avatar
-                                :src="`https://click-clack.cc:5000/files/images/${this.keeb.owner._id}.jpg`"
+                                :src="`https://click-clack.cc:5000/files/images/${this.post.author._id}.jpg`"
                                 badge-offset="-0.2rem"
                                 button
                                 class="avatar"
                                 size="2rem"
                                 variant="light"
-                                @click="previewUser(this.keeb.owner.id)"
+                                @click="previewUser(this.post.author.id)"
                             >
-                                <template v-if="this.keeb.owner.role == 'admin'" v-slot:badge>
+                                <template v-if="this.post.author.role == 'admin'" v-slot:badge>
                                     <b-icon v-b-tooltip.right icon="shield-shaded" title="Administrator"/>
                                 </template>
-                                <template v-else-if="this.keeb.owner.role == 'verified'" v-slot:badge>
+                                <template v-else-if="this.post.author.role == 'verified'" v-slot:badge>
                                     <b-icon v-b-tooltip.right icon="check-circle" title="Verified user"/>
                                 </template>
-                                <template v-else-if="this.keeb.owner.role == 'supporter'" v-slot:badge>
+                                <template v-else-if="this.post.author.role == 'supporter'" v-slot:badge>
                                     <b-icon v-b-tooltip.right icon="heart" title="Supporter"/>
                                 </template>
-                                <template v-else-if="this.keeb.owner.role == 'betatester'" v-slot:badge>
+                                <template v-else-if="this.post.author.role == 'betatester'" v-slot:badge>
                                     <b-icon
                                         v-b-tooltip.right
                                         icon="egg"
                                         title="I was there when it all started"
                                     />
                                 </template>
-                                <template v-else-if="this.keeb.owner.role == 'developer'" v-slot:badge>
+                                <template v-else-if="this.post.author.role == 'developer'" v-slot:badge>
                                     <b-icon v-b-tooltip.right icon="cup" title="Developer"/>
                                 </template>
                             </b-avatar>
-                            <b-link :href="`/u/${this.keeb.owner.id}`" class="name">
-                                {{ this.keeb.owner.firstname }} {{ this.keeb.owner.lastname }}
-                                <span class="text-muted"> @{{ this.keeb.owner.id }} </span>
+                            <b-link :href="`/u/${this.post.author.id}`" class="name">
+                                {{ this.post.author.firstname }}
+                                <span class="text-muted"> @{{ this.post.author.id }} </span>
                             </b-link>
                         </b-col>
-                        <b-col cols='4' align='right'>
+                        <b-col cols='6' align='right'>
                             <div class="timeago">
                             <span class="text-muted">
-                                {{ format(this.keeb.lastModified) }}
+                                {{ format(this.post.lastModified) }}
                             </span>
                             </div>
                         </b-col>
                     </b-row>
                     <br>
                     <b-row>
-                        <b-col cols='4' style='margin-left: 1rem'>
-                            <p v-if='this.keeb.switches'>
-                                <span style="font-weight: bold">Switches</span> {{ this.keeb.switches }}
+                        <b-col cols='3' style='margin-left: 1rem'>
+                            <p v-if='this.post.switches'>
+                                <span style="font-weight: bold">Switches</span> {{ this.post.switches }}
                             </p>
-                            <p v-if='this.keeb.keycaps'>
-                                <span style="font-weight: bold">Keycaps</span> {{ this.keeb.keycaps }}
+                            <p v-if='this.post.keycaps'>
+                                <span style="font-weight: bold">Keycaps</span> {{ this.post.keycaps }}
                             </p>
-                            <p v-if='this.keeb.case'>
-                                <span style="font-weight: bold">Case</span> {{ this.keeb.case }}
+                            <p v-if='this.post.case'>
+                                <span style="font-weight: bold">Case</span> {{ this.post.case }}
                             </p>
-                            <p v-if='this.keeb.pcb'>
-                                <span style="font-weight: bold">PCB</span> {{ this.keeb.pcb }}
+                            <p v-if='this.post.pcb'>
+                                <span style="font-weight: bold">PCB</span> {{ this.post.pcb }}
                             </p>
                             <div style=" margin-top: 0.5rem">
                                 <b-icon
                                     v-if="!hearted"
                                     icon="heart"
                                     style="cursor:pointer;"
-                                    @click="toggleHeart(keeb)"
+                                    @click="toggleHeart(post)"
                                 />
                                 <b-icon v-else icon="heart-fill" variant="primary"/>
-                                {{ ' ' + keeb.hearts?keeb.hearts.length:0 }}
+                                {{ ' ' + post.hearts?post.hearts.length:0 }}
                                 <b-icon icon="chat-square" style="margin-left: 1rem"/>
-                                {{ ' ' + keeb.comments?keeb.comments.length:0 }}
+                                {{ ' ' + post.comments?post.comments.length:0 }}
                             </div>
                         </b-col>
                         <b-col>
-                            <a style='font-weight: bold' v-if='this.keeb.url' :href='this.keeb.url'>
-                                {{`Created by ${this.keeb.creatorName} - ${truncate(this.keeb.url, 30, false)}`}}
+                            <a style='font-weight: bold' v-if='this.post.url' :href='this.post.url'>
+                                {{truncate(this.post.url, 30, false)}}
                                 <b-icon icon='link45deg'></b-icon>
                             </a>
-                            <br v-if='this.keeb.url'>
-                            <br v-if='this.keeb.url'>
-                            <div v-html='$md.render(this.keeb.description)'></div>
+                            <br v-if='this.post.url'>
+                            <br v-if='this.post.url'>
+                            <div v-html='$md.render(this.post.content)'></div>
                         </b-col>
                     </b-row>
                 </b-card>
@@ -142,7 +142,7 @@
                 </b-button>
             </template>
         </b-input-group>
-        <comment-list v-if="this.keeb.comments" :comments="this.keeb.comments" :user="user"/>
+        <comment-list id='comments' v-if="this.post.comments" :comments="this.post.comments" :user="user"/>
     </div>
 </template>
 
@@ -152,11 +152,11 @@
     import {mapState} from 'vuex'
     import CommentList from '../../components/CommentList'
     import userService from '../../services/user-service'
-    import keyboardService from '../../services/keyboard-service'
+    import postService from '../../services/post-service'
     import OtherUserDataPreview from '../../components/OtherUserDataPreview'
 
     export default {
-        name: 'Keyboard',
+        name: 'Post',
         layout: 'index',
         components: {
             CommentList,
@@ -164,28 +164,40 @@
         },
         props: [],
         async asyncData({params}) {
-            const keeb = await keyboardService.getKeyboard(params.id)
+            const post = await postService.getPost(params.id)
 
-            for (let j = 0; j < keeb.images.length; j++) {
-                keeb.images[j] = `https://click-clack.cc:5000/files/images/${keeb.images[j]}`
-            }
-            if (keeb.comments) {
-                keeb.comments = keeb.comments.reverse()
-                for (let i = 0; i < keeb.comments.length; i++) {
-                    const res = await userService.getUser(keeb.comments[i].submitter)
-                    keeb.comments[i].submitter = res
+            if(post.images){
+                for (let j = 0; j < post.images.length; j++) {
+                    post.images[j] = `https://click-clack.cc:5000/files/images/${post.images[j]}`
                 }
-            }
-            const res = await userService.getUser(keeb.owner)
-            keeb.owner = res
+            } else post.images = []
 
-            const description = keeb.name + ' built by ' + keeb.owner.firstname + ' ' +
-                ((keeb.owner.lastname === null) ? ('') : (keeb.owner.lastname)) + ' @' + keeb.owner.id + ' Built with ' +
-                keeb.switches + ', ' + keeb.keycaps + ', ' + keeb.pcb + ' and ' + keeb.case
+            if (post.comments) {
+                post.comments = post.comments.reverse()
+                for (let i = 0; i < post.comments.length; i++) {
+                    const res = await userService.getUser(post.comments[i].submitter)
+                    post.comments[i].submitter = res
+                }
+            } else post.comments = []
+
+            if(!post.hearts) post.hearts = []
+
+            post.author = await userService.getUser(post.user)
+
+            const description = post.title + ' by ' + post.author.firstname + ' @' + post.author.id + ' - ' +
+                post.content
 
             return {
                 altDesc: description,
-                keeb
+                post
+            }
+        },
+        watch: {
+            user: {
+                immediate: true,
+                handler() {
+                    this.checkIsHearted()
+                }
             }
         },
         data() {
@@ -200,22 +212,14 @@
         created() {
             this.checkIsHearted()
         },
-        watch: {
-            user: {
-                immediate: true,
-                handler() {
-                    this.checkIsHearted()
-                }
-            }
-        },
         methods: {
             previewUser() {
-                this.$bvModal.show('keyboard-user-preview-modal')
+                this.$bvModal.show('post-user-preview-modal')
                 Vue.prototype.$forceUpdate()
             },
             sendComment() {
                 if (this.commentInput.length > 0) {
-                    keyboardService.comment(this.user._id, this.keeb._id, this.commentInput, this.token).then(() => {
+                    postService.comment(this.user._id, this.post._id, this.commentInput, this.token).then(() => {
                         this.$router.go()
                     })
                 } else {
@@ -234,23 +238,23 @@
                     ? subString.substr(0, subString.lastIndexOf(' '))
                     : subString) + '...'
             },
-            toggleHeart(keeb) {
+            toggleHeart(post) {
                 if (!this.user) {
                     this.$router.push('/profile')
                 }
-                keyboardService.heart(this.user._id, this.keeb._id, this.token).then(() => {
+                postService.heart(this.user._id, this.post._id, this.token).then(() => {
                     this.hearted = true
-                    this.keeb.hearts.push({
+                    this.post.hearts.push({
                         submitter: this.user._id,
                         createdAt: new Date()
                     })
-                    this.$bvToast.toast(`Gave a ❤️ to ${this.owner.firstname} @${this.owner.id} `, {
+                    this.$bvToast.toast(`Gave a ❤️ to ${this.author.firstname} @${this.author.id} `, {
                         title: 'Success',
                         toaster: 'b-toaster-top-center',
                         variant: 'success'
                     })
                 }).catch(() => {
-                    this.$bvToast.toast('Failed to update keyboard', {
+                    this.$bvToast.toast('Failed to update post', {
                         title: 'Error',
                         toaster: 'b-toaster-top-center',
                         variant: 'danger'
@@ -258,9 +262,9 @@
                 })
             },
             checkIsHearted() {
-                if (this.user && this.keeb.hearts) {
-                    for (let i = 0; i < this.keeb.hearts.length; i++) {
-                        if (this.keeb.hearts[i].submitter === this.user._id) {
+                if (this.user && this.post.hearts) {
+                    for (let i = 0; i < this.post.hearts.length; i++) {
+                        if (this.post.hearts[i].submitter === this.user._id) {
                             this.hearted = true
                             return;
                         }
@@ -271,13 +275,12 @@
             format
         },
         head() {
-            const k = this.keeb
-            const description = k.name + ' built by ' + k.creatorName ? k.creatorName : k.owner.firstname + ' ' +
-                ((k.owner.lastname === null) ? ('') : (k.owner.lastname)) + ' @' + k.owner.id + ' Built with ' +
-                k.switches + ', ' + k.keycaps + ', ' + k.pcb + ' and ' + k.case
-            const title = `${k.name} - Click-Clack`
+            const k = this.post
+            const description = k.title + ' by ' + k.author.firstname + ' @' + k.author.id + ' - ' +
+                k.content
+            const title = `${k.title} - Click-Clack`
             const image = k.images[0]
-            const url = `https://click-clack.cc/keyboard/${k._id}`
+            const url = `https://click-clack.cc/post/${k._id}`
             return {
                 title,
                 htmlAttrs: {
@@ -320,19 +323,19 @@
 
 <style scoped>
 
-    .keyboardcard-title {
+    .postcard-title {
         margin: 1rem;
         margin-left: 1rem;
         margin-top: 0;
     }
 
-    .keyboard-preview {
+    .post-preview {
         margin-top: 2rem;
         margin-bottom: 1rem;
     }
 
     .user-thumbnail {
-        padding-left: 2rem;
+            padding-left: 2rem;
     }
 
     .avatar {

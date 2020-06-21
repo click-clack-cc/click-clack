@@ -72,20 +72,33 @@
                 </b-col>
             </template>
             <b-carousel
-                v-if="listing.images && listing.images.length > 0"
+                v-if="listing.images && listing.images.length > 1"
                 id="carousel"
                 v-model="listing.slide"
                 :interval="999999"
-                background="#ababab"
                 controls
-                img-height="480"
-                img-width="1024"
             >
-                <b-carousel-slide
-                    v-for="(img, index) in listing.images"
-                    :key="index"
-                    :img-src="`https://click-clack.cc:5000/files/images/${img}`"
-                />
+                <a style="cursor: pointer" @click="goToListing(listing._id)">
+                    <b-carousel-slide
+                        v-for="(img, index) in listing.images"
+                        :key="index"
+                        :img-src="`https://click-clack.cc:5000/files/images/${img}`"
+                    />
+                </a>
+            </b-carousel>
+            <b-carousel
+                v-else-if='listing.images'
+                id="carousel"
+                v-model="listing.slide"
+                :interval="999999"
+            >
+                <a style="cursor: pointer" @click="goToListing(listing._id)">
+                    <b-carousel-slide
+                        v-for="(img, index) in listing.images"
+                        :key="index"
+                        :img-src="`https://click-clack.cc:5000/files/images/${img}`"
+                    />
+                </a>
             </b-carousel>
             <b-row style='margin-top: 0.5rem'>
                 <b-col style='margin-left: 2rem'>
@@ -95,9 +108,11 @@
             <b-row>
                 <b-col no-gutters>
                     <div id="no-img-parts-list-container">
+                        <a style="cursor: pointer" @click="goToListing(listing._id)">
                         <b-col class="listing-info">
                             {{ truncate(listing.description,350,true) }}
                         </b-col>
+                        </a>
                     </div>
                 </b-col>
             </b-row>
@@ -273,7 +288,6 @@
     #carousel {
         margin: auto;
         margin-bottom: 1rem;
-        max-width: 40rem;
     }
 
     #no-img-parts-list-container {

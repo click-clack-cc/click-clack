@@ -1,0 +1,1 @@
+sass --watch americano.scss:americano.css blueberry-cappucino.scss:blueberry-cappucino.css cinnamon-latte.scss:cinnamon-latte.css fekete.scss:fekete.css iced-mocha.scss:iced-mocha.css mint-latte.scss:mint-latte.css light.scss:light.css  --style compressed

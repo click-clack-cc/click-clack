@@ -1,7 +1,7 @@
 <template>
     <div id="self-user-data-container">
         <b-overlay :show="loading" blur="0.5rem" opacity="1" variant="transparent">
-            <b-list-group>
+            <b-list-group style='margin-bottom: 1rem'>
                 <b-list-group-item>
                     <b-row>
                         <b-col align="left">
@@ -33,8 +33,8 @@
                                 </template>
                             </b-avatar>
                         </b-col>
-                        <b-col id="name" align="left" cols="9">
-                            <h2>
+                        <b-col id="name" align="left" lg="9" md='6' sm='3'>
+                            <h3>
                                 {{ userName }} <span v-if="showStarCount" style="font-size: 1.2rem; color: #ff7700">{{ recommendations.length }}<b-icon
                                 icon="star-fill"
                                 scale="0.8"
@@ -42,7 +42,7 @@
                                 <p class="text-muted" style="font-size: 1.2rem">
                                     @{{ publicUserName }}
                                 </p>
-                            </h2>
+                            </h3>
                         </b-col>
                         <b-col align="right">
                             <b-button
@@ -193,83 +193,12 @@
                         </b-form-group>
                     </form>
                 </b-modal>
-                <b-modal
-                    id="keeb-edit-modal"
-                    ref="keeb-edit-modal"
-                    centered
-                    title="New keyboard"
-                    @ok="handleKeebOk"
-                >
-                    <form ref="form" @submit.stop.prevent="handleKeebSubmit">
-                        <b-form @submit="handleKeebOk">
-                            <b-form-group label="Build title">
-                                <b-form-input
-                                    v-model="editKeyboard.name"
-                                    placeholder="Enter name of this build"
-                                    required
-                                />
-                            </b-form-group>
-                            <b-form-group label="Description">
-                                <b-form-textarea
-                                    v-model="editKeyboard.description"
-                                    max-rows="4"
-                                    placeholder="What makes your build special?"
-                                    required
-                                    rows="2"
-                                />
-                            </b-form-group>
-                            <b-form-group label="Layout">
-                                <b-form-select
-                                    v-model="editKeyboard.layout"
-                                    :options="[{value: null, text: 'Please select a layout'}, 'sub 40', '40', '50', '60', '65', '75', '87', '1800', 'Full', 'Battlecruiser', 'Battleship', 'Other']"
-                                    required
-                                />
-                            </b-form-group>
-                            <b-form-group label="Switches">
-                                <b-form-input
-                                    v-model="editKeyboard.switches"
-                                    placeholder="Enter switch type/model"
-                                    required
-                                />
-                            </b-form-group>
-                            <b-form-group label="Keycap set">
-                                <b-form-input
-                                    v-model="editKeyboard.keycaps"
-                                    placeholder="Enter keycap set name"
-                                    required
-                                />
-                            </b-form-group>
-                            <b-form-group label="Case">
-                                <b-form-input
-                                    v-model="editKeyboard.case"
-                                    placeholder="Enter case name"
-                                    required
-                                />
-                            </b-form-group>
-                            <b-form-group label="PCB">
-                                <b-form-input
-                                    v-model="editKeyboard.pcb"
-                                    placeholder="Enter PCB type"
-                                    required
-                                />
-                            </b-form-group>
-                            <b-form-group label="Photos">
-                                <b-form-file
-                                    v-model="photos"
-                                    accept="image/jpeg, image/png"
-                                    multiple
-                                >
-                                </b-form-file>
-                            </b-form-group>
-                        </b-form>
-                    </form>
-                </b-modal>
                 <b-list-group-item>
                     <b-row>
-                        <b-col cols="10">
-                            <h4>
+                        <b-col lg="10" md='12'>
+                            <h5>
                                 Bio
-                            </h4>
+                            </h5>
                         </b-col>
                         <b-col align="right">
                             <b-button
@@ -284,75 +213,136 @@
                         </b-col>
                     </b-row>
                     <b-row id='bio'>
-                        {{bio}}
-                    </b-row>
-                </b-list-group-item>
-                <b-list-group-item id="keyboards">
-                    <b-row>
-                        <b-col cols="10">
-                            <h4>
-                                Keyboards
-                            </h4>
-                        </b-col>
-                        <b-col align="right">
-                            <b-button
-                                id="edit-keebs-button"
-                                v-b-modal.keeb-edit-modal
-                                size="sm"
-                                variant="outline-primary"
-                            >
-                                <b-icon icon="plus"/>
-                            </b-button>
-                        </b-col>
-                    </b-row>
-                    <b-card-group columns :style='`column-count: ${this.keyboards.length>1?2:1}`'
-                                  v-if="keyboards && keyboards.length > 0">
-                        <Keyboard
-                            v-for="(keeb, index) in keyboards"
-                            :key="index"
-                            :keeb="keeb"
-                            :owner="user"
-                            :show-edit="true"
-                            :show-owner="false"
-                            :token="token"
-                            :user="user"
-                        />
-                    </b-card-group>
+                        <div v-html='$md.render(bio)'>
 
-                </b-list-group-item>
-                <b-list-group-item id="listings">
-                    <b-row>
-                        <b-col cols="10">
-                            <h4>
-                                Listings
-                            </h4>
-                        </b-col>
-                        <b-col align="right">
-                            <b-button
-                                id="edit-listings-button"
-                                @click='$nuxt.$router.push(`/newlisting`)'
-                                size="sm"
-                                variant="outline-primary"
-                            >
-                                <b-icon icon="plus"/>
-                            </b-button>
-                        </b-col>
+                        </div>
                     </b-row>
-                    <br>
-                    <b-card-group columns :style='`column-count: ${listings.length>1?2:1}`' v-if="listings">
-                        <ListingSmall style='display: inline-block; width: 100%'
-                                      v-for="(listing, index) in listings"
-                                      :listing="listing"
-                                      :owner="user"
-                                      :show-owner="true"
-                                      :token="token"
-                                      :user="user"
-                                      :showEdit="true"
-                                      :key="index">
-                        </ListingSmall>
-                    </b-card-group>
                 </b-list-group-item>
+
             </b-list-group>
+            <h5 v-if="user.recommendations">
+                Recommendations
+            </h5>
+            <recommendation-list style='margin-bottom: 1rem' v-if="user" :inspected-user="user"/>
+            <b-card no-body class="mb-1" v-if='keyboards && keyboards.length > 0'>
+                <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button block v-b-toggle.keyboards-accordion variant="light">{{keyboards.length}}
+                        keyboard{{keyboards.length>1?"s":""}}
+                    </b-button>
+                </b-card-header>
+                <b-collapse visible id="keyboards-accordion" accordion="profile-accordion" role="tabpanel">
+                    <div id="keyboards" style='padding: 1rem'>
+                        <b-row>
+                            <b-col cols="10">
+                                <h5>
+                                    Keyboards
+                                </h5>
+                            </b-col>
+                            <b-col align="right">
+                                <b-button
+                                    size="sm"
+                                    variant="outline-primary"
+                                    @click='$nuxt.$router.push("editkeyboard")'
+                                >
+                                    <b-icon icon="plus"/>
+                                </b-button>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col lg='6' md='12' v-for="(keeb, index) in keyboards" :key="index">
+                                <Keyboard
+                                    style='margin-bottom: 1rem'
+                                    :keeb="keeb"
+                                    :owner="user"
+                                    :show-edit="true"
+                                    :show-owner="false"
+                                    :token="token"
+                                    :user="user"
+                                />
+                            </b-col>
+                        </b-row>
+                    </div>
+                </b-collapse>
+            </b-card>
+            <b-card no-body class="mb-1" v-if='listings && listings.length > 0'>
+                <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button block v-b-toggle.listings-accordion variant="light">{{listings.length}} market
+                        listing{{listings.length>1?"s":""}}
+                    </b-button>
+                </b-card-header>
+                <b-collapse id="listings-accordion" accordion="profile-accordion" role="tabpanel">
+                    <div id="listings" style='padding: 1rem'>
+                        <b-row>
+                            <b-col cols="10">
+                                <h5>
+                                    Listings
+                                </h5>
+                            </b-col>
+                            <b-col align="right">
+                                <b-button
+                                    size="sm"
+                                    variant="outline-primary"
+                                    @click='$nuxt.$router.push("editlisting")'
+                                >
+                                    <b-icon icon="plus"/>
+                                </b-button>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col lg='6' md='12' v-for="(listing, index) in listings" :key="index">
+                                <ListingSmall style='margin-bottom: 1rem'
+                                              :listing="listing"
+                                              :owner="user"
+                                              :show-owner="true"
+                                              :token="token"
+                                              :user="user"
+                                              :showEdit="true"
+                                >
+                                </ListingSmall>
+                            </b-col>
+                        </b-row>
+                    </div>
+                </b-collapse>
+            </b-card>
+            <b-card no-body class="mb-1" v-if='posts && posts.length > 0'>
+                <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button block v-b-toggle.posts-accordion variant="light">{{posts.length}}
+                        post{{posts.length>1?"s":""}}
+                    </b-button>
+                </b-card-header>
+                <b-collapse id="posts-accordion" accordion="profile-accordion" role="tabpanel">
+                    <div id="posts" style='padding: 1rem'>
+                        <b-row>
+                            <b-col cols="10">
+                                <h5>
+                                    Posts
+                                </h5>
+                            </b-col>
+                            <b-col align="right">
+                                <b-button
+                                    size="sm"
+                                    variant="outline-primary"
+                                    @click='$nuxt.$router.push("editpost")'
+                                >
+                                    <b-icon icon="plus"/>
+                                </b-button>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col lg='6' md='12' v-for="(post, index) in posts" :key="index">
+                                <PostSmall style='margin-bottom: 1rem'
+                                           :post="post"
+                                           :author="user"
+                                           :showAuthor="false"
+                                           :token="token"
+                                           :user="user"
+                                >
+                                </PostSmall>
+                            </b-col>
+                        </b-row>
+                    </div>
+                </b-collapse>
+            </b-card>
         </b-overlay>
     </div>
 </template>
@@ -362,14 +352,19 @@
     import keyboardService from '../services/keyboard-service'
     import fileService from '../services/file-service'
     import Keyboard from './KeyboardSmall'
-    import listingService from "../services/listing-service";
-    import ListingSmall from "./ListingSmall";
+    import listingService from "../services/listing-service"
+    import ListingSmall from "./ListingSmall"
+    import postService from "../services/post-service"
+    import PostSmall from "./PostSmall";
+    import RecommendationList from "./RecommendationList";
 
     export default {
         name: 'SelfUserData',
         components: {
             Keyboard,
-            ListingSmall
+            ListingSmall,
+            PostSmall,
+            RecommendationList
         },
         props: [
             'user',
@@ -384,6 +379,7 @@
                 role: this.role,
                 keyboards: this.keyboards,
                 listings: this.listings,
+                posts: this.posts,
                 editBio: this.editBio,
                 editKeyboard: {layout: null},
                 editBioState: this.editBioState,
@@ -418,11 +414,14 @@
                 this.keyboards = keebs
             })
 
-            listingService.getOwn(this.user._id).then((listings) => {
+            listingService.getOwn(this.user._id, this.token).then((listings) => {
                 this.listings = listings
             })
 
-            this.newKeyboard = this.user.keyboards
+            postService.getOwn(this.user._id).then((posts) => {
+                this.posts = posts
+            })
+
             this.loading = false
             this.recommendations = this.user.recommendations
             if (!this.recommendations) {
@@ -517,97 +516,6 @@
 
                 this.$nextTick(() => {
                     this.$bvModal.hide('bio-edit-modal')
-                })
-            },
-            handleKeebSubmit() {
-                if (!this.editKeyboard.name ||
-                    !this.editKeyboard.description ||
-                    !this.editKeyboard.layout ||
-                    !this.editKeyboard.switches ||
-                    !this.editKeyboard.keycaps ||
-                    !this.editKeyboard.pcb ||
-                    !this.editKeyboard.case) {
-                    this.$bvToast.toast('Please fill in every field to submit keyboard', {
-                        title: 'Warning',
-                        toaster: 'b-toaster-top-center',
-                        variant: 'danger'
-                    })
-                    return
-                }
-                if (this.editKeyboard.name.length < 1 ||
-                    this.editKeyboard.description.length < 1 ||
-                    this.editKeyboard.layout.length < 1 ||
-                    this.editKeyboard.switches.length < 1 ||
-                    this.editKeyboard.keycaps.length < 1 ||
-                    this.editKeyboard.pcb.length < 1 ||
-                    this.editKeyboard.case.length < 1) {
-                    this.$bvToast.toast('Please fill in every field to submit keyboard', {
-                        title: 'Warning',
-                        toaster: 'b-toaster-top-center',
-                        variant: 'danger'
-                    })
-                    return
-                }
-                if (this.editKeyboard.name.length > 100 ||
-                    this.editKeyboard.description.length > 500 ||
-                    this.editKeyboard.layout.length > 100 ||
-                    this.editKeyboard.switches.length > 100 ||
-                    this.editKeyboard.keycaps.length > 100 ||
-                    this.editKeyboard.pcb.length > 100 ||
-                    this.editKeyboard.case.length > 100) {
-                    this.$bvToast.toast('One of your fields is too long', {
-                        title: 'Warning',
-                        toaster: 'b-toaster-top-center',
-                        variant: 'danger'
-                    })
-                    return
-                }
-
-                if (this.photos.length > 0) {
-                    if (!this.editKeyboard.images) {
-                        this.editKeyboard.images = []
-                    }
-                    for (let i = 0; i < this.photos.length; i++) {
-                        this.editKeyboard.images.push(`${this.editKeyboard.name.replace(' ', '-').replace(/[^a-z0-9d-]/ig, '').toLowerCase()}_${i + this.editKeyboard.images.length}.${this.photos[i].name.split('.')[1]}`)
-                    }
-                }
-
-                keyboardService.newKeyboard(this.user._id, this.editKeyboard, this.token).then(() => {
-                    if (this.photos) {
-                        fileService.uploadKeyboardImages(
-                            this.user._id,
-                            this.editKeyboard.name.replace(' ', '-').replace(/[^a-z0-9d-]/ig, '').toLowerCase(),
-                            this.photos,
-                            this.token
-                        ).catch((error) => {
-                            this.$bvToast.toast(error.response.statusText, {
-                                title: 'Error',
-                                toaster: 'b-toaster-top-center',
-                                variant: 'danger'
-                            })
-                        })
-                    }
-                    this.$bvToast.toast('Successfully added new keyboard', {
-                        title: 'Success',
-                        toaster: 'b-toaster-top-center',
-                        variant: 'success'
-                    })
-                    this.$router.go()
-                }).catch((error) => {
-                    this.$bvToast.toast(error.response.statusText, {
-                        title: 'Error',
-                        toaster: 'b-toaster-top-center',
-                        variant: 'danger'
-                    })
-                }).then(() => {
-                    this.$bvToast.toast('Successfully added new keyboard', {
-                        title: 'Success',
-                        toaster: 'b-toaster-top-center',
-                        variant: 'success'
-                    })
-                })
-                this.$nextTick(() => {
-                    this.$bvModal.hide('keeb-edit-modal')
                 })
             },
             async handleUsernameSubmit() {

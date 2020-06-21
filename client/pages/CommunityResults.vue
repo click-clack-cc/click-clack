@@ -1,14 +1,6 @@
 <template>
     <div id="community-container">
         <Leaderboard id="leaderboard" />
-        <b-row>
-            <b-col>
-                <announcements id="announcements" />
-            </b-col>
-            <b-col>
-                <NewUsers id="new-users" />
-            </b-col>
-        </b-row>
         <global-stats-list id="stats" />
     </div>
 </template>
@@ -47,7 +39,7 @@
                 'the newest custom mech keeb builds in the showroom'
             const title = 'Community - Click-Clack'
             const image = 'https://click-clack.cc:5000/files/images/indeximage.jpg'
-            const url = 'https://click-clack.cc/community'
+            const url = 'https://click-clack.cc/communityresults'
             return {
                 title,
                 htmlAttrs: {

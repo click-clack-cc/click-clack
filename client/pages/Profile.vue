@@ -6,7 +6,7 @@
             </template>
             <br>
             <div class="d-block text-center">
-                <h4>Signed in as {{ firstname }}</h4>
+                <h5>Signed in as {{ firstname }}</h5>
             </div>
             <br>
             <b-button
@@ -37,18 +37,14 @@
                     </div>
                 </b-col>
             </b-row>
-            <b-col v-else id="notSignedIn">
+            <b-col sm='12' md='6' lg='4' v-else id="notSignedIn">
                 <br>
-                <h4>Hello 👋</h4>
+                <h5>Hello 👋</h5>
                 <br><br>
                 <b-card
                     id="login-form-card"
                     footer-tag="footer"
-                    header-tag="header"
                 >
-                    <template v-slot:header align="&quot;middle">
-                        <b-icon icon="lock" scale="2" />
-                    </template>
                     <b-form id="login-form" align="left">
                         <b-form-group
                             label="Email or username"
@@ -103,43 +99,35 @@
                 </a>
             </b-col>
             <b-row v-if="user" id="selfUserDataCard">
-                <SelfUserData v-if="user" :token="token" :user="user" />
+                <SelfUserData v-if="user" :token="token" :user="user"/>
             </b-row>
         </div>
-        <br>
-        <h4 v-if="user && user.recommendations.length > 0">
-            Recommendations
-        </h4>
-        <recommendation-list v-if="user" :inspected-user="user" />
-        <br>
-        <h4 v-if="user">
-            Latest results
-        </h4>
-        <StatsList v-if="user" :user="user" />
+        <h5 v-if="user">
+            Typing test results
+        </h5>
+        <StatsList v-if="user" :user="user"/>
         {{ userdata }}
     </div>
 </template>
 
 <script>
-    import { mapState } from 'vuex'
+    import {mapState} from 'vuex'
     import StatsList from '../components/StatsList'
     import userService from '../services/user-service.js'
     import SelfUserData from '../components/SelfUserData'
-    import RecommendationList from '../components/RecommendationList'
 
     export default {
         name: 'Profile',
         layout: 'index',
         components: {
             SelfUserData,
-            StatsList,
-            RecommendationList
+            StatsList
         },
         props: [
             // 'user',
             // 'token'
         ],
-        data () {
+        data() {
             return {
                 username: this.username,
                 password: this.password,
@@ -149,7 +137,7 @@
         },
         computed: mapState(['user', 'token', 'nightmode', 'zenmode', 'darktheme', 'lighttheme', 'search']),
         methods: {
-            signIn () {
+            signIn() {
                 userService.logIn(this.username, this.password).then((data) => {
                     if (data.user && data.token) {
                         if (this.stayLoggedIn) {
@@ -170,7 +158,7 @@
                     })
                 })
             },
-            signOut () {
+            signOut() {
                 this.$bvModal.msgBoxConfirm('Are you sure you want to sign out?', {
                     title: 'Signing Out',
                     size: 'sm',
@@ -195,10 +183,10 @@
                     }
                 })
             },
-            hello () {
+            hello() {
                 this.$router.go()
             },
-            deleteAccount () {
+            deleteAccount() {
                 this.$bvModal.msgBoxConfirm('Are you sure you want to delete your account? This action is irreversible.', {
                     title: 'Account Deletion',
                     size: 'sm',
@@ -214,6 +202,8 @@
                     headerTextVariant: 'light'
                 }).then((result) => {
                     if (result) {
+                        console.log(this.user._id)
+                        console.log(this.token)
                         userService.deleteUser(this.user._id, this.token).then(() => {
                             this.$bvToast.toast('Stay safe and see you soon! You will be redirected in 5 seconds', {
                                 title: 'Bye bye',
@@ -227,7 +217,7 @@
                 })
             }
         },
-        head () {
+        head() {
             const description = 'Sign up to Click-Clack and check out the newest and nicest custom mechanical keyboard builds.'
             const title = 'Click-Clack - Profile'
             const image = 'https://click-clack.cc:5000/files/images/indeximage.jpg'
@@ -238,15 +228,15 @@
                     lang: 'en'
                 },
                 meta: [
-                    { charset: 'utf-8' },
-                    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+                    {charset: 'utf-8'},
+                    {name: 'viewport', content: 'width=device-width, initial-scale=1'},
 
-                    { name: 'title', property: 'title', hid: 'title', content: title },
-                    { name: 'og:title', property: 'og:title', hid: 'og:title', content: title },
-                    { name: 'twitter:title', property: 'twitter:title', hid: 'twitter:title', content: title },
+                    {name: 'title', property: 'title', hid: 'title', content: title},
+                    {name: 'og:title', property: 'og:title', hid: 'og:title', content: title},
+                    {name: 'twitter:title', property: 'twitter:title', hid: 'twitter:title', content: title},
 
-                    { name: 'description', property: 'description', hid: 'description', content: description },
-                    { name: 'og:description', property: 'og:description', hid: 'og:description', content: description },
+                    {name: 'description', property: 'description', hid: 'description', content: description},
+                    {name: 'og:description', property: 'og:description', hid: 'og:description', content: description},
                     {
                         name: 'twitter:description',
                         property: 'twitter:description',
@@ -254,12 +244,12 @@
                         content: description
                     },
 
-                    { name: 'twitter:image', hid: 'twitter:image', property: 'twitter:image', content: image },
-                    { name: 'og:image', hid: 'og:image', property: 'og:image', content: image },
-                    { name: 'image', hid: 'image', property: 'image', content: image },
+                    {name: 'twitter:image', hid: 'twitter:image', property: 'twitter:image', content: image},
+                    {name: 'og:image', hid: 'og:image', property: 'og:image', content: image},
+                    {name: 'image', hid: 'image', property: 'image', content: image},
 
-                    { name: 'og:site_name', property: 'og:site_name', hid: 'og:site_name', content: 'click-clack' },
-                    { name: 'og:type', property: 'og:type', hid: 'og:type', content: 'website' },
+                    {name: 'og:site_name', property: 'og:site_name', hid: 'og:site_name', content: 'click-clack'},
+                    {name: 'og:type', property: 'og:type', hid: 'og:type', content: 'website'},
                     {
                         name: 'og:url',
                         property: 'og:url',
@@ -283,7 +273,7 @@
     }
 
     #notSignedIn {
-        max-width: 75%;
+        /*max-width: 75%;*/
         margin: auto;
         text-align: center;
     }
@@ -294,12 +284,16 @@
         margin-right: 0;
     }
 
+    #recommendations {
+        margin-bottom: 1rem;
+    }
+
     #login-form {
         margin: auto;
     }
 
     #login-form-card {
-        width: 50%;
+        /*width: 50%;*/
         margin: auto;
     }
 </style>

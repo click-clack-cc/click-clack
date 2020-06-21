@@ -23,24 +23,13 @@ class keyboardService {
       return { ...keyboard, createdAt: new Date(keyboard.createdAt), lastModified: new Date(keyboard.lastModified) };
     }
 
-    static async newKeyboard (id, keyboard, token) {
-      const { data: [kb] } = await http.post(`${url}`, { id, keyboard }, { 
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      return kb;
-    }
-
-    static async updateKeyboard (id, keyboard, token) {
-      const { data: [kb] } = await http.post(`${url}/update`, { id, keyboard }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      return kb;
+    static async newKeyboard (id, edit, keyboard, token) {
+        const { data: [kb] } = await http.post(`${url + (edit?"/update":"")}`, { id, keyboard }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return kb;
     }
 
     static async deleteKeyboard (id, keyboard, token) {

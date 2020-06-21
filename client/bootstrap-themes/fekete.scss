@@ -64,6 +64,11 @@ $font-family-sans-serif: 'IBM Plex Sans', Roboto, -apple-system, BlinkMacSystemF
 //  background-color: black;
 //}
 
+* {
+    font-size: 15px;
+    line-height: 1.5;
+}
+
 p {
     color: $black;
 }

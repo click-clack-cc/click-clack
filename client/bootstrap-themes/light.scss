@@ -58,11 +58,14 @@ $font-family-sans-serif: 'IBM Plex Sans', Roboto, -apple-system, BlinkMacSystemF
 @import '../node_modules/bootstrap/scss/bootstrap';
 @import '../node_modules/bootstrap-vue/src/index';
 
+* {
+    font-size: 15px;
+    line-height: 1.5;
+}
 
 .card-header, .card-footer {
     background-color: $white
 }
-
 
 a {
     text-decoration: none !important;

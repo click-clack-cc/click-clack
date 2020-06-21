@@ -8,9 +8,9 @@
             ok-title='Send'
             @ok='sendMessage'
         >
-            <h4>
+            <h5>
                 Messaging user
-            </h4>
+            </h5>
             <br>
                 <b-row class='text-muted' style='margin-left: auto; margin-right:auto; margin-bottom: 1rem; max-width: 80%'>
                     <b-col cols='2' align='middle'>
@@ -28,7 +28,7 @@
             <b-form-input v-model="messageInput" :placeholder='`Say hi to ${inspectedUser.firstname}`'></b-form-input>
         </b-modal>
         <b-overlay :show="loading" blur="0.5rem" opacity="1" variant="transparent">
-            <b-list-group>
+            <b-list-group style='margin-bottom: 1rem'>
                 <b-list-group-item>
                     <b-row>
                         <b-col align="left" cols="2">
@@ -55,7 +55,7 @@
                             </b-avatar>
                         </b-col>
                         <b-col id="name" align="left" cols="6">
-                            <h2>
+                            <h3>
                                 {{ userName }} <span v-if="showStarCount" style="font-size: 1.2rem; color: #ff7700">{{ recommendations.length }}<b-icon
                                 icon="star-fill"
                                 scale="0.8"
@@ -63,7 +63,7 @@
                                 <p class="text-muted" style="font-size: 1.2rem">
                                     {{ publicUserName }}
                                 </p>
-                            </h2>
+                            </h3>
                         </b-col>
                         <b-col v-if="showStarReportButtons" id="star-report-button-group" align="right" cols="4">
                             <b-button-group>
@@ -153,71 +153,137 @@
                 <b-list-group-item id="bio-container">
                     <b-row>
                         <b-col cols="10">
-                            <h4>
+                            <h5>
                                 Bio
-                            </h4>
+                            </h5>
                         </b-col>
                     </b-row>
                     <b-row>
-                        <p id="bio">
-                            {{ bio }}
-                        </p>
+                        <div id="bio" v-html='$md.render(bio)'>
+
+                        </div>
                     </b-row>
-                </b-list-group-item>
-                <b-list-group-item id="keyboards">
-                    <b-row>
-                        <b-col cols="10">
-                            <h4>
-                                Keyboards
-                            </h4>
-                        </b-col>
-                    </b-row>
-                    <div v-if="keyboards">
-                        <!--                        <b-list-group id="keeblist">-->
-                        <!--                            <b-list-group-item v-bind:key="keeb" v-for="keeb in keyboards">{{keeb}}</b-list-group-item>-->
-                        <!--                        </b-list-group>-->
-                        <Keyboard
-                            v-for="(keeb, index) in keyboards"
-                            :key="index"
-                            :keeb="keeb"
-                            :owner="inspectedUser"
-                            :show-owner="false"
-                            :user="user"
-                        />
-                    </div>
-                </b-list-group-item>
-                <b-list-group-item id="listings">
-                    <b-row>
-                        <b-col cols="10">
-                            <h4>
-                                Listings
-                            </h4>
-                        </b-col>
-                        <b-col align="right">
-                            <b-button
-                                id="edit-listings-button"
-                                @click='$nuxt.$router.push(`/newlisting`)'
-                                size="sm"
-                                variant="outline-primary"
-                            >
-                                <b-icon icon="plus"/>
-                            </b-button>
-                        </b-col>
-                    </b-row>
-                    <br>
-                    <b-card-group columns :style='`column-count: ${listings.length>1?2:1}`' v-if="listings">
-                        <ListingSmall style='display: inline-block; width: 100%'
-                                      v-for="(listing, index) in listings"
-                                      :listing="listing"
-                                      :owner="inspectedUser"
-                                      :show-owner="true"
-                                      :token="token"
-                                      :user="user"
-                                      :key="index">
-                        </ListingSmall>
-                    </b-card-group>
                 </b-list-group-item>
             </b-list-group>
+
+            <h5 v-if="inspectedUser.recommendations">
+                Recommendations
+            </h5>
+            <recommendation-list style='margin-bottom: 1rem' v-if="inspectedUser" :inspected-user="inspectedUser" />
+
+            <b-card no-body class="mb-1" v-if='keyboards && keyboards.length > 0' >
+                <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button block v-b-toggle.keyboards-accordion variant="light">{{keyboards.length}} keyboard{{keyboards.length>1?"s":""}}</b-button>
+                </b-card-header>
+                <b-collapse visible id="keyboards-accordion" accordion="profile-accordion" role="tabpanel">
+                    <div  id="keyboards" style='padding: 1rem'>
+                        <b-row>
+                            <b-col cols="10">
+                                <h5>
+                                    Keyboards
+                                </h5>
+                            </b-col>
+                            <b-col align="right">
+                                <b-button
+                                    size="sm"
+                                    variant="outline-primary"
+                                    @click='$nuxt.$router.push("editkeyboard")'
+                                >
+                                    <b-icon icon="plus"/>
+                                </b-button>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col cols='6' v-for="(keeb, index) in keyboards" :key="index">
+                                <Keyboard
+                                    style='margin-bottom: 1rem'
+                                    :keeb="keeb"
+                                    :owner="inspectedUser"
+                                    :show-edit="false"
+                                    :show-owner="false"
+                                    :token="token"
+                                    :user="user"
+                                />
+                            </b-col>
+                        </b-row>
+                    </div>
+                </b-collapse>
+            </b-card>
+            <b-card no-body class="mb-1" v-if='listings && listings.length > 0'>
+                <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button block v-b-toggle.listings-accordion variant="light">{{listings.length}} market listing{{listings.length>1?"s":""}}</b-button>
+                </b-card-header>
+                <b-collapse id="listings-accordion" accordion="profile-accordion" role="tabpanel">
+                    <div  id="listings" style='padding: 1rem'>
+                        <b-row>
+                            <b-col cols="10">
+                                <h5>
+                                    Listings
+                                </h5>
+                            </b-col>
+                            <b-col align="right">
+                                <b-button
+                                    size="sm"
+                                    variant="outline-primary"
+                                    @click='$nuxt.$router.push("editlisting")'
+                                >
+                                    <b-icon icon="plus"/>
+                                </b-button>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col cols='6' v-for="(listing, index) in listings" :key="index">
+                                <ListingSmall style='margin-bottom: 1rem'
+                                              :listing="listing"
+                                              :owner="inspectedUser"
+                                              :show-owner="true"
+                                              :token="token"
+                                              :user="user"
+                                              :showEdit="false"
+                                >
+                                </ListingSmall>
+                            </b-col>
+                        </b-row>
+                    </div>
+                </b-collapse>
+            </b-card>
+            <b-card no-body class="mb-1" v-if='posts && posts.length > 0'>
+                <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button block v-b-toggle.posts-accordion variant="light">{{posts.length}} post{{posts.length>1?"s":""}}</b-button>
+                </b-card-header>
+                <b-collapse id="posts-accordion" accordion="profile-accordion" role="tabpanel">
+                    <div id="posts" style='padding: 1rem'>
+                        <b-row>
+                            <b-col cols="10">
+                                <h5>
+                                    Posts
+                                </h5>
+                            </b-col>
+                            <b-col align="right">
+                                <b-button
+                                    size="sm"
+                                    variant="outline-primary"
+                                    @click='$nuxt.$router.push("editpost")'
+                                >
+                                    <b-icon icon="plus"/>
+                                </b-button>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col cols='6' v-for="(post, index) in posts" :key="index">
+                                <PostSmall style='margin-bottom: 1rem'
+                                           :post="post"
+                                           :author="inspectedUser"
+                                           :showAuthor="false"
+                                           :token="token"
+                                           :user="user"
+                                >
+                                </PostSmall>
+                            </b-col>
+                        </b-row>
+                    </div>
+                </b-collapse>
+            </b-card>
         </b-overlay>
     </div>
 </template>
@@ -228,8 +294,10 @@
     import Vue from 'vue'
     import userService from '../services/user-service'
     import Keyboard from './KeyboardSmall'
-    import ListingSmall from "./ListingSmall";
-    import messageService from "../services/message-service";
+    import ListingSmall from "./ListingSmall"
+    import messageService from "../services/message-service"
+    import PostSmall from "./PostSmall"
+    import RecommendationList from "./RecommendationList";
 
     Vue.use(VueMeta, {
         refreshOnceOnNavigation: true
@@ -238,7 +306,9 @@
         name: 'OtherUserData',
         components: {
             Keyboard,
-            ListingSmall
+            ListingSmall,
+            PostSmall,
+            RecommendationList
         },
         props: [
             'inspectedUser',
@@ -254,6 +324,7 @@
                 role: this.role,
                 keyboards: null,
                 listings: null,
+                posts: null,
                 editBio: this.editBio,
                 editKeebs: this.editKeebs,
                 editBioState: null,
@@ -293,13 +364,13 @@
                     this.publicUserName = `@${this.inspectedUser.id}`
                     this.bio = this.inspectedUser.bio
                     this.editBio = this.inspectedUser.bio
-                    this.keyboards = this.inspectedUser.keyboards
                     this.role = this.inspectedUser.role
-                    this.keyboards = []
                     if (this.inspectedUser.keyboards === null) {
                         this.keyboards = []
+                    } else {
+                        this.keyboards = this.inspectedUser.keyboards
                     }
-                    this.keyboards = this.inspectedUser.keyboards
+                    this.posts = this.inspectedUser.posts
                     this.listings = this.inspectedUser.listings
                     this.loading = false
                     this.recommendations = this.inspectedUser.recommendations

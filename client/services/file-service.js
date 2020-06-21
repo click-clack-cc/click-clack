@@ -52,6 +52,24 @@ class imgService {
         });
         return data;
     }
+
+    static async uploadPostImages (id, post, imageNames, images, token) {
+        const formData = new FormData()
+        formData.append('id', id)
+        formData.append('post', post)
+
+        images.forEach((image, index) => {
+            formData.append('image', image, imageNames[index])
+        })
+
+        const { data } = await http.post(`${url}/postphotos`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return data;
+    }
 }
 
 export default imgService

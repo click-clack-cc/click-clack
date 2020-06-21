@@ -7,9 +7,14 @@ class listingService {
         const { data } = await http.get(`${url}/u`, { params: { user }});
         return data.map(listing => ({ ...listing, createdAt: new Date(listing.createdAt), lastModified: new Date(listing.lastModified) }));
     }
-    static async getOwn (user) {
+
+    static async getOwn (user, token) {
         const { data } = await http.get(`${url}/own`, { params: { user }});
-        return data.map(listing => ({ ...listing, createdAt: new Date(listing.createdAt), lastModified: new Date(listing.lastModified) }));
+        return data.map(listing => ({ ...listing, createdAt: new Date(listing.createdAt), lastModified: new Date(listing.lastModified) },{
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }));
     }
 
     static async getNewListings (method) {
@@ -20,6 +25,15 @@ class listingService {
                 lastModified: new Date(listing.lastModified)
             })
         );
+    }
+
+    static async getNewListingsForMod (id, token) {
+        const { data } = await http.get(`${url}/mod`, { params: { id },
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return data.map(listing => ({ ...listing, createdAt: new Date(listing.createdAt), lastModified: new Date(listing.lastModified) }));
     }
 
     static async getFilteredListings (filter) {
@@ -48,6 +62,24 @@ class listingService {
 
     static async deleteListing (id, listing, token) {
         const { data: [lt] } = await http.post(`${url}/delete`, { id, listing }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return lt;
+    }
+
+    static async approve (id, listing, token) {
+        const { data: [lt] } = await http.post(`${url}/approve`, { id, listing }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return lt;
+    }
+
+    static async decline (id, listing, token) {
+        const { data: [lt] } = await http.post(`${url}/decline`, { id, listing }, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

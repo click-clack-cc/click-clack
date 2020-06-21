@@ -67,6 +67,8 @@ router.get('/new', async (req, res) => {
                 images: true,
                 lastModified: true,
                 createdAt: true,
+                creatorName: true,
+                url: true,
                 comments: true,
                 hearts: true,
                 userdata: {
@@ -114,6 +116,8 @@ router.get('/best', async (req, res) => {
                 images: true,
                 lastModified: true,
                 createdAt: true,
+                creatorName: true,
+                url: true,
                 comments: true,
                 hearts: true,
                 userdata: {
@@ -171,6 +175,8 @@ router.get('/rising', async (req, res) => {
                 images: true,
                 lastModified: true,
                 createdAt: true,
+                creatorName: true,
+                url: true,
                 comments: true,
                 hearts: true,
                 userdata: {
@@ -204,10 +210,9 @@ router.get('/search/', async (req, res) => {
 });
 
 router.post('/', isLoggedIn, async (req, res) => {
-    console.log(req.body)
-    let num = await result.find({_id: req.body.keyboard.name.replace(' ', '-').replace(/[^a-zd-]/ig, '').toLowerCase()}).count();
+    let num = await result.find({_id: req.body.keyboard.name.replace(/ /g, '-').replace(/[^a-zd-]/ig, '').toLowerCase()}).count();
     await result.insertOne({
-        _id: (req.body.keyboard.name.replace(' ', '-').replace(/[^a-zd-]/ig, '').toLowerCase()) + (num === 0 ? '' : (num + 1)),
+        _id: (req.body.keyboard.name.replace(/ /g, '-').replace(/[^a-zd-]/ig, '').toLowerCase()) + (num === 0 ? '' : (num + 1)),
         owner: req.body.id,
         name: req.body.keyboard.name,
         description: req.body.keyboard.description,
@@ -217,6 +222,8 @@ router.post('/', isLoggedIn, async (req, res) => {
         pcb: req.body.keyboard.pcb,
         case: req.body.keyboard.case,
         images: req.body.keyboard.images,
+        creatorName: req.body.keyboard.creatorName,
+        url: req.body.keyboard.url,
         comments: [],
         hearts: [],
         lastModified: new Date(),
@@ -243,6 +250,8 @@ router.post('/update', isLoggedIn, async (req, res) => {
                 pcb: req.body.keyboard.pcb,
                 case: req.body.keyboard.case,
                 images: req.body.keyboard.images,
+                creatorName: req.body.keyboard.creatorName,
+                url: req.body.keyboard.url,
                 lastModified: new Date()
             }
         }).then(() => {
