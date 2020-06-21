@@ -1,49 +1,50 @@
 <template>
     <div id="index">
-        <b-card
+        <div
             v-show="loaded"
             id="container"
             :class="{ zen: (zenmode && $nuxt.$route.name === 'Typing') }"
             border-variant="light"
-            footer-tag="footer"
-            header-tag="header"
         >
-            <template v-if="!(zenmode && $nuxt.$route.name === 'Typing')" id="header" v-slot:header>
-                <Header :user="user" @event="eventHandler" />
-            </template>
+            <b-card v-if="!(zenmode && $nuxt.$route.name === 'Typing')" id='header-container'>
+                <template id="header">
+                    <Header :user="user" @event="eventHandler"/>
+                </template>
+            </b-card>
 
-<!--            <b-modal-->
-<!--                ref='welcome-modal'-->
-<!--                id='welcome-modal'-->
-<!--                size='lg'-->
-<!--                title="Welcome to Click-Clack ❤️"-->
-<!--                ok-only-->
-<!--                centered-->
-<!--                no-close-on-backdrop-->
-<!--                hide-backdrop-->
-<!--                no-close-on-esc-->
-<!--                content-class="shadow"-->
-<!--                ok-variant='outline-primary'-->
-<!--                ok-title='Cool, thanks'-->
-<!--                @hidden='welcomeModalClosed'-->
-<!--            >-->
-<!--                <b-card-text>-->
-<!--                    Click-Clack is a platform tailored specifically for mechanical keyboard enthusiasts.-->
-<!--                    We offer a customizable and clean typing test with performance tracking, a powerful-->
-<!--                    and neat keyboard gallery, a marketplace where you can list your items and services-->
-<!--                    and several other community features so you can talk to fellow-->
-<!--                    clackers and show off or even sell your builds and services. <br><br>-->
-<!--                    You will find the navigation on the top right corner.<br> <b-icon v-b-tooltip.hover.bottom="`Typing Test`" icon="lightning" /> will take you-->
-<!--                    to the typing test,<br> <b-icon v-b-tooltip.hover.bottom="`Keyboard Showroom`" icon="view-stacked" /> will-->
-<!--                    redirect you to the showroom-->
-<!--                    <br> <b-icon v-b-tooltip.hover.bottom="`Market`" icon="shop-window" /> is the market where you can trade items and services,-->
-<!--                    <br> and <b-icon v-b-tooltip.hover.bottom="`Community`" icon="people" /> is-->
-<!--                    where you can hang out and talk to fellow Click-Clack members.<br><br>-->
-<!--                    Please also note that we are using basic cookies to save your settings and for google analytics.<br><br>-->
-<!--                    Now go and explore the website, have fun!-->
-<!--                </b-card-text>-->
 
-<!--            </b-modal>-->
+            <!--            <b-modal-->
+            <!--                ref='welcome-modal'-->
+            <!--                id='welcome-modal'-->
+            <!--                size='lg'-->
+            <!--                title="Welcome to Click-Clack ❤️"-->
+            <!--                ok-only-->
+            <!--                centered-->
+            <!--                no-close-on-backdrop-->
+            <!--                hide-backdrop-->
+            <!--                no-close-on-esc-->
+            <!--                content-class="shadow"-->
+            <!--                ok-variant='outline-primary'-->
+            <!--                ok-title='Cool, thanks'-->
+            <!--                @hidden='welcomeModalClosed'-->
+            <!--            >-->
+            <!--                <b-card-text>-->
+            <!--                    Click-Clack is a platform tailored specifically for mechanical keyboard enthusiasts.-->
+            <!--                    We offer a customizable and clean typing test with performance tracking, a powerful-->
+            <!--                    and neat keyboard gallery, a marketplace where you can list your items and services-->
+            <!--                    and several other community features so you can talk to fellow-->
+            <!--                    clackers and show off or even sell your builds and services. <br><br>-->
+            <!--                    You will find the navigation on the top right corner.<br> <b-icon v-b-tooltip.hover.bottom="`Typing Test`" icon="lightning" /> will take you-->
+            <!--                    to the typing test,<br> <b-icon v-b-tooltip.hover.bottom="`Keyboard Showroom`" icon="view-stacked" /> will-->
+            <!--                    redirect you to the showroom-->
+            <!--                    <br> <b-icon v-b-tooltip.hover.bottom="`Market`" icon="shop-window" /> is the market where you can trade items and services,-->
+            <!--                    <br> and <b-icon v-b-tooltip.hover.bottom="`Community`" icon="people" /> is-->
+            <!--                    where you can hang out and talk to fellow Click-Clack members.<br><br>-->
+            <!--                    Please also note that we are using basic cookies to save your settings and for google analytics.<br><br>-->
+            <!--                    Now go and explore the website, have fun!-->
+            <!--                </b-card-text>-->
+
+            <!--            </b-modal>-->
             <nuxt
                 id="routerview"
                 :nightmode="nightmode"
@@ -52,40 +53,49 @@
                 :user="user"
                 @event="eventHandler"
             />
+        </div>
 
-<!--            <template-->
-<!--                v-if="!(zenmode && $nuxt.$route.name === 'Typing')"-->
-<!--                v-slot:footer-->
-<!--            >-->
-<!--                <div id="footer">-->
-<!--                    <Footer />-->
-<!--                    <b-form-checkbox-->
-<!--                        :checked="nightmode"-->
-<!--                        align="right"-->
-<!--                        name="check-button"-->
-<!--                        style="margin-top: -0.5rem"-->
-<!--                        switch-->
-<!--                        @change="changeTheme"-->
-<!--                    >-->
-<!--                        <p style="font-size: 0.7rem; margin-top: 0.2rem; font-weight: lighter">-->
-<!--                            Night mode-->
-<!--                        </p>-->
-<!--                    </b-form-checkbox>-->
-<!--                </div>-->
-<!--            </template>-->
-        </b-card>
+        <b-alert
+            v-model="showCookies"
+            class="position-fixed fixed-bottom m-0 rounded-0"
+            style="z-index: 2000; "
+            variant="info"
+            dismissible
+            @dismissed='cookiesClosed'
+        >
+            <div style='max-width: 960px; margin: auto;'>
+                <b-row no-gutters>
+                    <b-col cols='1' align='left'>
+                        <b-icon class="align-middle" icon='info-circle' style='margin-right: 1rem' scale='1.4'></b-icon>
+                    </b-col>
+                    <b-col align='left'>
+                        We use a few cookies to save your settings and for basic analytics. We hope you're okay with
+                        that.
+                    </b-col>
+                    <b-col style='margin: 0' cols='2' align='right'>
+                        <b-button @click='cookiesClosed' style='margin-top: -0.5rem; margin-bottom: -0.5rem'
+                                  variant='primary'>
+                            Okay, thank you
+                        </b-button>
+                    </b-col>
+                </b-row>
+
+            </div>
+
+        </b-alert>
+
         <div v-show="!loaded" class="loading-page">
-            <div class="loader" />
+            <div class="loader"/>
         </div>
     </div>
 </template>
 
 <script>
     import Vue from 'vue'
-    import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+    import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
     import VueRouter from 'vue-router'
     import PortalVue from 'portal-vue'
-    import { mapState } from 'vuex'
+    import {mapState} from 'vuex'
     import VueCookies from 'vue-cookies'
     import Header from '../components/Header'
     import Footer from '../components/Footer'
@@ -104,16 +114,17 @@
             Header,
             Footer
         },
-        data () {
+        data() {
             return {
-                loaded: false
+                loaded: false,
+                showCookies: false,
             }
         },
-        mounted () {
+        mounted() {
             this.$store.commit('updateZenmode', false)
         },
         computed: mapState(['user', 'token', 'nightmode', 'zenmode', 'darktheme', 'lighttheme', 'search']),
-        async created () {
+        async created() {
             this.$store.commit('updateZenmode', false)
             if (process.server) {
                 return
@@ -133,11 +144,6 @@
             this.$store.commit('updateLighttheme', this.lightTheme)
             this.$store.commit('updateDarktheme', this.darkTheme)
 
-            // console.log(1)
-            // await import('../node_modules/bootstrap/scss/bootstrap.scss')
-            // await import('../node_modules/bootstrap-vue/src/index.scss')
-            // console.log(2)
-
             if (this.$cookies.get('darkmode') === 'true') {
                 await import(`../bootstrap-themes/${this.darkTheme}.css`)
                 this.nightmode = true
@@ -154,6 +160,12 @@
                 this.$bvModal.show('welcome-modal')
             }
 
+            if (this.$cookies.get('cookiesDone') === 'true') {
+
+            } else {
+                this.showCookies = true;
+            }
+
             console.log(`
 ░█████╗░██╗░░░░░██╗░█████╗░██╗░░██╗░░░░░░░█████╗░██╗░░░░░░█████╗░░█████╗░██╗░░██╗
 ██╔══██╗██║░░░░░██║██╔══██╗██║░██╔╝░░░░░░██╔══██╗██║░░░░░██╔══██╗██╔══██╗██║░██╔╝
@@ -166,7 +178,7 @@
             this.loaded = true
         },
         methods: {
-            loadUserData () {
+            loadUserData() {
                 if (process.server) {
                     return
                 }
@@ -189,7 +201,7 @@
                     this.$store.commit('updateToken', this.$cookies.get('token'))
                 }
             },
-            eventHandler (event) {
+            eventHandler(event) {
                 if (event.name === 'zen') {
                     this.$store.commit('updateZenmode', event.value)
                     this.zenMode = event.value
@@ -201,6 +213,10 @@
             // welcomeModalClosed (){
             //     this.$cookies.set('welcomeDone', true, '7d')
             // }
+            cookiesClosed() {
+                this.showCookies = false;
+                this.$cookies.set('cookiesDone', true, '7d')
+            }
         }
     }
 </script>
@@ -211,9 +227,10 @@
         max-width: 1000px;
         margin: auto;
         margin-bottom: 6rem;
+        padding-top: 4rem;
     }
 
-    #welcome-mdal {
+    #welcome-modal {
         max-width: 1000px;
         margin: auto;
         margin-bottom: 1rem;
@@ -222,6 +239,16 @@
     #header {
         max-width: 1000px;
         margin: auto;
+        margin-top: -1.55rem;
+        margin-bottom: -1.55rem;
+    }
+
+    #header-container {
+        width: 100%;
+        position: fixed;
+        margin-top: -1px;
+        z-index: 2;
+        padding: 0;
     }
 
     #footer {
@@ -236,7 +263,7 @@
     }
 
     @media only screen and (max-width: 900px) {
-        body, #welcome-mdal, #routerview, #header, #footer {
+        body, #welcome-modal, #routerview, #header, #footer {
             max-width: unset;
         }
     }

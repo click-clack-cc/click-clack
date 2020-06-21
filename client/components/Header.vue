@@ -148,8 +148,8 @@
                                 <b-icon icon='exclamation-square'></b-icon>
                                 Report bug
                         </b-dropdown-item>
-                        <b-dropdown-divider></b-dropdown-divider>
-                        <b-dropdown-item-btn @click='signOut'>
+                        <b-dropdown-divider  v-if='this.user' ></b-dropdown-divider>
+                        <b-dropdown-item-btn  v-if='this.user'  @click='signOut'>
                             <b-icon icon='arrow-right-circle'></b-icon>
                             Sign out
                         </b-dropdown-item-btn>
