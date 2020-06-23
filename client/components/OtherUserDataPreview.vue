@@ -6,24 +6,8 @@
                     <b-row>
                         <b-col align="left" cols="2">
                             <b-avatar id="avatar" :src="img" size="4rem" variant="light">
-                                <template v-if="role == 'admin'" v-slot:badge>
+                                <template v-if="role && role.includes('admin')" v-slot:badge>
                                     <b-icon v-b-tooltip.right icon="shield-shaded" title="Administrator" />
-                                </template>
-                                <template v-else-if="role == 'verified'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="check-circle" title="Verified user" />
-                                </template>
-                                <template v-else-if="role == 'supporter'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="heart" title="Supporter" />
-                                </template>
-                                <template v-else-if="role == 'betatester'" v-slot:badge>
-                                    <b-icon
-                                        v-b-tooltip.right
-                                        icon="egg"
-                                        title="I was there when it all started"
-                                    />
-                                </template>
-                                <template v-else-if="role == 'developer'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="cup" title="Developer" />
                                 </template>
                             </b-avatar>
                         </b-col>
@@ -68,14 +52,13 @@
                     <b-row>
                         <b-col cols="10">
                             <h4>
-                                Bio
+                                About me
                             </h4>
                         </b-col>
                     </b-row>
                     <b-row>
-                        <p id="bio">
-                            {{ bio }}
-                        </p>
+                        <div v-if='bio' id="bio" v-html='$md.render(bio)'>
+                        </div>
                     </b-row>
                 </b-list-group-item>
                 <!--                <b-list-group-item id="keyboards">-->

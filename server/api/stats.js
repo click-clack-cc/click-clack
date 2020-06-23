@@ -126,6 +126,14 @@ router.post('/', isLoggedIn, async (req, res) => {
         res.status(401).send();
         return;
     }
+    if (req.body.stat.acc > 100) {
+        res.status(401).send();
+        return;
+    }
+    if (req.body.stat.wpm > 250) {
+        res.status(401).send();
+        return;
+    }
 
     if (req.body.stat.wpm >= 100) {
         await users.update({

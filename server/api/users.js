@@ -15,7 +15,6 @@ connect().then((db) => {
     console.log('users.js connected to ' + process.env.DB_NAME + '.users')
 })
 
-
 router.post('/register', async (req, res) => {
     let usernamefree = await result.find({id: req.body.id}).count() === 0;
     let emailfree = await result.find({email: req.body.email}).count() === 0;
@@ -197,6 +196,60 @@ router.post('/id/', isLoggedIn, async (req, res) => {
     }
 });
 
+router.post('/passwordchange/', isLoggedIn, async (req, res) => {
+    if (req.body.id !== 'test') {
+        await result.findOneAndUpdate({
+                _id: mongodb.ObjectId(req.body.id)
+            },
+            {
+                $set: {
+                    id: req.body.newid
+                }
+            });
+        res.status(201).send();
+    } else {
+        res.status(401).send();
+    }
+});
+
+router.post('/passwordchange', async (req, response) => {
+    let user = null;
+    if (req.body.id.includes('@')) {
+        user = await result.find({email: req.body.id}).toArray();
+    } else {
+        user = await result.find({id: req.body.id}).toArray();
+    }
+    user = user[0]
+    if (user) {
+        bcrypt.compare(req.body.password, user.password, function (err, res) {
+            bcrypt.hash(req.body.password, salt, (err, encrypted) => {
+
+            })
+            if (res) {
+                const token = jwt.sign({
+                        id: user._id
+                    },
+                    process.env.SECRET_KEY, {
+                        expiresIn: '7d'
+                    }
+                );
+
+                user.password = undefined;
+
+                response.status(200).send({
+                    token: token,
+                    user: user
+                });
+            } else {
+                response.status(401).send();
+            }
+        });
+    } else {
+        response.statusMessage = 'Authentication failed'
+        response.status(401).send();
+    }
+});
+
 router.post('/bio/', isLoggedIn, async (req, res) => {
     await result.findOneAndUpdate({
             _id: mongodb.ObjectId(req.body.id)
@@ -268,7 +321,6 @@ router.post('/recommend/', isLoggedIn, async (req, res) => {
                 }
             });
     res.status(201).send();
-
 });
 
 router.post('/report/', isLoggedIn, async (req, res) => {

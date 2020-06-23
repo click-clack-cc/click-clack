@@ -1,11 +1,12 @@
 import fs from 'fs'
 import redirectSSL from 'redirect-ssl'
+require('dotenv').config()
 
 export default {
     mode: 'universal',
     server: {
-        port: 443,
-        host: '192.168.0.106',
+        port: process.env.PORT,
+        host: process.env.HOST,
         https: {
             key: fs.readFileSync('certs/click-clack_cc.key'),
             ca: fs.readFileSync('certs/ccbundle.crt'),
@@ -71,6 +72,7 @@ export default {
     ],
     buildModules: [
         // '@nuxtjs/eslint-module',
+        '@nuxtjs/markdownit',
         '@nuxtjs/dotenv',
         ['@nuxtjs/google-analytics', {
             id: process.env.GOOGLE_ANALYTICS_ID,
@@ -89,6 +91,7 @@ export default {
         preset: 'default',
         linkify: true,
         breaks: true,
+        injected: true,
         use: [
             'markdown-it-div',
             'markdown-it-attrs'

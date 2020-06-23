@@ -5,14 +5,15 @@
             align="left"
             no-gutters
         >
-            <b-col lg="4" sm="12">
+            <b-col lg="4" sm="4">
                 <router-link to="/">
                     <h1 id="title">
                         click-clack
                     </h1>
                 </router-link>
             </b-col>
-            <b-col id="search-container" lg="4" sm="12">
+
+            <b-col id="search-container" lg="4" sm="8">
                 <b-input-group id="search">
                     <b-form-input
                         v-model="searchinput"
@@ -84,7 +85,7 @@
                                 <span v-else>Sign in</span>
                             </nuxt-link>
                         </b-dropdown-item>
-                        <b-dropdown-item v-if='user && (user.role === "admin" || user.role ==="developer")' @click='$nuxt.$router.push(`/admintools`)'>
+                        <b-dropdown-item v-if='user && (user.role.includes("admin") || user.role.includes("developer"))' @click='$nuxt.$router.push(`/admintools`)'>
                             <nuxt-link to="/profile">
                                 <b-icon icon='shield'></b-icon>
                                 <span>AdminTools</span>
@@ -180,7 +181,7 @@
             if (this.user && this.token) {
                 this.getUnseenMessages()
                 if(this.messagePollerStarted) return
-                if(!this.interval) this.interval = setInterval(this.getUnseenMessages, 5000)
+                if(!this.interval) this.interval = setInterval(this.getUnseenMessages, 10000)
                 this.messagePollerStarted = true
             }
         },
@@ -191,7 +192,7 @@
                     if (this.user && this.token) {
                         this.getUnseenMessages()
                         if(this.messagePollerStarted) return
-                        if(!this.interval) this.interval = setInterval(this.getUnseenMessages, 5000)
+                        if(!this.interval) this.interval = setInterval(this.getUnseenMessages, 10000)
                         this.messagePollerStarted = true
                     }
                 }

@@ -86,6 +86,7 @@
                 </nuxt-link>
             </b-col>
         </b-row>
+
         <b-row class='posts'>
             <b-col md='12' lg='8'>
                 <b-row id='postbuttons'>
@@ -97,7 +98,11 @@
                     </b-col>
                     <b-col>
                         <b-button block  pill  @click='$nuxt.$router.push(user?"/editkeyboard":"/profile")'>
-                            <b-icon icon='file-plus'></b-icon>
+                            <svg version="1.1" style='margin: -0.5rem; margin-right: 0' xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" viewBox="0 0 1024 1024">
+                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M284.991 354.558l227.242 119.907c0 0 178.891-8.704 220.472-102.499l-221.439-114.104c0 0-109.269 65.754-226.275 96.699z"></path>
+                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M284.991 354.558l-79.293 222.406 277.524 174.058 29.009 6.77 26.109-2.901 291.062-135.378 2.901-29.009-99.6-218.538"></path>
+                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M519.001 515.079l-6.77 180.826"></path>
+                            </svg>
                             Submit a keyboard
                         </b-button>
                     </b-col>
@@ -167,6 +172,7 @@
                 <announcements id="announcements"/>
                 <Leaderboard id="leaderboard"/>
 <!--                <NewUsers id="new-users"/>-->
+                <iframe src="https://discordapp.com/widget?id=715624140606013471&theme=dark" style='width: 100%; height: 25rem' allowtransparency="true" frameborder="0"></iframe>
                 <Footer >
                 </Footer>
             </b-col>
@@ -204,12 +210,12 @@
                 posts: null,
                 loaded: false,
                 allContent: null,
-                sortMethod: 'best'
+                sortMethod: 'rising'
             }
         },
         computed: mapState(['user', 'token', 'nightmode', 'zenmode', 'darktheme', 'lighttheme', 'search']),
         created() {
-            this.sortBy('best')
+            this.sortBy('rising')
         },
         methods: {
             async sortBy(method) {

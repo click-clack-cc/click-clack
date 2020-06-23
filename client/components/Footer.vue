@@ -16,6 +16,11 @@
                     <p id="madeinhungary">
                         Click-clack is proudly made in Hungary<br>
                     </p>
+                    <a href='https://status.click-clack.cc'>
+                        <b-icon icon='cloud'></b-icon> Service Status
+                    </a>
+                    <br>
+                    <br>
                 </div>
             </b-col>
         </b-row>

@@ -24,6 +24,7 @@
         "cookie-universal-nuxt": "^2.1.4",
         "core-js": "^2.6.5",
         "cors": "^2.8.5",
+        "dateformat": "^3.0.3",
         "helmet": "^3.22.1",
         "html": "^1.0.0",
         "http": "0.0.1-security",

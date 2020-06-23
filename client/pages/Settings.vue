@@ -50,14 +50,14 @@
                     <template v-slot:footer>
                         <div>
                             <b-icon
-                                v-if="isEnabled(theme.name)"
+                                v-if="isDisabled(theme.name)"
                                 icon="lock"
                                 style="margin-right: 1rem"
                                 variant="primary"
                             />
                             <b-icon v-else icon="unlock" style="margin-right: 1rem" variant="primary" />
                             <b-button
-                                :disabled="isEnabled(theme.name)"
+                                :disabled="isDisabled(theme.name)"
                                 :variant="currentLightTheme!==theme.name?'outline-primary':'primary'"
                                 href="#"
                                 style="margin-right: 1rem"
@@ -67,7 +67,7 @@
                                 Use
                             </b-button>
                             <b-button
-                                :disabled="isEnabled(theme.name)"
+                                :disabled="isDisabled(theme.name)"
                                 :variant="currentDarkTheme!==theme.name?'outline-primary':'primary'"
                                 href="#"
                                 style="margin-right: 1rem"
@@ -80,7 +80,7 @@
                                 <b-icon icon="eye" />
                                 Preview
                             </b-button>
-                            <a v-if="isEnabled(theme.name) && theme.category === '❤️ Supporter only'" href="https://www.patreon.com/clickclackcc">
+                            <a v-if="isDisabled(theme.name) && theme.category === '❤️ Supporter only'" href="https://www.patreon.com/clickclackcc">
                                 <b-button style='margin-top: 1rem' variant='outline-primary'>
                                     Support click-clack
                                     <b-icon style='margin-left: 0.5rem' icon="heart"/>
@@ -195,7 +195,7 @@
         },
         methods: {
             setLightTheme (theme) {
-                if (this.isEnabled(theme)) {
+                if (this.isDisabled(theme)) {
                     return
                 }
                 if (!this.user) {
@@ -206,7 +206,7 @@
                 this.$router.go()
             },
             setDarkTheme (theme) {
-                if (this.isEnabled(theme)) {
+                if (this.isDisabled(theme)) {
                     return
                 }
                 if (!this.user) {
@@ -227,10 +227,17 @@
             reset () {
                 this.$router.go()
             },
-            isEnabled (theme) {
+            isDisabled (theme) {
                 if (!this.user) {
                     return true
                 }
+
+                if(this.user.role && this.user.role.length > 0){
+                    for (let i = 0; i < this.user.role.length; i++) {
+                        if(['supporter', 'developer', 'admin'].includes(this.user.role[i])) return false
+                    }
+                }
+
                 if (theme === 'pressó') {
                     if (!this.user.achievements) {
                         return true
@@ -246,13 +253,9 @@
                         return true
                     }
                     return !this.user.achievements.includes('100tests')
-                } else if (theme === 'mint-latte') {
-                    return !['supporter', 'developer', 'admin'].includes(this.user.role)
-                } else if (theme === 'americano') {
-                    return !['supporter', 'developer', 'admin'].includes(this.user.role)
-                } else if (theme === 'iced-mocha') {
-                    return !['supporter', 'developer', 'admin'].includes(this.user.role)
                 }
+
+                return true;
             }
         },
         head () {

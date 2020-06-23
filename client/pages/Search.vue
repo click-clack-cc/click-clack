@@ -13,49 +13,38 @@
         <h2>Members</h2>
         <br>
         <div v-if="this.users && this.users.length > 0">
-            <b-card v-for="(u, index) in this.users" :key="index" class="user-thumbnail">
-                <b-avatar
-                    :src="`https://click-clack.cc:5000/files/images/${u._id}.jpg`"
-                    badge-offset="-0.3rem"
-                    button
-                    class="avatar"
-                    size="3rem"
-                    variant="light"
-                    @click="previewUser(u.id)"
-                >
-                    <template v-if="u.role == 'admin'" v-slot:badge>
-                        <b-icon v-b-tooltip.right icon="shield-shaded" title="Administrator"/>
-                    </template>
-                    <template v-else-if="u.role == 'verified'" v-slot:badge>
-                        <b-icon v-b-tooltip.right icon="check-circle" title="Verified user"/>
-                    </template>
-                    <template v-else-if="u.role == 'supporter'" v-slot:badge>
-                        <b-icon v-b-tooltip.right icon="heart" title="Supporter"/>
-                    </template>
-                    <template v-else-if="u.role == 'betatester'" v-slot:badge>
-                        <b-icon
-                            v-b-tooltip.right
-                            icon="egg"
-                            title="I was there when it all started"
-                        />
-                    </template>
-                    <template v-else-if="u.role == 'developer'" v-slot:badge>
-                        <b-icon v-b-tooltip.right icon="cup" title="Developer"/>
-                    </template>
-                </b-avatar>
-                <b-link :href="`/u/${u.id}`" class="name">
+            <b-row>
+                <b-col cols='6' v-for="(u, index) in this.users" :key="index">
+                    <b-card class="user-thumbnail">
+                        <b-avatar
+                            :src="`https://click-clack.cc:5000/files/images/${u._id}.jpg`"
+                            badge-offset="-0.3rem"
+                            button
+                            class="avatar"
+                            size="3rem"
+                            variant="light"
+                            @click="previewUser(u.id)"
+                        >
+                            <template v-if="u.role.includes('admin')" v-slot:badge>
+                                <b-icon v-b-tooltip.right icon="shield-shaded" title="Administrator"/>
+                            </template>
+                        </b-avatar>
+                        <b-link :href="`/u/${u.id}`" class="name">
           <span style="font-weight: bold">
             {{ u.firstname }} {{ u.lastname }}
           </span>
-                    <span class="text-muted">
+                            <span class="text-muted">
             @{{ u.id }}
           </span>
-                </b-link>
-                <span v-if="u.recommendations" class="starcount" style="font-size: 1.2rem; color: #ff7700">{{ u.recommendations.length }}<b-icon
-                    icon="star-fill"
-                    scale="0.8"
-                /> </span>
-            </b-card>
+                        </b-link>
+                        <span v-if="u.recommendations" class="starcount" style="font-size: 1.2rem; color: #ff7700">{{ u.recommendations.length }}<b-icon
+                            icon="star-fill"
+                            scale="0.8"
+                        /> </span>
+                    </b-card>
+                </b-col>
+            </b-row>
+
         </div>
         <div v-else>
             <br>
@@ -66,7 +55,7 @@
         <h2>Keyboards</h2>
         <br>
         <b-row>
-            <div v-if="this.keyboards && this.keyboards.length > 0"  >
+            <div v-if="this.keyboards && this.keyboards.length > 0">
                 <b-row>
                     <b-col cols='6' v-for="(keeb, index) in this.keyboards" :key="index">
                         <Keyboard
@@ -91,56 +80,49 @@
         <br>
         <h2>Listings</h2>
         <br>
-
-        <b-row>
-            <div v-if="listings && listings.length > 0">
-                <b-row>
-                    <b-col cols='6' :key="index" v-for="(listing, index) in listings">
-                        <ListingSmall style='margin-bottom: 1rem'
-                                      :listing="listing"
-                                      :owner="listing.userdata"
-                                      :show-owner="true"
-                                      :token="token"
-                                      :user="user"
-                        >
-                        </ListingSmall>
-                    </b-col>
-                </b-row>
-            </div>
-            <b-col v-else align='middle'>
-                <div>
-                    <br>
-                    <b-icon icon="x" scale="2" style="width: 100%; margin: auto"/>
-                </div>
+        <b-row v-if="listings && listings.length > 0">
+            <b-col cols='6' :key="index" v-for="(listing, index) in listings">
+                <ListingSmall style='margin-bottom: 1rem'
+                              :listing="listing"
+                              :owner="listing.userdata"
+                              :show-owner="true"
+                              :token="token"
+                              :user="user"
+                >
+                </ListingSmall>
             </b-col>
         </b-row>
-
+        <b-col v-else align='middle'>
+            <div>
+                <br>
+                <b-icon icon="x" scale="2" style="width: 100%; margin: auto"/>
+            </div>
+        </b-col>
         <br>
         <h2>Posts</h2>
         <br>
-        <b-row>
-            <div v-if="posts && posts.length > 0">
-                <b-row>
-                    <b-col cols='6'  v-for="(post, index) in posts" :key="index">
-                        <PostSmall
-                            style='margin-bottom: 1rem'
-                            :post='post'
-                            :author="post.userdata"
-                            :showAuthor="true"
-                            :token="token"
-                            :user="user"
-                        >
-                        </PostSmall>
-                    </b-col>
-                </b-row>
-            </div>
-            <b-col v-else align='middle'>
-                <div>
-                    <br>
-                    <b-icon icon="x" scale="2" style="width: 100%; margin: auto"/>
-                </div>
+
+        <b-row v-if="posts && posts.length > 0">
+            <b-col cols='6' v-for="(post, index) in posts" :key="index">
+                <PostSmall
+                    style='margin-bottom: 1rem'
+                    :post='post'
+                    :author="post.userdata"
+                    :showAuthor="true"
+                    :token="token"
+                    :user="user"
+                >
+                </PostSmall>
             </b-col>
         </b-row>
+
+        <b-col v-else align='middle'>
+            <div>
+                <br>
+                <b-icon icon="x" scale="2" style="width: 100%; margin: auto"/>
+            </div>
+        </b-col>
+
     </div>
 </template>
 

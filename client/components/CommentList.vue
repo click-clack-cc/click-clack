@@ -16,32 +16,22 @@
                                     variant="light"
                                     @click="previewUser(com.submitter.id)"
                                 >
-                                    <template v-if="com.submitter.role == 'admin'" v-slot:badge>
+                                    <template v-if="com.submitter.role.includes('admin')" v-slot:badge>
                                         <b-icon v-b-tooltip.right icon="shield-shaded" title="Administrator"/>
-                                    </template>
-                                    <template v-else-if="com.submitter.role == 'verified'" v-slot:badge>
-                                        <b-icon v-b-tooltip.right icon="check-circle" title="Verified user"/>
-                                    </template>
-                                    <template v-else-if="com.submitter.role == 'supporter'" v-slot:badge>
-                                        <b-icon v-b-tooltip.right icon="heart" title="Supporter"/>
-                                    </template>
-                                    <template v-else-if="com.submitter.role == 'betatester'" v-slot:badge>
-                                        <b-icon
-                                            v-b-tooltip.right
-                                            icon="egg"
-                                            title="I was there when it all started"
-                                        />
-                                    </template>
-                                    <template v-else-if="com.submitter.role == 'developer'" v-slot:badge>
-                                        <b-icon v-b-tooltip.right icon="cup" title="Developer"/>
                                     </template>
                                 </b-avatar>
                             </b-col>
                             <b-col align='left'>
                                 <b-link :href="`/u/${com.submitter.id}`" class="name">
-                                    {{ com.submitter.firstname }}
-                                    <br>
-                                    <span class="tag text-muted"> @{{ com.submitter.id }} </span>
+                                    <b-col>
+                                        <b-row>
+                                            {{ com.submitter.firstname }}
+                                        </b-row>
+                                        <b-row>
+                                            <span class="tag text-muted"> @{{ com.submitter.id }} </span>
+                                        </b-row>
+
+                                    </b-col>
                                 </b-link>
                             </b-col>
                         </b-row>
@@ -126,16 +116,11 @@
 
 
     .name {
-        margin-left: 1rem;
         /*margin-top: 0.3rem;*/
         margin-right: 0rem;
     }
-
-    .tag {
-        margin-right: 1rem;
-    }
-
     .avatar {
+        margin-top: 0.5rem;
         margin-left: 0.5rem;
     }
 

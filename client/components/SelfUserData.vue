@@ -1,62 +1,158 @@
 <template>
     <div id="self-user-data-container">
         <b-overlay :show="loading" blur="0.5rem" opacity="1" variant="transparent">
-            <b-list-group style='margin-bottom: 1rem'>
-                <b-list-group-item>
-                    <b-row>
-                        <b-col align="left">
-                            <b-avatar
-                                :src="img"
-                                badge-offset="-0.4rem"
-                                class="avatar"
-                                size="4rem"
-                                variant="light"
-                            >
-                                <template v-if="role == 'admin'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="shield-shaded" title="Administrator"/>
-                                </template>
-                                <template v-else-if="role == 'verified'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="check-circle" title="Verified user"/>
-                                </template>
-                                <template v-else-if="role == 'supporter'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="heart" title="Supporter"/>
-                                </template>
-                                <template v-else-if="role == 'betatester'" v-slot:badge>
-                                    <b-icon
-                                        v-b-tooltip.right
-                                        icon="egg"
-                                        title="I was there when it all started"
-                                    />
-                                </template>
-                                <template v-else-if="role == 'developer'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="cup" title="Developer"/>
-                                </template>
-                            </b-avatar>
-                        </b-col>
-                        <b-col id="name" align="left" lg="9" md='6' sm='3'>
-                            <h3>
-                                {{ userName }} <span v-if="showStarCount" style="font-size: 1.2rem; color: #ff7700">{{ recommendations.length }}<b-icon
-                                icon="star-fill"
-                                scale="0.8"
-                            /> </span>
-                                <p class="text-muted" style="font-size: 1.2rem">
-                                    @{{ publicUserName }}
-                                </p>
-                            </h3>
-                        </b-col>
-                        <b-col align="right">
-                            <b-button
-                                id="edit-username-button"
-                                style='border: none'
-                                v-b-modal.username-edit-modal
-                                size="sm"
-                                variant="outline-primary"
-                            >
-                                <b-icon icon="pencil-square"/>
-                            </b-button>
-                        </b-col>
-                    </b-row>
-                </b-list-group-item>
+            <b-card style='margin-bottom: 1rem'>
+                <b-row no-gutters>
+
+                    <b-col align="middle" lg="3" md='12' sm='12'>
+                        <b-card style='border-left: none; border-top: none; border-bottom: none; border-radius: 0; padding-right: 1rem'>
+                            <b-row>
+                                <b-col>
+                                    <b-row>
+                                        <b-col>
+                                            <b-avatar
+                                                :src="img"
+                                                badge-offset="-0.4rem"
+                                                class="avatar"
+                                                size="8rem"
+                                                variant="light"
+                                            >
+                                            </b-avatar>
+                                        </b-col>
+                                    </b-row>
+                                    <b-row>
+                                        <b-col align='middle' style='margin-left: 2rem; margin-right: 2.75rem; margin-top: 2rem'>
+                                            <b-row>
+                                                <b-col align='middle' cols='3'
+                                                       v-if="user.role.includes('admin')"
+                                                       style='margin-bottom: 1rem'>
+                                                    <b-icon scale='1.4' v-b-tooltip.bottom icon="shield-shaded"
+                                                            title="Administrator"/>
+                                                </b-col>
+                                                <b-col cols='3' v-if="user.role.includes('developer')"
+                                                       style='margin-bottom: 1rem'>
+                                                    <b-icon scale='1.4' v-b-tooltip.bottom icon="cup"
+                                                            title="Developer"/>
+                                                </b-col>
+                                                <b-col align='middle' cols='3'
+                                                       v-if="user.role.includes('verified')"
+                                                       style='margin-bottom: 1rem'>
+                                                    <b-icon scale='1.4' v-b-tooltip.bottom icon="check-circle"
+                                                            title="Verified user"/>
+                                                </b-col>
+                                                <b-col align='middle' cols='3'
+                                                       v-if="user.role.includes('partner')"
+                                                       style='margin-bottom: 1rem'>
+                                                    <b-icon scale='1.4' v-b-tooltip.bottom icon="people"
+                                                            title="Click-Clack Partner"/>
+                                                </b-col>
+                                                <b-col align='middle' cols='3'
+                                                       v-if="user.role.includes('supporter')"
+                                                       style='margin-bottom: 1rem'>
+                                                    <b-icon scale='1.4' v-b-tooltip.bottom icon="heart"
+                                                            title="Supporter"/>
+                                                </b-col>
+                                                <b-col align='middle' cols='3'
+                                                       v-if="user.role.includes('betatester')"
+                                                       style='margin-bottom: 1rem'>
+                                                    <b-icon
+                                                        scale='1.4'
+                                                        v-b-tooltip.bottom
+                                                        icon="egg"
+                                                        title="Beta tester - I was there when it all started"
+                                                    />
+                                                </b-col>
+                                            </b-row>
+                                        </b-col>
+                                    </b-row>
+                                </b-col>
+                            </b-row>
+                        </b-card>
+                    </b-col>
+
+                    <b-col id="name" style='padding-left: 1rem' align="left" lg="9" md='12' sm='12'>
+                        <b-row>
+                            <b-col>
+                                <a v-b-modal.recommendationsModal>
+                                    <h3>
+                                        {{ userName }} <span v-if="showStarCount"
+                                                             style="font-size: 1.2rem; color: #ff7700">{{ recommendations.length }}<b-icon
+                                        icon="star-fill"
+                                        scale="0.8"
+                                    /> </span>
+                                        <p class="text-muted" style="font-size: 1.2rem">
+                                            @{{ publicUserName }}
+                                        </p>
+                                    </h3>
+                                </a>
+                            </b-col>
+                            <b-col align='right'>
+                                <b-button
+                                    id="edit-username-button"
+                                    style='border: none'
+                                    v-b-modal.username-edit-modal
+                                    size="sm"
+                                    variant="outline-primary"
+                                >
+                                    <b-icon icon="pencil-square"/>
+                                </b-button>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col>
+                                <b-row>
+                                    <b-col lg="10" md='12'>
+                                        <h5>
+                                            About me
+                                        </h5>
+                                    </b-col>
+                                    <b-col align="right">
+                                        <b-button
+                                            id="edit-bio-button"
+                                            v-b-modal.bio-edit-modal
+                                            style='border: none'
+                                            size="sm"
+                                            variant="outline-primary"
+                                        >
+                                            <b-icon icon="pencil-square"/>
+                                        </b-button>
+                                    </b-col>
+                                </b-row>
+                                <b-row id='bio'>
+                                    <div v-html='$md.render(bio)'>
+
+                                    </div>
+                                </b-row>
+                                <b-row no-gutters class='text-muted' style='font-size: x-small'>
+                                    <b-col>
+                                        <p>
+                                            Member since {{dateformat(user.createdAt, "mmmm dS, yyyy")}}<br>
+                                            Last active {{dateformat(user.lastLogIn, "mmmm dS, yyyy")}}
+                                        </p>
+                                    </b-col>
+                                </b-row>
+                            </b-col>
+                        </b-row>
+                    </b-col>
+                </b-row>
+
+                <b-modal
+                    id='recommendationsModal'
+                    ref='recommendationsModal'
+                    centered
+                    title='Recommendations'
+                    ok-only>
+                    <div v-if='user.recommendations && user.recommendations.length > 0'>
+                        Other members have said these about {{user.firstname}}
+                        <br>
+                        <br>
+                        <recommendation-list style='margin-bottom: 1rem' v-if="user" :inspected-user="user"/>
+                    </div>
+                    <div v-else>
+                        No recommendations yet
+                    </div>
+
+                </b-modal>
                 <b-modal
                     id="bio-edit-modal"
                     ref="bio-edit-modal"
@@ -99,36 +195,25 @@
                         <b-col align="middle">
                             <b-avatar
                                 :src="img"
+                                variant='light'
                                 badge-offset="-0.5rem"
                                 size="6rem"
                             >
-                                <template v-if="role == 'admin'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="shield-shaded" title="Administrator"/>
-                                </template>
-                                <template v-else-if="role == 'verified'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="check-circle" title="Verified user"/>
-                                </template>
-                                <template v-else-if="role == 'supporter'" v-slot:badge>
-                                    <b-icon v-b-tooltip.right icon="heart" title="Supporter"/>
-                                </template>
                             </b-avatar>
                         </b-col>
                         <br>
                         <b-form>
-                            <br>
-                            <br>
                             <b-row>
                                 <b-col align="left" cols="9">
                                     <b-form-file
                                         v-model="file"
-                                        :state="Boolean(file)"
                                         accept=".jpg"
                                         drop-placeholder="Drop file here..."
                                         placeholder="Choose a file or drop it here..."
                                     />
                                 </b-col>
                                 <b-col align="middle">
-                                    <b-button variant="outline-primary" @click="uploadImage">
+                                    <b-button :disabled='!Boolean(file)' variant="outline-primary" @click="uploadImage">
                                         Upload
                                     </b-button>
                                 </b-col>
@@ -136,7 +221,6 @@
                         </b-form>
                         <br>
                         <b-form-group
-                            :state="editUsernameState"
                             label-for="username-input"
                         >
                             <h5>
@@ -144,86 +228,24 @@
                             </h5>
                             <b-input-group id="username-input" prepend="@">
                                 <b-form-input
-
                                     v-model="editUsername"
-                                    :state="editUsernameState"
                                     required
                                 />
-                                <b-form-invalid-feedback :state="editUsernameState">
-                                    This user ID is either already taken or inappropriate.
-                                </b-form-invalid-feedback>
-                                <b-form-valid-feedback :state="editUsernameState">
-                                    Looks Good.
-                                </b-form-valid-feedback>
                             </b-input-group>
-
                             <h5>
                                 First name (nickname)
                             </h5>
                             <b-input-group id="firstname-input">
                                 <b-form-input
                                     v-model="editFirstname"
-                                    :state="editFirstnameState"
                                     required
                                 />
-                                <b-form-invalid-feedback :state="editFirstnameState">
-                                    Please input a valid first name
-                                </b-form-invalid-feedback>
-                                <b-form-valid-feedback :state="editFirstnameState">
-                                    Looks Good.
-                                </b-form-valid-feedback>
-                            </b-input-group>
-
-                            <h5>
-                                Last name (optional)
-                            </h5>
-                            <b-input-group id="secondname-input">
-                                <b-form-input
-                                    v-model="editSecondname"
-                                    :state="editSecondnameState"
-                                    required
-                                />
-                                <b-form-invalid-feedback :state="editSecondnameState">
-                                    Please input a valid second name or leave empty
-                                </b-form-invalid-feedback>
-                                <b-form-valid-feedback :state="editSecondnameState">
-                                    Looks Good.
-                                </b-form-valid-feedback>
                             </b-input-group>
                         </b-form-group>
                     </form>
                 </b-modal>
-                <b-list-group-item>
-                    <b-row>
-                        <b-col lg="10" md='12'>
-                            <h5>
-                                Bio
-                            </h5>
-                        </b-col>
-                        <b-col align="right">
-                            <b-button
-                                id="edit-bio-button"
-                                v-b-modal.bio-edit-modal
-                                style='border: none'
-                                size="sm"
-                                variant="outline-primary"
-                            >
-                                <b-icon icon="pencil-square"/>
-                            </b-button>
-                        </b-col>
-                    </b-row>
-                    <b-row id='bio'>
-                        <div v-html='$md.render(bio)'>
 
-                        </div>
-                    </b-row>
-                </b-list-group-item>
-
-            </b-list-group>
-            <h5 v-if="user.recommendations">
-                Recommendations
-            </h5>
-            <recommendation-list style='margin-bottom: 1rem' v-if="user" :inspected-user="user"/>
+            </b-card>
             <b-card no-body class="mb-1" v-if='keyboards && keyboards.length > 0'>
                 <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button block v-b-toggle.keyboards-accordion variant="light">{{keyboards.length}}
@@ -357,6 +379,7 @@
     import postService from "../services/post-service"
     import PostSmall from "./PostSmall";
     import RecommendationList from "./RecommendationList";
+    import dateformat from "dateformat"
 
     export default {
         name: 'SelfUserData',
@@ -568,12 +591,29 @@
                 })
             },
             uploadImage() {
+                this.loading = true
                 fileService.uploadProfileImage(
                     this.user._id,
                     this.file,
                     this.token
-                )
-            }
+                ).then((res) => {
+                    this.loading = false
+                    this.$nuxt.$forceUpdate()
+                    this.$bvToast.toast('Successfully updated profile picture', {
+                        title: 'Success',
+                        toaster: 'b-toaster-top-center',
+                        variant: 'success'
+                    })
+                }).catch((e) => {
+                    this.loading = false
+                    this.$bvToast.toast('Failed to update profile picture', {
+                        title: 'Error',
+                        toaster: 'b-toaster-top-center',
+                        variant: 'danger'
+                    })
+                })
+            },
+            dateformat
         }
     }
 </script>
@@ -584,11 +624,11 @@
     }
 
     .avatar {
-        margin-top: 1rem;
+        /*margin-top: 1rem;*/
     }
 
     #name {
-        margin-top: 1rem;
+        /*margin-top: 1rem;*/
     }
 
     #bio-card {
@@ -596,7 +636,8 @@
     }
 
     #bio {
-        margin: 1rem;
+        margin: 0;
+        /*margin: 1rem;*/
     }
 
     #edit-bio-button {

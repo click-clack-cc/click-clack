@@ -1,3 +1,3 @@
 User-agent: *
-Disallow:
-Sitemap: https://www.click-clack.cc:5000/sitemap.xml
+Disallow: 
+Sitemap: https://click-clack.cc/sitemap.xml
