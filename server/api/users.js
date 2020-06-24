@@ -3,6 +3,7 @@ const express = require('express');
 const mongodb = require('mongodb');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+isLoggedIn = require('../middleware/auth')
 
 const router = express.Router();
 const salt = 10
@@ -16,47 +17,54 @@ connect().then((db) => {
 })
 
 router.post('/register', async (req, res) => {
+    res.statusMessage = null;
+    if (!(req.body.id && validateUsername(req.body.id))) res.statusMessage = "Incorrect User ID"
+    if (!(req.body.email && validateEmail(req.body.email))) res.statusMessage = "Incorrect Email"
+    if (!(req.body.firstname && validateDisplayName(req.body.firstname))) res.statusMessage = "Incorrect Display Name"
+    if (!(req.body.password && validatePassword(req.body.password))) res.statusMessage = "Your password has to be at least 10 characters long"
     let usernamefree = await result.find({id: req.body.id}).count() === 0;
     let emailfree = await result.find({email: req.body.email}).count() === 0;
-    if (usernamefree && emailfree && validateUsername(req.body.id)) {
-        bcrypt.hash(req.body.password, salt, (err, encrypted) => {
-            let user = {
-                id: req.body.id,
-                email: req.body.email,
-                img: "",
-                firstname: req.body.firstname,
-                lastname: "",
-                bio: `Hello everyone, it's me, ${req.body.firstname}!`,
-                keyboards: [],
-                recommendations: [],
-                achievements: [],
-                role: 'betatester',
-                password: encrypted,
-                createdAt: new Date(),
-                lastLogIn: new Date()
-            }
+    if (!(usernamefree && emailfree)) res.statusMessage = 'This username or email is already in use'
 
-            result.insertOne(user);
-
-            const token = jwt.sign({
-                    id: user._id
-                },
-                process.env.SECRET_KEY, {
-                    expiresIn: '7d'
-                }
-            );
-
-            user.password = undefined;
-
-            res.status(200).send({
-                token: token,
-                user: user
-            });
-        });
-    } else {
-        res.statusMessage = 'This username or email is already in use'
+    if (res.statusMessage) {
         res.status(304).send();
+        return
     }
+
+    bcrypt.hash(req.body.password, salt, (err, encrypted) => {
+        let user = {
+            id: req.body.id,
+            email: req.body.email,
+            img: "",
+            firstname: req.body.firstname,
+            lastname: "",
+            bio: `Hello everyone, it's me, ${req.body.firstname}!`,
+            keyboards: [],
+            recommendations: [],
+            achievements: [],
+            role: 'betatester',
+            password: encrypted,
+            createdAt: new Date(),
+            lastLogIn: new Date()
+        }
+
+        result.insertOne(user);
+
+        const token = jwt.sign({
+                id: user._id
+            },
+            process.env.SECRET_KEY, {
+                expiresIn: '7d'
+            }
+        );
+
+        user.password = undefined;
+
+        res.status(200).send({
+            token: token,
+            user: user
+        });
+    });
 });
 
 router.post('/login', async (req, response) => {
@@ -146,21 +154,37 @@ function validateUsername(id) {
     return valid;
 }
 
-// function validateEmail(email) {
-//     let valid = true;
-//     let allowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.@".split("");
-//     const re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-//     valid = re.no(email);
-//     if (email.length < 5 || email.length > 16) {
-//         valid = false;
-//     }
-//     for (let i = 0; i < email.length; i++) {
-//         if (!allowedCharacters.includes(email.charAt(i))) {
-//             valid = false;
-//         }
-//     }
-//     return valid;
-// }
+function validateDisplayName(displayname) {
+    let valid = true;
+    let allowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    if (displayname.length < 2 || displayname.length > 20) {
+        valid = false;
+    }
+    for (let i = 0; i < displayname.length; i++) {
+        if (!allowedCharacters.includes(displayname.charAt(i))) {
+            valid = false;
+        }
+    }
+    return valid;
+}
+
+function validateEmail(email) {
+    let valid = true;
+    let allowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.@".split("");
+    if (email.length < 5 || email.length > 60) {
+        valid = false;
+    }
+    for (let i = 0; i < email.length; i++) {
+        if (!allowedCharacters.includes(email.charAt(i))) {
+            valid = false;
+        }
+    }
+    return valid;
+}
+
+function validatePassword(password) {
+    return (password.length > 9 && password.length < 100)
+}
 
 router.get('/validateUsername/', async (req, res) => {
     if (!validateUsername(req.query.id)) {
@@ -196,51 +220,25 @@ router.post('/id/', isLoggedIn, async (req, res) => {
     }
 });
 
-router.post('/passwordchange/', isLoggedIn, async (req, res) => {
-    if (req.body.id !== 'test') {
-        await result.findOneAndUpdate({
-                _id: mongodb.ObjectId(req.body.id)
-            },
-            {
-                $set: {
-                    id: req.body.newid
-                }
-            });
-        res.status(201).send();
-    } else {
-        res.status(401).send();
-    }
-});
-
 router.post('/passwordchange', async (req, response) => {
     let user = null;
-    if (req.body.id.includes('@')) {
-        user = await result.find({email: req.body.id}).toArray();
-    } else {
-        user = await result.find({id: req.body.id}).toArray();
-    }
-    user = user[0]
+    user = await result.find({email: req.body.email}).toArray()[0];
     if (user) {
-        bcrypt.compare(req.body.password, user.password, function (err, res) {
-            bcrypt.hash(req.body.password, salt, (err, encrypted) => {
-
-            })
+        bcrypt.compare(req.body.password, user.password, async function (err, res) {
             if (res) {
-                const token = jwt.sign({
-                        id: user._id
-                    },
-                    process.env.SECRET_KEY, {
-                        expiresIn: '7d'
-                    }
-                );
-
-                user.password = undefined;
-
-                response.status(200).send({
-                    token: token,
-                    user: user
-                });
+                await bcrypt.hash(req.body.password, salt, async (err, encrypted) => {
+                    await result.findOneAndUpdate({
+                            email: mongodb.ObjectId(req.body.email)
+                        },
+                        {
+                            $set: {
+                                password: encrypted
+                            }
+                        });
+                    res.status(201).send();
+                })
             } else {
+                response.statusMessage = 'Authentication failed'
                 response.status(401).send();
             }
         });
@@ -338,14 +336,14 @@ router.post('/report/', isLoggedIn, async (req, res) => {
     res.status(201).send();
 });
 
-router.get('/search/',  async (req, res) => {
-    if(!req.query.text) return;
-    if(req.query.text === '') return;
+router.get('/search/', async (req, res) => {
+    if (!req.query.text) return;
+    if (req.query.text === '') return;
     let response = await result.find({
-            $text : {
-                $search : req.query.text
-            }
-        }).project({email: false, password: false})
+        $text: {
+            $search: req.query.text
+        }
+    }).project({email: false, password: false})
         .limit(100).toArray()
     res.send(response);
 });
@@ -357,30 +355,6 @@ async function connect() {
             useUnifiedTopology: true
         });
     return client.db(process.env.DB_NAME).collection('users');
-}
-
-function isLoggedIn(req, res, next) {
-
-    try {
-        const token = req.headers.authorization.split(' ')[1];
-        const decoded = jwt.verify(
-            token,
-            process.env.SECRET_KEY
-        );
-        req.tokenData = decoded;
-        console.log(req.tokenData.id)
-        if (req.tokenData.id === req.body.id || req.tokenData.id === req.query.id) {
-            next();
-        } else {
-            res.status(401).send({
-                message: 'Authentication failed'
-            });
-        }
-    } catch (err) {
-        return res.status(401).send({
-            message: 'Authentication failed'
-        });
-    }
 }
 
 module.exports = router;

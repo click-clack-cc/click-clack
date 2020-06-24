@@ -3,6 +3,7 @@ const express = require('express');
 const mongodb = require('mongodb');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
+isLoggedIn = require('../middleware/auth')
 
 const uri = `${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
 
@@ -208,30 +209,6 @@ async function connectUsers() {
             useUnifiedTopology: true
         });
     return client.db(process.env.DB_NAME).collection('users');
-}
-
-
-function isLoggedIn(req, res, next) {
-    try {
-        const token = req.headers.authorization.split(' ')[1];
-        const decoded = jwt.verify(
-            token,
-            process.env.SECRET_KEY
-        );
-        req.tokenData = decoded;
-        if (req.tokenData.id === req.body.id || req.tokenData.id === req.query.id) {
-            next();
-        } else {
-            res.status(401).send({
-                message: 'Authentication failed'
-            });
-        }
-    } catch (err) {
-        console.log(err)
-        return res.status(401).send({
-            message: 'Authentication failed'
-        });
-    }
 }
 
 module.exports = router;

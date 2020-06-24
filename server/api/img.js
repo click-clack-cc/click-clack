@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const {Resize, ProfilePicResize} = require('./Resize');
+isLoggedIn = require('../middleware/auth')
 
 const upload = multer({
     limits: {
@@ -77,26 +78,5 @@ router.post('/postphotos', upload.array('image'), async function (req, res) {
         res.status(401).send();
     }
 });
-
-
-function isLoggedIn(req, res, next) {
-    try {
-        const token = req.headers.authorization.split(' ')[1];
-        const decoded = jwt.verify(
-            token,
-            'DC5C89929F8C5366540B8AFECA9CEB22C0095A54F3F45233A79246C666088CFD'
-        );
-        req.tokenData = decoded;
-        if (req.tokenData.id === req.body.id || req.tokenData.id === req.query.id) {
-            next();
-        } else {
-            res.statusText = 'Authentication failed'
-            res.status(401).send();
-        }
-    } catch (err) {
-        res.statusText = 'Authentication failed'
-        return res.status(401).send();
-    }
-}
 
 module.exports = router;

@@ -1,11 +1,8 @@
 require('dotenv').config()
 const express = require('express');
 const mongodb = require('mongodb');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-
 const router = express.Router();
-const salt = 10
+isLoggedIn = require('../middleware/auth')
 
 const uri = `${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
 

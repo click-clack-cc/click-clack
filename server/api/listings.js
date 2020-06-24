@@ -3,6 +3,9 @@ const express = require('express');
 const mongodb = require('mongodb');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
+isLoggedIn = require('../middleware/auth')
+isAdmin = require('../middleware/admin')
+
 
 const uri = `${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
 
@@ -418,46 +421,6 @@ async function connect() {
             useUnifiedTopology: true
         });
     return client.db(process.env.DB_NAME).collection('listings');
-}
-
-function isLoggedIn(req, res, next) {
-    try {
-        const token = req.headers.authorization.split(' ')[1];
-        const decoded = jwt.verify(
-            token,
-            process.env.SECRET_KEY
-        );
-        req.tokenData = decoded;
-        if (req.tokenData.id === req.body.id || req.tokenData.id === req.query.id) {
-            next();
-        } else {
-            res.statusMessage = 'Authentication failed'
-            res.status(401).send();
-        }
-    } catch (err) {
-        res.statusMessage = 'Authentication failed'
-        res.status(401).send();
-    }
-}
-
-function isAdmin(req, res, next) {
-    try {
-        const token = req.headers.authorization.split(' ')[1];
-        const decoded = jwt.verify(
-            token,
-            process.env.SECRET_KEY
-        );
-        req.tokenData = decoded;
-        if (process.env.ADMINS.split(' ').includes(req.tokenData.id) && (req.tokenData.id === req.body.id || req.tokenData.id === req.query.id)) {
-            next();
-        } else {
-            res.statusMessage = 'Successful authentication'
-            res.status(201).send();
-        }
-    } catch (err) {
-        res.statusMessage = 'Successful authentication'
-        res.status(201).send();
-    }
 }
 
 module.exports = router;

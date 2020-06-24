@@ -108,19 +108,19 @@
                             </a>
                             <a style="cursor: pointer" @click="goToKeyboard(keeb._id)">
                                 <div style="">
-                                    <span style="font-weight: bold; margin-right: 1rem">
+                                    <span style="font-weight: bold; margin-right: 1rem" v-if='keeb.switches'>
                                       Switches
                                     </span>
                                     {{ keeb.switches }} <br>
-                                    <span style="font-weight: bold; margin-right: 1rem">
+                                    <span style="font-weight: bold; margin-right: 1rem" v-if='keeb.keycaps'>
                                       Keycaps
                                     </span>
                                     {{ keeb.keycaps }} <br>
-                                    <span style="font-weight: bold; margin-right: 1rem">
+                                    <span style="font-weight: bold; margin-right: 1rem" v-if='keeb.pcb'>
                                       PCB
                                     </span>
                                     {{ keeb.pcb }} <br>
-                                    <span style="font-weight: bold; margin-right: 1rem">
+                                    <span style="font-weight: bold; margin-right: 1rem" v-if='keeb.case'>
                                       Case
                                     </span>
                                     {{ keeb.case }} <br>
