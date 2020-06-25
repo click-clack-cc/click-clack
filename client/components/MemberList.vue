@@ -1,80 +1,79 @@
 <template>
-    <b-card id="user-list-container" header-tag="header">
-        <b-modal
-            id="user-list-preview-modal"
-            ref="user-list-preview-modal"
-            centered
-            hide-header
-            ok-only
-        >
-            <OtherUserDataPreview :inspected-user="userSelected" />
-        </b-modal>
-        <template v-slot:header>
-            <h4 class="mb-0">
-                Newest Members
-            </h4>
-        </template>
-        <div v-if="!newMembersLoading" id="newest-members-body">
-            <b-row v-for="(user, index) in users" :key="index" class="user-thumbnail">
-                <b-avatar
-                    :src="`https://click-clack.cc:5000/files/images/${user._id}.jpg`"
-                    button
-                    class="avatar"
-                    size="2rem"
-                    variant="light"
-                    @click="previewUser(user.id)"
-                />
-                <b-link :href="`/u/${user.id}`" class="name">
-                    {{ user.firstname }} {{ user.lastname }}
-                </b-link>
-                <b-col>
-                    <p align="right" class="text-muted timeago">
-                        {{ format(user.createdAt) }}
-                    </p>
-                </b-col>
-            </b-row>
-        </div>
-        <div v-else id="loading" class="text-center">
-            <b-spinner :variant="'primary'" type="grow" />
-        </div>
-    </b-card>
+  <b-card id="user-list-container" header-tag="header">
+    <b-modal
+      id="user-list-preview-modal"
+      ref="user-list-preview-modal"
+      centered
+      hide-header
+      ok-only
+    >
+      <OtherUserDataPreview :inspected-user="userSelected" />
+    </b-modal>
+    <template v-slot:header>
+      <h4 class="mb-0">
+        Newest Members
+      </h4>
+    </template>
+    <div v-if="!newMembersLoading" id="newest-members-body">
+      <b-row v-for="(user, index) in users" :key="index" class="user-thumbnail">
+        <b-avatar
+          :src="`https://click-clack.cc:5000/files/images/${user._id}.jpg`"
+          button
+          class="avatar"
+          size="2rem"
+          variant="light"
+          @click="previewUser(user.id)"
+        />
+        <b-link :href="`/u/${user.id}`" class="name">
+          {{ user.firstname }} {{ user.lastname }}
+        </b-link>
+        <b-col>
+          <p align="right" class="text-muted timeago">
+            {{ format(user.createdAt) }}
+          </p>
+        </b-col>
+      </b-row>
+    </div>
+    <div v-else id="loading" class="text-center">
+      <b-spinner :variant="'primary'" type="grow" />
+    </div>
+  </b-card>
 </template>
 
 <script>
-    import Vue from 'vue'
-    import { format } from 'timeago.js'
-    import userService from '../services/user-service.js'
-    import OtherUserDataPreview from '../components/OtherUserDataPreview'
+import Vue from 'vue'
+import { format } from 'timeago.js'
+import OtherUserDataPreview from '../components/OtherUserDataPreview'
 
-    export default {
-        name: 'NewUsers',
-        components: {
-            OtherUserDataPreview
-        },
-        props: [
-            'users'
-        ],
-        data () {
-            return {
-                // users: this.users
-            }
-        },
-        computed: {},
-        created () {
+export default {
+	name: 'NewUsers',
+	components: {
+		OtherUserDataPreview
+	},
+	props: [
+		'users'
+	],
+	data () {
+		return {
+			// users: this.users
+		}
+	},
+	computed: {},
+	created () {
 
-        },
-        methods: {
-            previewUser (userid) {
-                this.$bvModal.show('new-members-user-preview-modal')
-                this.userSelected = null
-                userService.getUser(userid).then((result) => {
-                    this.userSelected = result
-                    Vue.prototype.$forceUpdate()
-                })
-            },
-            format
-        }
-    }
+	},
+	methods: {
+		previewUser (userid) {
+			this.$bvModal.show('new-members-user-preview-modal')
+			this.userSelected = null
+			this.$services.userService.getUser(userid).then((result) => {
+				this.userSelected = result
+				Vue.prototype.$forceUpdate()
+			})
+		},
+		format
+	}
+}
 </script>
 
 <style scoped>

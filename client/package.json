@@ -14,10 +14,10 @@
         "sass": "sass --watch bootstrap-themes/americano.scss:americano.css bootstrap-themes/blueberry-cappucino.scss:blueberry-cappucino.css bootstrap-themes/cinnamon-latte.scss:cinnamon-latte.css bootstrap-themes/fekete.scss:fekete.css bootstrap-themes/iced-mocha.scss:iced-mocha.css bootstrap-themes/mint-latte.scss:mint-latte.css bootstrap-themes/light.scss:light.css  --style compressed"
     },
     "dependencies": {
+        "@nuxtjs/axios": "^5.11.0",
         "@nuxtjs/dotenv": "^1.4.1",
         "@nuxtjs/google-analytics": "^2.3.0",
         "@nuxtjs/markdownit": "^1.2.9",
-        "axios": "^0.19.2",
         "boostrap": "^2.0.0",
         "bootstrap": "^4.5.0",
         "bootstrap-vue": "^2.15.0",

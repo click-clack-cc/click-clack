@@ -1,42 +1,29 @@
-import { http } from "./index";
-
 const url = '/messages'
 
-class messageService {
+export default class MessageService {
+	http = null
 
-    static async getMessages (id, token) {
-        const { data } = await http.get(`${url}/messages`, { params: { id },
-            headers: {
-                Authorization: `Bearer ${token}`
-            }});
-        return data.map(message => ({ ...message, createdAt: new Date(message.createdAt)}));
-    }
+	constructor (axios) {
+		this.http = axios
+	}
 
-    static async getUnseenMessageCount (id, token) {
-        const { data: [unseen] } = await http.get(`${url}/unseencount`, { params: { id },
-            headers: {
-                Authorization: `Bearer ${token}`
-            }});
-        return unseen?unseen.unseen:0
-    }
+	async getMessages (id) {
+		const { data } = await this.http.get(`${url}/messages`, { params: { id } })
+		return data.map(message => ({ ...message, createdAt: new Date(message.createdAt) }))
+	}
 
-    static async sendMessage (id, to, text, token) {
-        const { data: [msg] } = await http.post(`${url}/`, { id, to, text }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        return msg;
-    }
+	async getUnseenMessageCount (id) {
+		const { data: [response] } = await this.http.get(`${url}/unseencount`, { params: { id } })
+		return response ? response.unseen : 0
+	}
 
-    static async markSeen (id, convo, token) {
-        const { data: [msg]  } = await http.post(`${url}/markseen`, { id, convo }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        return msg;
-    }
+	async sendMessage (id, to, text) {
+		const { data: [msg] } = await this.http.post(`${url}/`, { id, to, text })
+		return msg
+	}
+
+	async markSeen (id, convo) {
+		const { data: [msg] } = await this.http.post(`${url}/markseen`, { id, convo })
+		return msg
+	}
 }
-
-export default messageService

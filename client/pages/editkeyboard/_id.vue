@@ -1,418 +1,369 @@
 <template>
-    <div>
-        <b-card id='container'>
-            <h4>
-                {{this.edit?"Update Keyboard":"New Keyboard"}}
-            </h4>
-            <br>
-            <b-form-group label="Photos">
-                <b-form-file
-                    v-model="photos"
-                    accept=".jpg, .jpeg, .png"
-                    multiple
-                >
-                    <template slot="file-name" slot-scope="{ names }">
-                        <b-badge variant="dark">
-                            {{ names[0] }}
-                        </b-badge>
-                        <b-badge v-if="names.length > 1" class="ml-1" variant="dark">
-                            + {{ names.length - 1 }} More files
-                        </b-badge>
-                    </template>
-                </b-form-file>
-            </b-form-group>
-            <card class='photoPreview' style='max-width: 10rem; max-height: 10rem; margin: 0.5rem'
-                  v-for='(img, index) in keyboard.images' v-bind:key='index'>
-                <img style='border-radius: 0.25rem; max-width: 10rem; max-height: 10rem; margin-bottom: 1rem'
-                     :src='"https://click-clack.cc:5000/files/images/"+img'/>
-                <b-button
-                    size="sm"
-                    variant="outline-danger"
-                    @click="keyboard.images.splice(index,1)"
-                >
-                    <b-icon icon="trash"/>
-                </b-button>
-            </card>
-            <br>
-            <b-row>
-                <b-col cols='6'>
-                    <b-row>
-                        <b-col>
-                            <b-form-group>
-                                <b-form-input v-model='keyboard.name'
-                                              placeholder='Title of build'>
-                                </b-form-input>
-                            </b-form-group>
-                        </b-col>
-                    </b-row>
-                    <b-row>
-                        <b-col>
-                            <b-form-group>
-                                <b-form-select
-                                    v-model="keyboard.layout"
-                                    :options="[{value: null, text: 'Layout'}, 'sub 40', '40', '50', '60', '65', '75', '87', '1800', 'Full', 'Battlecruiser', 'Battleship', 'Other']"
-                                    required
-                                />
-                            </b-form-group>
-                        </b-col>
-                    </b-row>
-                </b-col>
-                <b-col>
-                    <b-row>
-                        <b-col cols='1'></b-col>
-                        <b-col align='right' cols='5'>
-                            <p style='font-size: small; margin-top: 1rem'>
-                                If you are submitting someone else's keyboard, please credit them.
-                            </p>
-                        </b-col>
-                        <b-col>
-                            <b-form-group>
-                                <b-form-input v-model='keyboard.creatorName'
-                                              placeholder="Name of creator">
-                                </b-form-input>
-                            </b-form-group>
-                            <b-form-group>
-                                <b-form-input v-model='keyboard.url'
-                                              placeholder='Source URL'>
-                                </b-form-input>
-                            </b-form-group>
-                        </b-col>
-                    </b-row>
-                </b-col>
-            </b-row>
-            <b-row>
-                <b-col>
-                    <b-form-group label="Description">
-                        <b-textarea v-model='keyboard.description' rows='4' placeholder='Description of the keyboard'>
-                        </b-textarea>
-                    </b-form-group>
+  <div>
+    <b-card id="container">
+      <h4>
+        {{ edit?"Update Keyboard":"New Keyboard" }}
+      </h4>
+      <br>
+      <b-form-group label="Photos">
+        <b-form-file
+          v-model="photos"
+          accept=".jpg, .jpeg, .png"
+          multiple
+        >
+          <template slot="file-name" slot-scope="{ names }">
+            <b-badge variant="dark">
+              {{ names[0] }}
+            </b-badge>
+            <b-badge v-if="names.length > 1" class="ml-1" variant="dark">
+              + {{ names.length - 1 }} More files
+            </b-badge>
+          </template>
+        </b-form-file>
+      </b-form-group>
+      <card
+        v-for="(img, index) in keyboard.images"
+        :key="index"
+        class="photoPreview"
+        style="max-width: 10rem; max-height: 10rem; margin: 0.5rem"
+      >
+        <img
+          style="border-radius: 0.25rem; max-width: 10rem; max-height: 10rem; margin-bottom: 1rem"
+          :src="'https://click-clack.cc:5000/files/images/'+img"
+        >
+        <b-button
+          size="sm"
+          variant="outline-danger"
+          @click="keyboard.images.splice(index,1)"
+        >
+          <b-icon icon="trash" />
+        </b-button>
+      </card>
+      <br>
+      <b-row>
+        <b-col cols="6">
+          <b-row>
+            <b-col>
+              <b-form-group>
+                <b-form-input
+                  v-model="keyboard.name"
+                  placeholder="Title of build"
+                />
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-form-group>
+                <b-form-select
+                  v-model="keyboard.layout"
+                  :options="[{value: null, text: 'Layout'}, 'sub 40', '40', '50', '60', '65', '75', '87', '1800', 'Full', 'Battlecruiser', 'Battleship', 'Other']"
+                  required
+                />
+              </b-form-group>
+            </b-col>
+          </b-row>
+        </b-col>
+        <b-col>
+          <b-row>
+            <b-col cols="1" />
+            <b-col align="right" cols="5">
+              <p style="font-size: small; margin-top: 1rem">
+                If you are submitting someone else's keyboard, please credit them.
+              </p>
+            </b-col>
+            <b-col>
+              <b-form-group>
+                <b-form-input
+                  v-model="keyboard.creatorName"
+                  placeholder="Name of creator"
+                />
+              </b-form-group>
+              <b-form-group>
+                <b-form-input
+                  v-model="keyboard.url"
+                  placeholder="Source URL"
+                />
+              </b-form-group>
+            </b-col>
+          </b-row>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-form-group label="Description">
+            <b-textarea v-model="keyboard.description" rows="4" placeholder="Description of the keyboard" />
+          </b-form-group>
 
-                    <b-form-checkbox v-model="preview" name="check-button" switch>
-                        Show Preview <p style='font-size: small'>
-                        You can format your description using markdown. Learn about it <a style='font-size: small'
-                                                                                          href='/markdown'>here</a>.
-                    </p>
-                    </b-form-checkbox>
-                </b-col>
-                <b-col v-if='preview'>
-                    Preview
-                    <div v-html="$md.render( keyboard.description?keyboard.description:``)"></div>
-                </b-col>
-            </b-row>
-            <br>
-            <p>
-                Parts (optional)
-            <p/>
-            <b-row id='extradetails'>
-                <b-col>
-                    <b-row>
-                        <b-col cols='2'>
-                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 1024 1024">
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M204.502 512.298v-22.598l22.598-13.085 28.548-34.49 34.49-16.649 55.903-103.477 128.461-35.683-2.378-60.659 9.514-7.135 2.378-14.27 23.791-7.135 24.977 15.463 36.876-10.706 17.841 16.649-1.193 52.339 191.499 98.721 24.977 95.157 28.548 17.841 16.649 40.44 28.548 17.841-3.571 30.926-36.876 11.892v30.926l-15.463 82.072-21.413 8.328-13.085-7.135-52.339 22.598-7.135 11.892-3.571 48.767 2.378-52.339-53.524 20.22-21.412 15.463h-23.791l-91.586 27.355-30.926-5.949-15.463 8.328-5.949 26.169-13.085-2.378-19.034-5.949-15.463-2.378-7.135-14.27-134.404-110.62-14.27-2.378-5.949-14.27-17.841-17.841-13.085-109.427z"></path>
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M264.174 546.657l190.082 140.459 24.39 10.936 27.751-4.206 329.697-110.176"></path>
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M422.292 382.645l110.176 68.963 140.459-41.212"></path>
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M562.751 391.9l-2.525-106.814"></path>
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M498.83 391.056l34.482-12.617-1.681-54.666"></path>
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M460.142 615.62l35.326 21.865c0 0 93.36-23.553 91.672-26.914s-23.553-118.587-23.553-118.587"></path>
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M730.117 454.141l24.39 103.452 57.191-14.298"></path>
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M314.634 514.693l113.544 77.375"></path>
-                            </svg>
-                        </b-col>
-                        <b-col>
-                            <b-form-group>
-                                <b-form-input
-                                    autocomplete='off'
-                                    v-model="keyboard.switches"
-                                    placeholder="Switch and stab model"
-                                    required
-                                />
-                            </b-form-group>
-                        </b-col>
-                    </b-row>
-                </b-col>
-                <b-col>
-                    <b-row>
-                        <b-col cols='2'>
-                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 1024 1024">
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M284.991 354.558l227.242 119.907c0 0 178.891-8.704 220.472-102.499l-221.439-114.104c0 0-109.269 65.754-226.275 96.699z"></path>
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M284.991 354.558l-79.293 222.406 277.524 174.058 29.009 6.77 26.109-2.901 291.062-135.378 2.901-29.009-99.6-218.538"></path>
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M519.001 515.079l-6.77 180.826"></path>
-                            </svg>
-                        </b-col>
-                        <b-col>
-                            <b-form-group>
-                                <b-form-input
-                                    autocomplete='off'
-                                    v-model="keyboard.keycaps"
-                                    placeholder="Keycap set"
-                                    required
-                                />
-                            </b-form-group>
-                        </b-col>
-                    </b-row>
-                </b-col>
-                <b-col>
-                    <b-row>
-                        <b-col cols='2'>
-                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 1024 1024">
-                            <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M36.864 499.961l171.757 179.785 788.155-245.593-197.439-150.887z"></path>
-                            <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M36.864 499.961l-9.632 104.337 36.918 25.682 16.049-4.812 125.207 115.574 783.336-252.017 8.028-54.578"></path>
-                            <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M147.618 535.275l643.685-192.626 8.028-59.391"></path>
-                            <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M791.303 342.649l89.892 60.995"></path>
-                            <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M221.462 527.247l43.342 51.362 468.72-150.887"></path>
-                        </svg></b-col>
-                       <b-col>
-                           <b-form-group>
-                               <b-form-input
-                                   autocomplete='off'
-                                   v-model="keyboard.case"
-                                   placeholder="Case and plate"
-                                   required
-                               />
-                           </b-form-group>
-                       </b-col>
-                    </b-row>
-                </b-col>
-                <b-col>
-                    <b-row>
-                        <b-col cols='2'>
-                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 1024 1024">
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M57.946 357.789h911.669v297.811h-911.669v-297.811z"></path>
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M240.28 412.49l-127.633 189.93"></path>
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M347.585 412.868l-126.872 188.792"></path>
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M450.713 412.868l-126.683 188.792"></path>
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M561.443 412.49l-128.015 189.17"></path>
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M678.064 411.73l-127.633 189.93"></path>
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M795.063 411.73l-127.633 189.93"></path>
-                                <path fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M907.313 411.73l-127.633 189.93"></path>
-                                <path fill="none" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M60.984 603.937l718.697-2.277"></path>
-                                <path fill="none" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" stroke-width="36" stroke="currentColor" d="M240.28 412.49l727.814-1.521"></path>
-                            </svg>
-                        </b-col>
-                        <b-col>
-                            <b-form-group>
-                                <b-form-input
+          <b-form-checkbox v-model="preview" name="check-button" switch>
+            Show Preview <p style="font-size: small">
+              You can format your description using markdown. Learn about it <a
+                style="font-size: small"
+                href="/markdown"
+              >here</a>.
+            </p>
+          </b-form-checkbox>
+        </b-col>
+        <b-col v-if="preview">
+          Preview
+          <div v-html="$md.render( keyboard.description?keyboard.description:``)" />
+        </b-col>
+      </b-row>
+      <br>
+      <p>
+        Parts (optional)
+      </p><p />
+      <b-row id="extradetails">
+        <b-col>
+          <b-form-group>
+            <b-form-input
+              v-model="keyboard.switches"
+              autocomplete="off"
+              placeholder="Switch and stab model"
+              required
+            />
+          </b-form-group>
+        </b-col>
+        <b-col>
+          <b-form-group>
+            <b-form-input
+              v-model="keyboard.keycaps"
+              autocomplete="off"
+              placeholder="Keycap set"
+              required
+            />
+          </b-form-group>
+        </b-col>
+        <b-col>
+          <b-form-group>
+            <b-form-input
+              v-model="keyboard.case"
+              autocomplete="off"
+              placeholder="Case and plate"
+              required
+            />
+          </b-form-group>
+        </b-col>
+        <b-col>
+          <b-form-group>
+            <b-form-input
 
-                                    autocomplete='off'
-                                    v-model="keyboard.pcb"
-                                    placeholder="PCB model"
-                                    required
-                                />
-                            </b-form-group>
-                        </b-col>
-                    </b-row>
-                </b-col>
-            </b-row>
-            <b-button-group style='width: 100%'>
-                <b-button :disabled="loading" @click='submit' variant='primary'>
-                <span v-if='!loading'>
-                    <b-icon icon='check-circle'></b-icon>
-                    Submit Keyboard
-                </span>
-                    <b-spinner v-else></b-spinner>
-                </b-button>
-            </b-button-group>
-        </b-card>
-    </div>
+              v-model="keyboard.pcb"
+              autocomplete="off"
+              placeholder="PCB model"
+              required
+            />
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-button-group style="width: 100%">
+        <b-button :disabled="loading" variant="primary" @click="submit">
+          <span v-if="!loading">
+            <b-icon icon="check-circle" />
+            Submit Keyboard
+          </span>
+          <b-spinner v-else />
+        </b-button>
+      </b-button-group>
+    </b-card>
+  </div>
 </template>
 
 <script>
-    import {mapState} from 'vuex'
-    import keyboardService from "../../services/keyboard-service";
-    import fileService from "../../services/file-service";
+import { mapState } from 'vuex'
 
-    export default {
-        name: 'EditKeyboard',
-        layout: 'index',
-        components: {},
-        props: [],
-        data() {
-            return {
-                photos: null,
-                preview: false,
-                creditSwitch: true,
-                creditName: null,
-                creditUrl: null,
-                keyboard: {
-                    name: null,
-                    description: null,
-                    layout: null,
-                    switches: null,
-                    keycaps: null,
-                    pcb: null,
-                    case: null,
-                    creatorName: null,
-                    url: null
-                },
-                loading: false
-            }
-        },
-        computed: mapState(['user', 'token', 'nightmode', 'zenmode', 'darktheme', 'lighttheme', 'search']),
-        async asyncData({params}) {
-            if (params.id) {
-                return {
-                    keyboard: await keyboardService.getKeyboard(params.id),
-                    loaded: true,
-                    edit: true
-                }
-            }
-            return {
-                loaded: true,
-                edit: false
-            }
-        },
-        created() {
-        },
-        methods: {
-            async submit() {
-                this.loading = true;
+export default {
+	name: 'EditKeyboard',
+	layout: 'index',
+	components: {},
+	props: [],
+	async asyncData ({ params, app }) {
+		if (params.id) {
+			return {
+				keyboard: await app.$services.keyboardService.getKeyboard(params.id),
+				loaded: true,
+				edit: true
+			}
+		}
+		return {
+			loaded: true,
+			edit: false
+		}
+	},
+	data () {
+		return {
+			photos: null,
+			preview: false,
+			creditSwitch: true,
+			creditName: null,
+			creditUrl: null,
+			keyboard: {
+				name: null,
+				description: null,
+				layout: null,
+				switches: null,
+				keycaps: null,
+				pcb: null,
+				case: null,
+				creatorName: null,
+				url: null
+			},
+			loading: false
+		}
+	},
+	computed: mapState(['user', 'token', 'nightmode', 'zenmode', 'darktheme', 'lighttheme', 'search']),
+	created () {
+	},
+	methods: {
+		submit () {
+			this.loading = true
 
-                if (!this.keyboard.name) {
-                    this.$bvToast.toast(`Please title your keyboard`, {
-                        variant: `danger`,
-                        title: `Error`,
-                        toaster: 'b-toaster-top-center'
-                    })
-                    this.loading = false;
-                    return;
-                }
+			if (!this.keyboard.name) {
+				this.$bvToast.toast('Please title your keyboard', {
+					variant: 'danger',
+					title: 'Error',
+					toaster: 'b-toaster-top-center'
+				})
+				this.loading = false
+				return
+			}
 
-                if (!this.keyboard.layout) {
-                    this.$bvToast.toast(`Please select the layout of your keyboard`, {
-                        variant: `danger`,
-                        title: `Error`,
-                        toaster: 'b-toaster-top-center'
-                    })
-                    this.loading = false;
-                    return;
-                }
+			if (!this.keyboard.layout) {
+				this.$bvToast.toast('Please select the layout of your keyboard', {
+					variant: 'danger',
+					title: 'Error',
+					toaster: 'b-toaster-top-center'
+				})
+				this.loading = false
+				return
+			}
 
-                if ((this.keyboard.creatorName === null) !== (this.keyboard.url === null)) {
-                    this.$bvToast.toast('Make sure to fill out both the creator name and source fields.', {
-                        title: 'Warning',
-                        toaster: 'b-toaster-top-center',
-                        variant: 'danger'
-                    })
-                }
+			if ((this.keyboard.creatorName === null) !== (this.keyboard.url === null)) {
+				this.$bvToast.toast('Make sure to fill out both the creator name and source fields.', {
+					title: 'Warning',
+					toaster: 'b-toaster-top-center',
+					variant: 'danger'
+				})
+			}
 
-                if (this.keyboard.name.length > 200 ||
+			if (this.keyboard.name.length > 200 ||
                     this.keyboard.description.length > 800 ||
                     this.keyboard.layout.length > 200 ||
                     this.keyboard.switches.length > 200 ||
                     this.keyboard.keycaps.length > 200 ||
                     this.keyboard.pcb.length > 200 ||
                     this.keyboard.case.length > 200) {
-                    this.$bvToast.toast('One of your fields is too long', {
-                        title: 'Warning',
-                        toaster: 'b-toaster-top-center',
-                        variant: 'danger'
-                    })
-                    return
-                }
+				this.$bvToast.toast('One of your fields is too long', {
+					title: 'Warning',
+					toaster: 'b-toaster-top-center',
+					variant: 'danger'
+				})
+				return
+			}
 
-                if (this.photos) {
-                    if (this.photos.length > 0) {
-                        if (!this.keyboard.images) {
-                            this.keyboard.images = []
-                        }
-                        for (let i = 0; i < this.photos.length; i++) {
-                            this.keyboard.images.push(`${this.keyboard.name.replace(' ', '-').replace(/[^a-z0-9d-]/ig, '').toLowerCase()}_${i + this.keyboard.images.length}.${this.photos[i].name.split('.')[1]}`)
-                        }
-                    }
-                }
+			if (this.photos) {
+				if (this.photos.length > 0) {
+					if (!this.keyboard.images) {
+						this.keyboard.images = []
+					}
+					for (let i = 0; i < this.photos.length; i++) {
+						this.keyboard.images.push(`${this.keyboard.name.replace(' ', '-').replace(/[^a-z0-9d-]/ig, '').toLowerCase()}_${i + this.keyboard.images.length}.${this.photos[i].name.split('.')[1]}`)
+					}
+				}
+			}
 
-                keyboardService.newKeyboard(this.user._id, this.edit, this.keyboard, this.token).then(() => {
-                    if (this.photos) {
-                        if (this.photos.length > 0) {
-                            fileService.uploadKeyboardImages(
-                                this.user._id,
-                                this.keyboard.name.replace(' ', '-').replace(/[^a-z0-9d-]/ig, '').toLowerCase(),
-                                this.keyboard.images.splice(this.keyboard.images.length - this.photos.length),
-                                this.photos,
-                                this.token
-                            ).then(() => {
-                                this.loading = false
-                                this.$bvToast.toast('Keyboard updated successfully', {
-                                    title: 'Success',
-                                    toaster: 'b-toaster-top-center',
-                                    variant: 'success'
-                                })
-                                this.$nextTick(() => {
-                                    this.$bvModal.hide(`keeb-edit-modal${this.keyboard._id}`)
-                                })
-                            }).catch(() => {
-                                this.loading = false
-                                this.$bvToast.toast('Failed to update keyboard', {
-                                    title: 'Error',
-                                    toaster: 'b-toaster-top-center',
-                                    variant: 'danger'
-                                })
-                                this.$nextTick(() => {
-                                    this.$bvModal.hide(`keeb-edit-modal${this.keyboard._id}`)
-                                })
-                            })
-                        }
-                    } else {
-                        this.$bvToast.toast('Keyboard updated successfully', {
-                            title: 'Success',
-                            toaster: 'b-toaster-top-center',
-                            variant: 'success'
-                        })
-                    }
-                }).catch((error) => {
-                    this.$bvToast.toast('Failed to update keyboard', {
-                        title: 'Error',
-                        toaster: 'b-toaster-top-center',
-                        variant: 'danger'
-                    })
-                })
-                this.loading = false
-                this.loaded = true
-            }
-        },
-        head() {
-            const description = 'Submit a new keyboard to click-clack!'
-            const title = 'Click-Clack - ' + this.edit ? "Update Keyboard" : "New Keyboard"
-            const image = 'https://click-clack.cc:5000/files/images/indeximage.JPG'
-            const url = 'https://click-clack.cc/editkeyboard'
-            return {
-                title,
-                htmlAttrs: {
-                    lang: 'en'
-                },
-                meta: [
-                    {charset: 'utf-8'},
-                    {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+			this.$services.keyboardService.newKeyboard(this.user._id, this.edit, this.keyboard, this.token).then(() => {
+				if (this.photos) {
+					if (this.photos.length > 0) {
+						this.$services.fileService.uploadKeyboardImages(
+							this.user._id,
+							this.keyboard.name.replace(' ', '-').replace(/[^a-z0-9d-]/ig, '').toLowerCase(),
+							this.keyboard.images.splice(this.keyboard.images.length - this.photos.length),
+							this.photos,
+							this.token
+						).then(() => {
+							this.loading = false
+							this.$bvToast.toast('Keyboard updated successfully', {
+								title: 'Success',
+								toaster: 'b-toaster-top-center',
+								variant: 'success'
+							})
+							this.$nextTick(() => {
+								this.$bvModal.hide(`keeb-edit-modal${this.keyboard._id}`)
+							})
+						}).catch(() => {
+							this.loading = false
+							this.$bvToast.toast('Failed to update keyboard', {
+								title: 'Error',
+								toaster: 'b-toaster-top-center',
+								variant: 'danger'
+							})
+							this.$nextTick(() => {
+								this.$bvModal.hide(`keeb-edit-modal${this.keyboard._id}`)
+							})
+						})
+					}
+				} else {
+					this.$bvToast.toast('Keyboard updated successfully', {
+						title: 'Success',
+						toaster: 'b-toaster-top-center',
+						variant: 'success'
+					})
+				}
+			}).catch((_) => {
+				this.$bvToast.toast('Failed to update keyboard', {
+					title: 'Error',
+					toaster: 'b-toaster-top-center',
+					variant: 'danger'
+				})
+			})
+			this.loading = false
+			this.loaded = true
+		}
+	},
+	head () {
+		const description = 'Submit a new keyboard to click-clack!'
+		const title = 'Click-Clack - ' + this.edit ? 'Update Keyboard' : 'New Keyboard'
+		const image = 'https://click-clack.cc:5000/files/images/indeximage.JPG'
+		const url = 'https://click-clack.cc/editkeyboard'
+		return {
+			title,
+			htmlAttrs: {
+				lang: 'en'
+			},
+			meta: [
+				{ charset: 'utf-8' },
+				{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
 
-                    {name: 'title', property: 'title', hid: 'title', content: title},
-                    {name: 'og:title', property: 'og:title', hid: 'og:title', content: title},
-                    {name: 'twitter:title', property: 'twitter:title', hid: 'twitter:title', content: title},
+				{ name: 'title', property: 'title', hid: 'title', content: title },
+				{ name: 'og:title', property: 'og:title', hid: 'og:title', content: title },
+				{ name: 'twitter:title', property: 'twitter:title', hid: 'twitter:title', content: title },
 
-                    {name: 'description', property: 'description', hid: 'description', content: description},
-                    {name: 'og:description', property: 'og:description', hid: 'og:description', content: description},
-                    {
-                        name: 'twitter:description',
-                        property: 'twitter:description',
-                        hid: 'twitter:description',
-                        content: description
-                    },
+				{ name: 'description', property: 'description', hid: 'description', content: description },
+				{ name: 'og:description', property: 'og:description', hid: 'og:description', content: description },
+				{
+					name: 'twitter:description',
+					property: 'twitter:description',
+					hid: 'twitter:description',
+					content: description
+				},
 
-                    {name: 'twitter:image', hid: 'twitter:image', property: 'twitter:image', content: image},
-                    {name: 'og:image', hid: 'og:image', property: 'og:image', content: image},
-                    {name: 'image', hid: 'image', property: 'image', content: image},
+				{ name: 'twitter:image', hid: 'twitter:image', property: 'twitter:image', content: image },
+				{ name: 'og:image', hid: 'og:image', property: 'og:image', content: image },
+				{ name: 'image', hid: 'image', property: 'image', content: image },
 
-                    {name: 'og:site_name', property: 'og:site_name', hid: 'og:site_name', content: 'click-clack'},
-                    {name: 'og:type', property: 'og:type', hid: 'og:type', content: 'website'},
-                    {
-                        name: 'og:url',
-                        property: 'og:url',
-                        hid: 'og:url',
-                        content: url
-                    }
-                ]
-            }
-        }
-    }
+				{ name: 'og:site_name', property: 'og:site_name', hid: 'og:site_name', content: 'click-clack' },
+				{ name: 'og:type', property: 'og:type', hid: 'og:type', content: 'website' },
+				{
+					name: 'og:url',
+					property: 'og:url',
+					hid: 'og:url',
+					content: url
+				}
+			]
+		}
+	}
+}
 </script>
 
 <style scoped>

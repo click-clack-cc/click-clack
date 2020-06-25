@@ -1,23 +1,23 @@
 <template lang="html">
-    <div v-if="loading" class="loading-page">
-        <b-spinner type="grow" variant="primary" />
-    </div>
+  <div v-if="loading" class="loading-page">
+    <b-spinner type="grow" variant="primary" />
+  </div>
 </template>
 
 <script>
-    export default {
-        data: () => ({
-            loading: false
-        }),
-        methods: {
-            start () {
-                this.loading = true
-            },
-            finish () {
-                this.loading = false
-            }
-        }
-    }
+export default {
+	data: () => ({
+		loading: false
+	}),
+	methods: {
+		start () {
+			this.loading = true
+		},
+		finish () {
+			this.loading = false
+		}
+	}
+}
 </script>
 
 <style scoped>
