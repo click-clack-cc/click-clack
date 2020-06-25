@@ -12,9 +12,11 @@ module.exports = {
         'plugin:nuxt/recommended'
     ],
     rules: {
-        "template-curly-spacing": "off",
-        "indent": 0,
-        "no-tabs": 0,
-        "vue/html-indent": 0
+      "no-tabs": ["error", { allowIndentationTabs: true }],
+      "indent": ["error", "tab"],
+      "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
+      "vue/require-prop-types": "off",
+      "vue/no-v-html": "off",
+      "quotes": [2, "single", { "avoidEscape": true }]
     }
 }

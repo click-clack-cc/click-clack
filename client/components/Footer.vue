@@ -1,48 +1,43 @@
 <template>
-    <b-col id="footer-container">
-        <b-row>
-            <b-col align="middle">
-                <div id="subtitle">
-                    <p id="contact">
-                        Contact us at
-                        <a href="mailto:support@click-clack.cc">
-                            support@click-clack.cc</a><br>
-                    </p>
-                    <!--                        <p id="contribute">-->
-                    <!--                            Want to contribute? Message <a href='/u/daniel'>@daniel</a> at-->
-                    <!--                            <a href="mailto:support@click-clack.cc">-->
-                    <!--                                daniel.szabo@click-clack.cc</a><br>-->
-                    <!--                        </p>-->
-                    <p id="madeinhungary">
-                        Click-clack is proudly made in Hungary<br>
-                    </p>
-                    <a href='https://status.click-clack.cc'>
-                        <b-icon icon='cloud'></b-icon> Service Status
-                    </a>
-                    <br>
-                    <br>
-                </div>
-            </b-col>
-        </b-row>
-        <b-row>
-            <b-col align="middle">
-                <p id="support" >
-                    <a href="https://www.patreon.com/clickclackcc">
-                        <b-button block variant='outline-primary' >
-                            Support click-clack
-                            <b-icon style='margin-left: 0.5rem' icon="heart"/>
-                        </b-button>
-                    </a><br>
-                </p>
-            </b-col>
-        </b-row>
-    </b-col>
+  <b-col id="footer-container">
+    <b-row>
+      <b-col align="middle">
+        <div id="subtitle">
+          <p id="contact">
+            Contact us at
+            <a href="mailto:support@click-clack.cc">
+              support@click-clack.cc</a><br>
+          </p>
+          <!--                        <p id="contribute">-->
+          <!--                            Want to contribute? Message <a href='/u/daniel'>@daniel</a> at-->
+          <!--                            <a href="mailto:support@click-clack.cc">-->
+          <!--                                daniel.szabo@click-clack.cc</a><br>-->
+          <!--                        </p>-->
+          <p id="madeinhungary">
+            Click-clack is proudly made in Hungary<br>
+          </p>
+        </div>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col align="middle">
+        <p id="support">
+          <a href="https://www.patreon.com/clickclackcc">
+            <b-button block variant="outline-primary">
+              Support click-clack
+              <b-icon style="margin-left: 0.5rem" icon="heart" />
+            </b-button>
+          </a><br>
+        </p>
+      </b-col>
+    </b-row>
+  </b-col>
 </template>
 
 <script>
-    export default {
-        name: 'Footer'
-    }
+export default {
+	name: 'Footer'
+}
 </script>
 
 <style scoped>

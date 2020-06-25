@@ -1,66 +1,59 @@
-import { http } from "./index";
-
 const url = '/keyboards'
 
-class keyboardService {
-    static async getKeyboards (user) {
-      const { data } = await http.get(`${url}/u`, { params: { user }});
-      return data.map(keyboard => ({ ...keyboard, createdAt: new Date(keyboard.createdAt), lastModified: new Date(keyboard.lastModified) }));
-    }
+export default class KeyboardService {
+	http = null
 
-    static async getNewKeyboards (method) {
-      const { data } = await http.get(`${url}/${method}`);
-      return data.map(keyboard => ({
-          ...keyboard,
-          createdAt: new Date(keyboard.createdAt),
-          lastModified: new Date(keyboard.lastModified)
-        })
-      );
-    }
+	constructor (axios) {
+		this.http = axios
+	}
 
-    static async getKeyboard (id) {
-      const { data: [keyboard] } = await http.get(`${url}/id`, { params: { id }});
-      return { ...keyboard, createdAt: new Date(keyboard.createdAt), lastModified: new Date(keyboard.lastModified) };
-    }
+	async getKeyboards (user) {
+		const { data } = await this.http.get(`${url}/u`, { params: { user } })
+		return data.map(keyboard => ({ ...keyboard, createdAt: new Date(keyboard.createdAt), lastModified: new Date(keyboard.lastModified) }))
+	}
 
-    static async newKeyboard (id, edit, keyboard, token) {
-        const { data: [kb] } = await http.post(`${url + (edit?"/update":"")}`, { id, keyboard }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        return kb;
-    }
+	async getNewKeyboards (method) {
+		const { data } = await this.http.get(`${url}/${method}`)
+		return data.map(keyboard => ({
+			...keyboard,
+			createdAt: new Date(keyboard.createdAt),
+			lastModified: new Date(keyboard.lastModified)
+		})
+		)
+	}
 
-    static async deleteKeyboard (id, keyboard, token) {
-      const { data: [kb] } = await http.post(`${url}/delete`, { id, keyboard }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+	async getKeyboard (id) {
+		const { data: [keyboard] } = await this.http.get(`${url}/id`, { params: { id } })
+		return { ...keyboard, createdAt: new Date(keyboard.createdAt), lastModified: new Date(keyboard.lastModified) }
+	}
 
-      return kb;
-    }
+	async newKeyboard (id, keyboard) {
+		const { data: [kb] } = await this.http.post(`${url}`, { id, keyboard })
 
-    static async comment (id, keyboard, text, token) {
-      const { data: [kb] } = await http.post(`${url}/comment`, { id, keyboard, text }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+		return kb
+	}
 
-      return kb;
-    }
+	async updateKeyboard (id, keyboard) {
+		const { data: [response] } = await this.http.post(`${url}/update`, { id, keyboard })
 
-    static async heart (id, keyboard, token) {
-      const { data: [kb] } = await http.post(`${url}/heart`, { id, keyboard }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+		return response
+	}
 
-      return kb;
-    }
+	async deleteKeyboard (id, keyboard) {
+		const { data: [response] } = await this.http.post(`${url}/delete`, { id, keyboard })
+
+		return response
+	}
+
+	async comment (id, keyboard, text) {
+		const { data: [response] } = await this.http.post(`${url}/comment`, { id, keyboard, text })
+
+		return response
+	}
+
+	async heart (id, keyboard) {
+		const { data: [response] } = await this.http.post(`${url}/heart`, { id, keyboard })
+
+		return response
+	}
 }
-
-export default keyboardService

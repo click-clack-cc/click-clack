@@ -1,120 +1,80 @@
-import {http} from "./index";
-
 const url = '/users/'
+export default class UserService {
+	http = null
 
-class userService {
-    static async logIn(username, password) {
-        const {data} = await http.post(`${url}/login`, {id: username, password})
-        return {...data, createdAt: new Date(data.createdAt)}
-    }
+	constructor (axios) {
+		this.http = axios
+	}
 
-    static async signUp(id, email, firstname, password) {
-        const {data} = await http.post(`${url}/register`, {
-            id,
-            email,
-            firstname,
-            password
-        })
+	async logIn (username, password) {
+		const { data } = await this.http.post(`${url}/login`, { id: username, password })
+		return { ...data, createdAt: new Date(data.createdAt) }
+	}
 
-        return data;
-    }
+	async signUp (id, email, firstname, lastname, password) {
+		const { data } = await this.http.post(`${url}/register`, { id, email, firstname, lastname, password })
+		return data
+	}
 
-    static async getUser(id) {
-        const {data: [user]} = await http.get(url, {params: {id}})
-        return {...user, createdAt: new Date(user.createdAt)}
-    }
+	async getUser (id) {
+		const { data: [user] } = await this.http.get(url, { params: { id } })
+		return { ...user, createdAt: new Date(user.createdAt) }
+	}
 
-    static async resolveId(id) {
-        const {data: [user]} = await http.get(`${url}/resolveid`, {params: {id}})
-        return {...user, createdAt: new Date(user.createdAt)}
-    }
+	async resolveId (id) {
+		const { data: [user] } = await this.http.get(`${url}/resolveid`, { params: { id } })
+		return { ...user, createdAt: new Date(user.createdAt) }
+	}
 
-    static async getNewUsers() {
-        const {data} = await http.get(`${url}/new`)
-        return data.map(user => ({...user, createdAt: new Date(user.createdAt)}))
-    }
+	async getNewUsers () {
+		const { data } = await this.http.get(`${url}/new`)
+		return data.map(user => ({ ...user, createdAt: new Date(user.createdAt) }))
+	}
 
-    static async changeId(oldid, newid, token) {
-        return http.post(url + 'id', {id: oldid, newid}, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-    }
+	changeId (oldid, newid) {
+		return this.http.post(url + 'id', { id: oldid, newid })
+	}
 
-    static async changeUserBio(id, bio, token) {
-        return http.post(url + 'bio', {id, bio}, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-    }
+	changeUserBio (id, bio) {
+		return this.http.post(url + 'bio', { id, bio })
+	}
 
-    static async changeKeebs(id, keyboards, token) {
-        return http.post(url + 'keebs', {id, keebs: keyboards}, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-    }
+	changeKeebs (id, keyboards) {
+		return this.http.post(url + 'keebs', { id, keebs: keyboards })
+	}
 
-    static async recommend(submitterid, recommendedid, recommendationtext, token) {
-        const {data} = await http.post(`${url}/recommend`, {
-            id: submitterid,
-            user: recommendedid,
-            text: recommendationtext
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
+	async recommend (submitterid, recommendedid, recommendationtext) {
+		const { data } = await this.http.post(`${url}/recommend`, {
+			id: submitterid,
+			user: recommendedid,
+			text: recommendationtext
+		})
+		return data
+	}
 
-        return data;
-    }
+	async report (submitterid, reportedid, reporttext) {
+		const { data } = await this.http.post(url + 'report', {
+			id: submitterid,
+			user: reportedid,
+			text: reporttext
+		})
+		return data
+	}
 
-    static async report(submitterid, reportedid, reporttext, token) {
-        const {data} = await http.post(url + 'report', {
-            id: submitterid,
-            user: reportedid,
-            text: reporttext
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
+	deleteUser (id) {
+		return this.http.post(url + '/delete', { id })
+	}
 
-        return data;
-    }
+	async validateUsername (publicUserName) {
+		const { data } = await this.http.get(`${url}/validateUsername`, { params: { id: publicUserName } })
+		return data
+	}
 
-    static deleteUser(id, token) {
-        console.log()
-        return http.post(url + 'delete', {id}, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-    }
+	changeLastname (id, lastname) {
+		return this.http.post(url + 'lastname', { id, lastname })
+	}
 
-    static async validateUsername(publicUserName) {
-        const {data} = await http.get(`${url}/validateUsername`, {params: {id: publicUserName}})
-        return data;
-    }
-
-    static changeLastname(id, lastname, token) {
-        return http.post(url + 'lastname', {id, lastname}, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-    }
-
-    static changeFirstname(id, firstname, token) {
-        return http.post(url + 'firstname', {id, firstname}, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-    }
+	changeFirstname (id, firstname) {
+		return this.http.post(url + 'firstname', { id, firstname })
+	}
 }
-
-export default userService
