@@ -142,8 +142,8 @@ export default {
 						this.$cookies.set('id', data.user.id, '7d')
 						this.$cookies.set('token', data.token, '7d')
 					} else {
-						this.$cookies.set('id', data.user.id, '1m')
-						this.$cookies.set('token', data.token, '1m')
+						this.$cookies.set('id', data.user.id, '1h')
+						this.$cookies.set('token', data.token, '1h')
 					}
 
 					this.firstname = data.user.firstname
