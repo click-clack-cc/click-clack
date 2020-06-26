@@ -275,7 +275,7 @@
                 />
               </b-input-group>
               <h5>
-                First name (nickname)
+                Display name
               </h5>
               <b-input-group id="firstname-input">
                 <b-form-input
@@ -451,8 +451,6 @@ export default {
 			editUsernameState: this.editUsernameState,
 			editFirstname: this.editFirstname,
 			editFirstnameState: this.editFirstnameState,
-			editSecondname: this.editSecondname,
-			editSecondnameState: this.editSecondnameState,
 			file: this.file,
 			photos: this.photos,
 			showStarCount: false,
@@ -502,7 +500,6 @@ export default {
 		async checkUsernameValidity () {
 			let usernameValid = true
 			let firstnameValid = true
-			let secondnameValid = true
 			if (this.editUsername === this.publicUserName) {
 				usernameValid = true
 			} else {
@@ -519,23 +516,16 @@ export default {
 			}
 			firstnameValid = firstnameValid && this.editFirstname.length > 0
 			firstnameValid = firstnameValid && this.editFirstname.length < 50
-			secondnameValid = secondnameValid && this.editSecondname.length < 50
 			const allowedCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 			for (let i = 0; i < this.editFirstname.length; i++) {
 				if (!allowedCharacters.includes(this.editFirstname.charAt(i))) {
 					firstnameValid = false
 				}
 			}
-			for (let i = 0; i < this.editSecondname.length; i++) {
-				if (!allowedCharacters.includes(this.editSecondname.charAt(i))) {
-					secondnameValid = false
-				}
-			}
 			this.editUsernameState = usernameValid
 			this.editFirstnameState = firstnameValid
-			this.editSecondnameState = secondnameValid
 
-			return usernameValid && firstnameValid && secondnameValid
+			return usernameValid && firstnameValid
 		},
 		resetModal () {
 			this.editBio = this.bio
@@ -546,8 +536,6 @@ export default {
 			this.editUsernameState = null
 			this.editFirstname = this.user.firstname
 			this.editFirstnameState = null
-			this.editSecondname = this.user.lastname
-			this.editSecondnameState = null
 		},
 		handleOk (bvModalEvt) {
 			bvModalEvt.preventDefault()
@@ -599,18 +587,6 @@ export default {
 				}
 				this.$services.userService.changeFirstname(this.user._id, this.editFirstname, this.token).then(() => {
 					this.user.firstname = this.editFirstname
-					this.userName = this.user.firstname + ' ' + this.user.lastname
-					changed = true
-				})
-				this.$router.go()
-			}
-
-			if (this.editSecondname !== this.user.lastname) {
-				if (!await this.checkUsernameValidity()) {
-					return
-				}
-				this.$services.userService.changeLastname(this.user._id, this.editSecondname, this.token).then(() => {
-					this.user.lastname = this.editSecondname
 					this.userName = this.user.firstname + ' ' + this.user.lastname
 					changed = true
 				})
@@ -694,7 +670,7 @@ export default {
         margin-top: 1rem;
     }
 
-    #username-input, #firstname-input, #secondname-input {
+    #username-input, #firstname-input {
         margin-bottom: 2rem;
     }
 </style>

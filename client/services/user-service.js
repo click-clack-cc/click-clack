@@ -11,8 +11,8 @@ export default class UserService {
 		return { ...data, createdAt: new Date(data.createdAt) }
 	}
 
-	async signUp (id, email, firstname, lastname, password) {
-		const { data } = await this.http.post(`${url}/register`, { id, email, firstname, lastname, password })
+	async signUp (id, email, firstname, password) {
+		const { data } = await this.http.post(`${url}/register`, { id, email, firstname, password })
 		return data
 	}
 
@@ -68,10 +68,6 @@ export default class UserService {
 	async validateUsername (publicUserName) {
 		const { data } = await this.http.get(`${url}/validateUsername`, { params: { id: publicUserName } })
 		return data
-	}
-
-	changeLastname (id, lastname) {
-		return this.http.post(url + 'lastname', { id, lastname })
 	}
 
 	changeFirstname (id, firstname) {

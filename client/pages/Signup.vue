@@ -137,6 +137,7 @@ export default {
 				return
 			}
 
+			console.log(this.password)
 			this.$services.userService.signUp(this.username, this.email, this.displayname, this.password).then((data) => {
 				if (data.user && data.token) {
 					this.$cookies.set('id', data.user.id, '7d')
