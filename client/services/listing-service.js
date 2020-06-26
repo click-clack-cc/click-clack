@@ -41,4 +41,19 @@ export default class listingService {
 		const { data: [response] } = await this.http.post(`${url}/delete`, { id, keyboard })
 		return response
 	}
+
+	async approve (id, listing) {
+		const { data: [lt] } = await this.http.post(`${url}/approve`, { id, listing })
+		return lt
+	}
+
+	async decline (id, listing) {
+		const { data: [lt] } = await this.http.post(`${url}/decline`, { id, listing })
+		return lt
+	}
+
+	async getNewListingsForMod (id) {
+		const { data } = await this.http.get(`${url}/mod`, { params: { id } })
+		return data.map(listing => ({ ...listing, createdAt: new Date(listing.createdAt), lastModified: new Date(listing.lastModified) }))
+	}
 }

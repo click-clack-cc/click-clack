@@ -11,12 +11,8 @@ export default class AnnouncementService {
 		return data.map(announcement => ({ ...announcement, createdAt: new Date(announcement.createdAt) }))
 	}
 
-	static async sendAnnouncement (id, text, token) {
-		const { data: [msg] } = await this.http.post(`${url}/`, { id, text }, {
-			headers: {
-				Authorization: `Bearer ${token}`
-			}
-		})
+	async sendAnnouncement (id, text) {
+		const { data: [msg] } = await this.http.post(`${url}/`, { id, text })
 		return msg
 	}
 }
