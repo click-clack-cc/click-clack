@@ -3,7 +3,7 @@ const express = require('express');
 const mongodb = require('mongodb');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-isLoggedIn = require('../middleware/auth')
+let isLoggedIn = require('../middleware/auth')
 
 const router = express.Router();
 const salt = 10
@@ -14,6 +14,10 @@ let result = null;
 connect().then((db) => {
     result = db;
     console.log('users.js connected to ' + process.env.DB_NAME + '.users')
+})
+
+router.post('/', isLoggedIn, async (req, res) => {
+    res.status(201).send()
 })
 
 router.post('/register', async (req, res) => {
@@ -54,7 +58,7 @@ router.post('/register', async (req, res) => {
                 id: user._id
             },
             process.env.SECRET_KEY, {
-                expiresIn: '7d'
+                expiresIn: '14d'
             }
         );
 
@@ -127,7 +131,6 @@ router.get('/resolveid/', async (req, res) => {
         .project({id: true}).toArray()
     res.send(response);
 });
-
 
 router.get('/u/', async (req, res) => {
     if (req.query.id !== undefined) {
@@ -221,7 +224,7 @@ router.post('/id/', isLoggedIn, async (req, res) => {
 });
 
 router.post('/passwordchange', async (req, response) => {
-    let user = null;
+    let user;
     user = await result.find({email: req.body.email}).toArray()[0];
     if (user) {
         bcrypt.compare(req.body.password, user.password, async function (err, res) {

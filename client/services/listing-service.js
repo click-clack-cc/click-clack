@@ -1,4 +1,4 @@
-const url = 'https://click-clack.cc:5000/api/listings/'
+const url = '/listings'
 
 export default class listingService {
 	http = null

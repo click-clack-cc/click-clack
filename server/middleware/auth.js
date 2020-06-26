@@ -25,23 +25,16 @@ module.exports = function (req, res, next) {
             token,
             process.env.SECRET_KEY
         );
-        req.tokenData = decoded;
-        if (req.tokenData.id === req.body.id || req.tokenData.id === req.query.id) {
+        users.findOneAndUpdate({
+                _id: mongodb.ObjectId(decoded.id)
+            },
+            {
+                $set: {
+                    lastLogIn: new Date()
+                }
+            })
 
-            users.findOneAndUpdate({
-                    _id: mongodb.ObjectId(req.tokenData.id)
-                },
-                {
-                    $set: {
-                        lastLogIn: new Date()
-                    }
-                })
-
-            next()
-        } else {
-            res.statusMessage = 'Authentication failed'
-            res.status(401).send();
-        }
+        next()
     } catch (err) {
         res.statusMessage = 'Authentication failed'
         res.status(401).send();

@@ -27,16 +27,10 @@ export default class KeyboardService {
 		return { ...keyboard, createdAt: new Date(keyboard.createdAt), lastModified: new Date(keyboard.lastModified) }
 	}
 
-	async newKeyboard (id, keyboard) {
-		const { data: [kb] } = await this.http.post(`${url}`, { id, keyboard })
+	async updateKeyboard (id, edit, keyboard) {
+		const { data: [kb] } = await this.http.post(`${url}/${edit ? '/update' : ''}`, { id, keyboard })
 
 		return kb
-	}
-
-	async updateKeyboard (id, keyboard) {
-		const { data: [response] } = await this.http.post(`${url}/update`, { id, keyboard })
-
-		return response
 	}
 
 	async deleteKeyboard (id, keyboard) {

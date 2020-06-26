@@ -60,24 +60,8 @@
                 variant="light"
                 @click="previewUser(post.author.id)"
               >
-                <template v-if="post.author.role == 'admin'" v-slot:badge>
+                <template v-if="post.author.role.includes(`admin`)" v-slot:badge>
                   <b-icon v-b-tooltip.right icon="shield-shaded" title="Administrator" />
-                </template>
-                <template v-else-if="post.author.role == 'verified'" v-slot:badge>
-                  <b-icon v-b-tooltip.right icon="check-circle" title="Verified user" />
-                </template>
-                <template v-else-if="post.author.role == 'supporter'" v-slot:badge>
-                  <b-icon v-b-tooltip.right icon="heart" title="Supporter" />
-                </template>
-                <template v-else-if="post.author.role == 'betatester'" v-slot:badge>
-                  <b-icon
-                    v-b-tooltip.right
-                    icon="egg"
-                    title="I was there when it all started"
-                  />
-                </template>
-                <template v-else-if="post.author.role == 'developer'" v-slot:badge>
-                  <b-icon v-b-tooltip.right icon="cup" title="Developer" />
                 </template>
               </b-avatar>
               <b-link :href="`/u/${post.author.id}`" class="name">
@@ -109,16 +93,183 @@
                 <span style="font-weight: bold">PCB</span> {{ post.pcb }}
               </p>
               <div style=" margin-top: 0.5rem">
-                <b-icon
+                <svg
                   v-if="!hearted"
-                  icon="heart"
+                  v-b-tooltip.top="Like"
                   style="cursor:pointer;"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 1024 1024"
                   @click="toggleHeart(post)"
-                />
-                <b-icon v-else icon="heart-fill" variant="primary" />
+                >
+                  <path
+                    fill="none"
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    stroke-miterlimit="4"
+                    stroke-width="36"
+                    stroke="currentColor"
+                    d="M204.502 512.298v-22.598l22.598-13.085 28.548-34.49 34.49-16.649 55.903-103.477 128.461-35.683-2.378-60.659 9.514-7.135 2.378-14.27 23.791-7.135 24.977 15.463 36.876-10.706 17.841 16.649-1.193 52.339 191.499 98.721 24.977 95.157 28.548 17.841 16.649 40.44 28.548 17.841-3.571 30.926-36.876 11.892v30.926l-15.463 82.072-21.413 8.328-13.085-7.135-52.339 22.598-7.135 11.892-3.571 48.767 2.378-52.339-53.524 20.22-21.412 15.463h-23.791l-91.586 27.355-30.926-5.949-15.463 8.328-5.949 26.169-13.085-2.378-19.034-5.949-15.463-2.378-7.135-14.27-134.404-110.62-14.27-2.378-5.949-14.27-17.841-17.841-13.085-109.427z"
+                  />
+                  <path
+                    fill="none"
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    stroke-miterlimit="4"
+                    stroke-width="36"
+                    stroke="currentColor"
+                    d="M264.174 546.657l190.082 140.459 24.39 10.936 27.751-4.206 329.697-110.176"
+                  />
+                  <path
+                    fill="none"
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    stroke-miterlimit="4"
+                    stroke-width="36"
+                    stroke="currentColor"
+                    d="M422.292 382.645l110.176 68.963 140.459-41.212"
+                  />
+                  <path
+                    fill="none"
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    stroke-miterlimit="4"
+                    stroke-width="36"
+                    stroke="currentColor"
+                    d="M562.751 391.9l-2.525-106.814"
+                  />
+                  <path
+                    fill="none"
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    stroke-miterlimit="4"
+                    stroke-width="36"
+                    stroke="currentColor"
+                    d="M498.83 391.056l34.482-12.617-1.681-54.666"
+                  />
+                  <path
+                    fill="none"
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    stroke-miterlimit="4"
+                    stroke-width="36"
+                    stroke="currentColor"
+                    d="M460.142 615.62l35.326 21.865c0 0 93.36-23.553 91.672-26.914s-23.553-118.587-23.553-118.587"
+                  />
+                  <path
+                    fill="none"
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    stroke-miterlimit="4"
+                    stroke-width="36"
+                    stroke="currentColor"
+                    d="M730.117 454.141l24.39 103.452 57.191-14.298"
+                  />
+                  <path
+                    fill="none"
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    stroke-miterlimit="4"
+                    stroke-width="36"
+                    stroke="currentColor"
+                    d="M314.634 514.693l113.544 77.375"
+                  />
+                </svg>
+                <!--                                <b-icon-->
+                <!--                                    v-if="!hearted"-->
+                <!--                                    icon="heart"-->
+                <!--                                    style="cursor:pointer;"-->
+                <!--                                    @click="toggleHeart(keeb)"-->
+                <!--                                />-->
+                <span v-else class="text-primary">
+                  <svg
+                    v-b-tooltip.top="Like"
+                    stroke="currentColor"
+                    fill="currentColor"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 1024 1024"
+                  >
+                    <path
+                      fill="none"
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      stroke-miterlimit="4"
+                      stroke-width="42"
+                      d="M204.502 512.298v-22.598l22.598-13.085 28.548-34.49 34.49-16.649 55.903-103.477 128.461-35.683-2.378-60.659 9.514-7.135 2.378-14.27 23.791-7.135 24.977 15.463 36.876-10.706 17.841 16.649-1.193 52.339 191.499 98.721 24.977 95.157 28.548 17.841 16.649 40.44 28.548 17.841-3.571 30.926-36.876 11.892v30.926l-15.463 82.072-21.413 8.328-13.085-7.135-52.339 22.598-7.135 11.892-3.571 48.767 2.378-52.339-53.524 20.22-21.412 15.463h-23.791l-91.586 27.355-30.926-5.949-15.463 8.328-5.949 26.169-13.085-2.378-19.034-5.949-15.463-2.378-7.135-14.27-134.404-110.62-14.27-2.378-5.949-14.27-17.841-17.841-13.085-109.427z"
+                    />
+                    <path
+                      fill="none"
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      stroke-miterlimit="4"
+                      stroke-width="42"
+                      d="M264.174 546.657l190.082 140.459 24.39 10.936 27.751-4.206 329.697-110.176"
+                    />
+                    <path
+                      fill="none"
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      stroke-miterlimit="4"
+                      stroke-width="42"
+                      d="M422.292 382.645l110.176 68.963 140.459-41.212"
+                    />
+                    <path
+                      fill="none"
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      stroke-miterlimit="4"
+                      stroke-width="42"
+                      d="M562.751 391.9l-2.525-106.814"
+                    />
+                    <path
+                      fill="none"
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      stroke-miterlimit="4"
+                      stroke-width="42"
+                      d="M498.83 391.056l34.482-12.617-1.681-54.666"
+                    />
+                    <path
+                      fill="none"
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      stroke-miterlimit="4"
+                      stroke-width="42"
+                      d="M460.142 615.62l35.326 21.865c0 0 93.36-23.553 91.672-26.914s-23.553-118.587-23.553-118.587"
+                    />
+                    <path
+                      fill="none"
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      stroke-miterlimit="4"
+                      stroke-width="42"
+                      d="M730.117 454.141l24.39 103.452 57.191-14.298"
+                    />
+                    <path
+                      fill="none"
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      stroke-miterlimit="4"
+                      stroke-width="42"
+                      d="M314.634 514.693l113.544 77.375"
+                    />
+                  </svg>
+                </span>
+                <!--                                <b-icon v-else icon="heart-fill" variant="primary"/>-->
                 {{ ' ' + post.hearts?post.hearts.length:0 }}
-                <b-icon icon="chat-square" style="margin-left: 1rem" />
-                {{ ' ' + post.comments?post.comments.length:0 }}
+                <a>
+                  <b-icon
+                    icon="chat-square"
+                    scale="1.2"
+                    style="margin-left: 1rem; margin-top: 0.2rem; margin-bottom: -0.1rem; margin-right: 0.2rem"
+                  />
+                  {{ ' ' + post.comments?post.comments.length:0 }}
+                </a>
               </div>
             </b-col>
             <b-col>
@@ -168,22 +319,27 @@ export default {
 			for (let j = 0; j < post.images.length; j++) {
 				post.images[j] = `https://click-clack.cc:5000/files/images/${post.images[j]}`
 			}
-		} else { post.images = [] }
+		} else {
+			post.images = []
+		}
 
 		if (post.comments) {
 			post.comments = post.comments.reverse()
 			for (let i = 0; i < post.comments.length; i++) {
-				const res = await app.$services.userService.getUser(post.comments[i].submitter)
-				post.comments[i].submitter = res
+				post.comments[i].submitter = await app.$services.userService.getUser(post.comments[i].submitter)
 			}
-		} else { post.comments = [] }
+		} else {
+			post.comments = []
+		}
 
-		if (!post.hearts) { post.hearts = [] }
+		if (!post.hearts) {
+			post.hearts = []
+		}
 
 		post.author = await app.$services.userService.getUser(post.user)
 
 		const description = post.title + ' by ' + post.author.firstname + ' @' + post.author.id + ' - ' +
-                post.content
+				post.content
 
 		return {
 			altDesc: description,
@@ -275,7 +431,7 @@ export default {
 	head () {
 		const k = this.post
 		const description = k.title + ' by ' + k.author.firstname + ' @' + k.author.id + ' - ' +
-                k.content
+				k.content
 		const title = `${k.title} - Click-Clack`
 		const image = k.images[0]
 		const url = `https://click-clack.cc/post/${k._id}`
@@ -321,47 +477,45 @@ export default {
 
 <style scoped>
 
-    .postcard-title {
-        margin: 1rem;
-        margin-left: 1rem;
-        margin-top: 0;
-    }
+	.postcard-title {
+		margin: 0 1rem 1rem;
+	}
 
-    .post-preview {
-        margin-top: 2rem;
-        margin-bottom: 1rem;
-    }
+	.post-preview {
+		margin-top: 2rem;
+		margin-bottom: 1rem;
+	}
 
-    .user-thumbnail {
-            padding-left: 2rem;
-    }
+	.user-thumbnail {
+		padding-left: 2rem;
+	}
 
-    .avatar {
-        margin-top: -0.2rem;
-        margin-right: 1rem;
-    }
+	.avatar {
+		margin-top: -0.2rem;
+		margin-right: 1rem;
+	}
 
-    .name {
-    }
+	.name {
+	}
 
-    .timeago {
+	.timeago {
 
-    }
+	}
 
-    #comment-input {
-        width: 80%;
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 1rem;
-    }
+	#comment-input {
+		width: 80%;
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: 1rem;
+	}
 
-    #carousel {
-        overflow: hidden;
-        margin: 0;
-    }
+	#carousel {
+		overflow: hidden;
+		margin: 0;
+	}
 
-    #carousel-card {
-        margin-bottom: 1rem;
-    }
+	#carousel-card {
+		margin-bottom: 1rem;
+	}
 
 </style>

@@ -7,7 +7,7 @@ export default {
 
 	server: {
 		port: process.env.PORT,
-    host: process.env.HOST,
+		host: process.env.HOST,
 		https: {
 			key: process.env.HTTPS_KEY ? fs.readFileSync(`${process.env.HTTPS_KEY}`) : null,
 			ca: process.env.HTTPS_CA ? fs.readFileSync(`${process.env.HTTPS_CA}`) : null,

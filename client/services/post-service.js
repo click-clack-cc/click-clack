@@ -33,7 +33,7 @@ export default class PostService {
 		return ps
 	}
 
-	async comment (id, post, text, token) {
+	async comment (id, post, text) {
 		const { data: [ps] } = await this.http.post(`${url}/comment`, { id, post, text })
 		return ps
 	}
@@ -43,12 +43,12 @@ export default class PostService {
 		return { ...lt, createdAt: new Date(lt.createdAt), lastModified: new Date(lt.lastModified) }
 	}
 
-	async newPost (id, edit, post, token) {
-		const { data: [lt] } = await this.http.post(`${url + (edit ? '/update' : '')}`, { id, post })
+	async updatePost (id, edit, post) {
+		const { data: [lt] } = await this.http.post(`${url + (edit ? '/update' : '/')}`, { id, post })
 		return lt
 	}
 
-	async deletePost (id, post, token) {
+	async deletePost (id, post) {
 		const { data: [lt] } = await this.http.post(`${url}/delete`, { id, post })
 		return lt
 	}

@@ -106,7 +106,6 @@
       Typing test results
     </h5>
     <StatsList v-if="user" :user="user" />
-    {{ userdata }}
   </div>
 </template>
 
@@ -270,7 +269,6 @@ export default {
     }
 
     #notSignedIn {
-        /*max-width: 75%;*/
         margin: auto;
         text-align: center;
     }
@@ -281,16 +279,11 @@ export default {
         margin-right: 0;
     }
 
-    #recommendations {
-        margin-bottom: 1rem;
-    }
-
     #login-form {
         margin: auto;
     }
 
     #login-form-card {
-        /*width: 50%;*/
         margin: auto;
     }
 </style>

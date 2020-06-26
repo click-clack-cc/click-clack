@@ -7,6 +7,7 @@ import StatService from '~/services/stat-service'
 import UserService from '~/services/user-service'
 import PostService from '~/services/post-service'
 import MessageService from '~/services/message-service'
+import KeyboardAPIService from '~/services/keyboardAPI-service'
 
 export default ({ app }, inject) => {
 	const services = {
@@ -18,7 +19,8 @@ export default ({ app }, inject) => {
 		statService: new StatService(app.$api),
 		userService: new UserService(app.$api),
 		postService: new PostService(app.$api),
-		messageService: new MessageService(app.$api)
+		messageService: new MessageService(app.$api),
+		keyboardAPIService: new KeyboardAPIService(app.$api)
 	}
 
 	inject('services', services)

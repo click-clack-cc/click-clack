@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const mongodb = require('mongodb');
 const router = express.Router();
-isLoggedIn = require('../middleware/auth')
+let isAdmin = require('../middleware/admin')
 
 const uri = `${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
 
@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
     res.send(response);
 })
 
-router.post('/', async (req, res) => {
+router.post('/', isAdmin, async (req, res) => {
     await result.insertOne({
         text: req.body.text,
         createdAt: new Date()

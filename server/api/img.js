@@ -1,8 +1,7 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const {Resize, ProfilePicResize} = require('./Resize');
-isLoggedIn = require('../middleware/auth')
+let isLoggedIn = require('../middleware/auth')
 
 const upload = multer({
     limits: {
@@ -12,7 +11,7 @@ const upload = multer({
 
 const router = express.Router();
 
-router.post('/upload', upload.single('image'), async function (req, res) {
+router.post('/upload', isLoggedIn, upload.single('image'), async function (req, res) {
     try {
         const fileUpload = new ProfilePicResize('files/images');
         if (!req.file) {
@@ -28,7 +27,7 @@ router.post('/upload', upload.single('image'), async function (req, res) {
 
 });
 
-router.post('/keebphotos', upload.array('image'), async function (req, res) {
+router.post('/keebphotos', isLoggedIn, upload.array('image'), async function (req, res) {
     try {
         const fileUpload = new Resize('files/images');
         if (!req.files) {
@@ -45,7 +44,7 @@ router.post('/keebphotos', upload.array('image'), async function (req, res) {
     }
 });
 
-router.post('/listingphotos', upload.array('image'), async function (req, res) {
+router.post('/listingphotos', isLoggedIn,  upload.array('image'), async function (req, res) {
     try {
         const fileUpload = new Resize('files/images');
         if (!req.files) {
@@ -62,7 +61,7 @@ router.post('/listingphotos', upload.array('image'), async function (req, res) {
     }
 });
 
-router.post('/postphotos', upload.array('image'), async function (req, res) {
+router.post('/postphotos', isLoggedIn, upload.array('image'), async function (req, res) {
     try {
         const fileUpload = new Resize('files/images');
         if (!req.files) {

@@ -21,8 +21,8 @@
           </template>
         </b-form-file>
       </b-form-group>
-      <card v-for="(img, index) in post.images" :key="index" class="photoPreview" style="max-width: 10rem; max-height: 10rem; margin: 0.5rem">
-        <img style="border-radius: 0.25rem; max-width: 10rem; max-height: 10rem; margin-bottom: 1rem" :src="'https://click-clack.cc:5000/files/images/'+img"></img>
+      <b-card v-for="(img, index) in post.images" :key="index" class="photoPreview" style="max-width: 10rem; max-height: 10rem; margin: 0.5rem">
+        <img style="border-radius: 0.25rem; max-width: 10rem; max-height: 10rem; margin-bottom: 1rem" :src="'https://click-clack.cc:5000/files/images/'+img">
         <b-button
           size="sm"
           variant="outline-danger"
@@ -30,7 +30,7 @@
         >
           <b-icon icon="trash" />
         </b-button>
-      </card>
+      </b-card>
       <br>
       <b-row>
         <b-col>
@@ -151,7 +151,7 @@ export default {
 				}
 			}
 
-			this.$services.postService.newPost(this.user._id, this.edit, {
+			this.$services.postService.updatePost(this.user._id, this.edit, {
 				_id: this.post._id,
 				title: this.post.title,
 				url: this.post.url,

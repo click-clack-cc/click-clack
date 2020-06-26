@@ -18,161 +18,285 @@
         </b-col>
         <b-col style="font-size: small">
           <p>
-            When contacting other users please make sure to follow our community guidelines - be respectful and kind.
+            When contacting other users please make sure to follow our community guidelines - be respectful
+            and kind.
           </p>
           <p>
-            After sending the first message to {{ inspectedUser.firstname }} you can continue the conversation in your messages.
+            After sending the first message to {{ inspectedUser.firstname }} you can continue the conversation
+            in your messages.
           </p>
         </b-col>
       </b-row>
       <b-form-input v-model="messageInput" :placeholder="`Say hi to ${inspectedUser.firstname}`" />
     </b-modal>
     <b-overlay :show="loading" blur="0.5rem" opacity="1" variant="transparent">
-      <b-list-group style="margin-bottom: 1rem">
-        <b-list-group-item>
-          <b-row>
-            <b-col align="left" cols="2">
-              <b-avatar id="avatar" :src="img" size="4rem" variant="light">
-                <template v-if="role == 'admin'" v-slot:badge>
-                  <b-icon v-b-tooltip.right icon="shield-shaded" title="Administrator" />
-                </template>
-                <template v-else-if="role == 'verified'" v-slot:badge>
-                  <b-icon v-b-tooltip.right icon="check-circle" title="Verified user" />
-                </template>
-                <template v-else-if="role == 'supporter'" v-slot:badge>
-                  <b-icon v-b-tooltip.right icon="heart" title="Supporter" />
-                </template>
-                <template v-else-if="role == 'betatester'" v-slot:badge>
-                  <b-icon
-                    v-b-tooltip.right
-                    icon="egg"
-                    title="I was there when it all started"
-                  />
-                </template>
-                <template v-else-if="role == 'developer'" v-slot:badge>
-                  <b-icon v-b-tooltip.right icon="cup" title="Developer" />
-                </template>
-              </b-avatar>
-            </b-col>
-            <b-col id="name" align="left" cols="6">
-              <h3>
-                {{ userName }} <span v-if="showStarCount" style="font-size: 1.2rem; color: #ff7700">{{ recommendations.length }}<b-icon
-                  icon="star-fill"
-                  scale="0.8"
-                /> </span>
-                <p class="text-muted" style="font-size: 1.2rem">
-                  {{ publicUserName }}
-                </p>
-              </h3>
-            </b-col>
-            <b-col v-if="showStarReportButtons" id="star-report-button-group" align="right" cols="4">
-              <b-button-group>
-                <b-button
-                  variant="outline-primary"
-                  size="sm"
-                  @click="messageUser"
-                >
-                  <b-icon icon="envelope" /> Message
-                </b-button>
-              </b-button-group>
-              <b-button-group>
-                <b-button
-                  id="star-button"
-                  v-b-modal.recommendation-modal
-                  :disabled="!canGiveStar"
-                  size="sm"
-                  variant="outline-primary"
-                >
-                  <b-icon icon="star-fill" />
-                  Give Star
-                </b-button>
-                <b-button
-                  id="report-button"
-                  v-b-modal.report-modal
-                  size="sm"
-                  variant="outline-primary"
-                >
-                  <b-icon icon="flag" />
-                </b-button>
-              </b-button-group>
-            </b-col>
-            <b-modal
-              v-if="user"
-              id="recommendation-modal"
-              ref="recommendation-modal"
-              centered
-              title="Recommendation"
-              @ok="handleRecommendationOk"
+      <b-card style="margin-bottom: 1rem">
+        <b-row no-gutters>
+          <b-col align="middle" lg="3" md="12" sm="12">
+            <b-card
+              style="border-left: none; border-top: none; border-bottom: none; border-radius: 0; padding-right: 1rem"
             >
-              <form ref="form" @submit.stop.prevent="handleRecommendationSubmit">
-                You are giving 1
-                <b-icon icon="star-fill" />
-                to {{ inspectedUser.firstname }} for being a good person
-                <br>
-                <br>
-                <b-form-group
-                  label-for="recommendation-input"
-                >
-                  <b-form-textarea
-                    id="recommendation-input"
-                    v-model="editRecommendation"
-                    max-rows="6"
-                    placeholder="Say something nice about them, or leave this empty to just give them a star"
-                    required
-                    rows="4"
-                  />
-                </b-form-group>
-              </form>
-            </b-modal>
-            <b-modal
-              v-if="user"
-              id="report-modal"
-              ref="report-modal"
-              centered
-              title="Submit report"
-              @ok="handleReportOk"
+              <b-row>
+                <b-col>
+                  <b-row>
+                    <b-col>
+                      <b-avatar
+                        :src="img"
+                        badge-offset="-0.4rem"
+                        class="avatar"
+                        size="8rem"
+                        variant="light"
+                      />
+                    </b-col>
+                  </b-row>
+                  <b-row>
+                    <b-col
+                      align="middle"
+                      style="margin-left: 2rem; margin-right: 2.75rem; margin-top: 2rem"
+                    >
+                      <b-row>
+                        <b-col
+                          v-if="inspectedUser.role.includes('admin')"
+                          align="middle"
+                          cols="3"
+                          style="margin-bottom: 1rem"
+                        >
+                          <b-icon
+                            v-b-tooltip.bottom
+                            scale="1.4"
+                            icon="shield-shaded"
+                            title="Administrator"
+                          />
+                        </b-col>
+                        <b-col
+                          v-if="inspectedUser.role.includes('developer')"
+                          cols="3"
+                          style="margin-bottom: 1rem"
+                        >
+                          <b-icon
+                            v-b-tooltip.bottom
+                            scale="1.4"
+                            icon="cup"
+                            title="Developer"
+                          />
+                        </b-col>
+                        <b-col
+                          v-if="inspectedUser.role.includes('verified')"
+                          align="middle"
+                          cols="3"
+                          style="margin-bottom: 1rem"
+                        >
+                          <b-icon
+                            v-b-tooltip.bottom
+                            scale="1.4"
+                            icon="check-circle"
+                            title="Verified user"
+                          />
+                        </b-col>
+                        <b-col
+                          v-if="inspectedUser.role.includes('partner')"
+                          align="middle"
+                          cols="3"
+                          style="margin-bottom: 1rem"
+                        >
+                          <b-icon
+                            v-b-tooltip.bottom
+                            scale="1.4"
+                            icon="people"
+                            title="Click-Clack Partner"
+                          />
+                        </b-col>
+                        <b-col
+                          v-if="inspectedUser.role.includes('supporter')"
+                          align="middle"
+                          cols="3"
+                          style="margin-bottom: 1rem"
+                        >
+                          <b-icon
+                            v-b-tooltip.bottom
+                            scale="1.4"
+                            icon="heart"
+                            title="Supporter"
+                          />
+                        </b-col>
+                        <b-col
+                          v-if="inspectedUser.role.includes('betatester')"
+                          align="middle"
+                          cols="3"
+                          style="margin-bottom: 1rem"
+                        >
+                          <b-icon
+                            v-b-tooltip.bottom
+                            scale="1.4"
+                            icon="egg"
+                            title="Beta tester - I was there when it all started"
+                          />
+                        </b-col>
+                      </b-row>
+                    </b-col>
+                  </b-row>
+                </b-col>
+              </b-row>
+            </b-card>
+          </b-col>
+
+          <b-col
+            id="name"
+            style="padding-left: 1rem"
+            align="left"
+            lg="9"
+            md="12"
+            sm="12"
+          >
+            <b-row>
+              <b-col>
+                <a v-b-modal.recommendationsModal>
+                  <h3>
+                    {{ userName }} <span
+                      v-if="showStarCount"
+                      style="font-size: 1.2rem; color: #ff7700"
+                    >{{ recommendations.length }}<b-icon
+                      icon="star-fill"
+                      scale="0.8"
+                    /> </span>
+                    <p class="text-muted" style="font-size: 1.2rem">
+                      {{ publicUserName }}
+                    </p>
+                  </h3>
+                </a>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <b-row>
+                  <b-col lg="10" md="12">
+                    <h5>
+                      About me
+                    </h5>
+                  </b-col>
+                </b-row>
+                <b-row id="bio">
+                  <div v-html="$md.render(bio)" />
+                </b-row>
+                <b-row no-gutters class="text-muted" style="font-size: x-small">
+                  <b-col>
+                    <p>
+                      Member since {{ dateformat(inspectedUser.createdAt, "mmmm dS, yyyy") }}<br>
+                      Last active {{ dateformat(inspectedUser.lastLogIn, "mmmm dS, yyyy") }}
+                    </p>
+                  </b-col>
+                </b-row>
+              </b-col>
+            </b-row>
+          </b-col>
+        </b-row>
+        <b-modal
+          id="recommendationsModal"
+          ref="recommendationsModal"
+          centered
+          title="Recommendations"
+          ok-only
+        >
+          <div v-if="inspectedUser.recommendations && inspectedUser.recommendations.length > 0">
+            Other members have said these about {{ inspectedUser.firstname }}
+            <br>
+            <br>
+            <recommendation-list v-if="inspectedUser" style="margin-bottom: 1rem" :inspected-user="inspectedUser" />
+          </div>
+          <div v-else>
+            No recommendations yet
+          </div>
+        </b-modal>
+        <b-modal
+          v-if="user"
+          id="recommendation-modal"
+          ref="recommendation-modal"
+          centered
+          title="Recommendation"
+          @ok="handleRecommendationOk"
+        >
+          <form ref="form" @submit.stop.prevent="handleRecommendationSubmit">
+            You are giving 1
+            <b-icon icon="star-fill" />
+            to {{ inspectedUser.firstname }} for being a good person
+            <br>
+            <br>
+            <b-form-group
+              label-for="recommendation-input"
             >
-              <form ref="form" @submit.stop.prevent="handleReportSubmit">
-                <br>
-                <b-form-group
-                  label-for="report-input"
-                >
-                  <b-form-textarea
-                    id="recommendation-input"
-                    v-model="editReport"
-                    max-rows="6"
-                    placeholder="Please explain your reason for reporting this user"
-                    required
-                    rows="4"
-                  />
-                </b-form-group>
-              </form>
-            </b-modal>
-          </b-row>
-        </b-list-group-item>
-        <b-list-group-item id="bio-container">
-          <b-row>
-            <b-col cols="10">
-              <h5>
-                Bio
-              </h5>
-            </b-col>
-          </b-row>
-          <b-row>
-            <div id="bio" v-html="$md.render(bio)" />
-          </b-row>
-        </b-list-group-item>
-      </b-list-group>
+              <b-form-textarea
+                id="recommendation-input"
+                v-model="editRecommendation"
+                max-rows="6"
+                placeholder="Say something nice about them, or leave this empty to just give them a star"
+                required
+                rows="4"
+              />
+            </b-form-group>
+          </form>
+        </b-modal>
+        <b-modal
+          v-if="user"
+          id="report-modal"
+          ref="report-modal"
+          centered
+          title="Submit report"
+          @ok="handleReportOk"
+        >
+          <form ref="form" @submit.stop.prevent="handleReportSubmit">
+            <br>
+            <b-form-group
+              label-for="report-input"
+            >
+              <b-form-textarea
+                id="recommendation-input"
+                v-model="editReport"
+                max-rows="6"
+                placeholder="Please explain your reason for reporting this user"
+                required
+                rows="4"
+              />
+            </b-form-group>
+          </form>
+        </b-modal>
 
-      <h5 v-if="inspectedUser.recommendations">
-        Recommendations
-      </h5>
-      <recommendation-list v-if="inspectedUser" style="margin-bottom: 1rem" :inspected-user="inspectedUser" />
-
+        <!--                aSD-->
+      </b-card>
+      <b-button-group style="margin-bottom: 1rem">
+        <b-button
+          variant="outline-primary"
+          size="sm"
+          @click="messageUser"
+        >
+          <b-icon icon="envelope" />
+          Message
+        </b-button>
+      </b-button-group>
+      <b-button-group style="margin-bottom: 1rem">
+        <b-button
+          id="star-button"
+          v-b-modal.recommendation-modal
+          :disabled="!canGiveStar"
+          size="sm"
+          variant="outline-primary"
+        >
+          <b-icon icon="star-fill" />
+          Give Star
+        </b-button>
+        <b-button
+          id="report-button"
+          v-b-modal.report-modal
+          size="sm"
+          variant="outline-primary"
+        >
+          <b-icon icon="flag" />
+        </b-button>
+      </b-button-group>
       <b-card v-if="keyboards && keyboards.length > 0" no-body class="mb-1">
         <b-card-header header-tag="header" class="p-1" role="tab">
           <b-button v-b-toggle.keyboards-accordion block variant="light">
-            {{ keyboards.length }} keyboard{{ keyboards.length>1?"s":"" }}
+            {{ keyboards.length }}
+            keyboard{{ keyboards.length>1?"s":"" }}
           </b-button>
         </b-card-header>
         <b-collapse id="keyboards-accordion" visible accordion="profile-accordion" role="tabpanel">
@@ -187,7 +311,7 @@
                 <b-button
                   size="sm"
                   variant="outline-primary"
-                  @click="$nuxt.$router.push('editkeyboard')"
+                  @click="$nuxt.$router.push(`editkeyboard`)"
                 >
                   <b-icon icon="plus" />
                 </b-button>
@@ -212,7 +336,8 @@
       <b-card v-if="listings && listings.length > 0" no-body class="mb-1">
         <b-card-header header-tag="header" class="p-1" role="tab">
           <b-button v-b-toggle.listings-accordion block variant="light">
-            {{ listings.length }} market listing{{ listings.length>1?"s":"" }}
+            {{ listings.length }} market
+            listing{{ listings.length>1?"s":"" }}
           </b-button>
         </b-card-header>
         <b-collapse id="listings-accordion" accordion="profile-accordion" role="tabpanel">
@@ -227,7 +352,7 @@
                 <b-button
                   size="sm"
                   variant="outline-primary"
-                  @click="$nuxt.$router.push('editlisting')"
+                  @click="$nuxt.$router.push(`editlisting`)"
                 >
                   <b-icon icon="plus" />
                 </b-button>
@@ -252,7 +377,8 @@
       <b-card v-if="posts && posts.length > 0" no-body class="mb-1">
         <b-card-header header-tag="header" class="p-1" role="tab">
           <b-button v-b-toggle.posts-accordion block variant="light">
-            {{ posts.length }} post{{ posts.length>1?"s":"" }}
+            {{ posts.length }}
+            post{{ posts.length>1?"s":"" }}
           </b-button>
         </b-card-header>
         <b-collapse id="posts-accordion" accordion="profile-accordion" role="tabpanel">
@@ -267,7 +393,7 @@
                 <b-button
                   size="sm"
                   variant="outline-primary"
-                  @click="$nuxt.$router.push('editpost')"
+                  @click="$nuxt.$router.push(`editpost`)"
                 >
                   <b-icon icon="plus" />
                 </b-button>
@@ -296,6 +422,7 @@
 
 import VueMeta from 'vue-meta'
 import Vue from 'vue'
+import dateformat from 'dateformat'
 import Keyboard from './KeyboardSmall'
 import ListingSmall from './ListingSmall'
 import PostSmall from './PostSmall'
@@ -313,9 +440,7 @@ export default {
 		RecommendationList
 	},
 	props: [
-		'inspectedUser',
-		'user',
-		'token'
+		'inspectedUser'
 	],
 	data () {
 		return {
@@ -327,9 +452,6 @@ export default {
 			keyboards: null,
 			listings: null,
 			posts: null,
-			editBio: this.editBio,
-			editKeebs: this.editKeebs,
-			editBioState: null,
 			loading: true,
 			publicUserName: this.publicUserName,
 			editRecommendation: this.editRecommendation,
@@ -493,7 +615,8 @@ export default {
 					toaster: 'b-toaster-top-center'
 				})
 			})
-		}
+		},
+		dateformat
 	},
 	metaInfo () {
 		if (!this.inspectedUser) {
@@ -534,38 +657,12 @@ export default {
     #self-user-data-container {
         width: 100%;
     }
-
-    #avatar {
-        margin-bottom: 1rem;
-        margin-top: 0.5rem;
-        position: absolute;
-    }
-
     #name {
         margin-top: 0.5rem;
     }
 
-    #bio-card {
-
-    }
-
     #bio {
         margin: 1rem;
-        margin-top: 0rem;
-    }
-
-    #edit-bio-button {
-    }
-
-    #keyboards {
-
-    }
-
-    #keeblist {
-        margin-top: 1rem;
-    }
-
-    #star-report-button-group {
-        margin-top: 0.5rem;
+        margin-top: 0;
     }
 </style>

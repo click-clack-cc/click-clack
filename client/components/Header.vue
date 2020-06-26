@@ -88,7 +88,7 @@
                 <span v-else>Sign in</span>
               </nuxt-link>
             </b-dropdown-item>
-            <b-dropdown-item v-if="user && (user.role.includes('admin') || user.role.includes('developer'))" @click="$router.push(`/admintools`)">
+            <b-dropdown-item v-if="user && (user.role.includes('admin') || user.role.includes('developer'))" @click=" $nuxt.$router.push(`/admintools`)">
               <nuxt-link to="/profile">
                 <b-icon icon="shield" />
                 <span>AdminTools</span>
@@ -172,7 +172,6 @@ import { mapState } from 'vuex'
 export default {
 	name: 'Header',
 	props: [
-		'user'
 	],
 	data () {
 		return {
@@ -180,7 +179,7 @@ export default {
 			unseen: 0
 		}
 	},
-	computed: mapState(['token', 'nightmode', 'zenmode', 'darktheme', 'lighttheme']),
+	computed: mapState(['user', 'token', 'nightmode', 'zenmode', 'darktheme', 'lighttheme']),
 	watch: {
 		user: {
 			immediate: true,
@@ -188,7 +187,7 @@ export default {
 				if (this.user && this.token) {
 					this.getUnseenMessages()
 					if (this.messagePollerStarted) { return }
-					if (!this.interval) { this.interval = setInterval(this.getUnseenMessages, 5000) }
+					if (!this.interval) { this.interval = setInterval(this.getUnseenMessages, 60000) }
 					this.messagePollerStarted = true
 				}
 			}
@@ -198,7 +197,7 @@ export default {
 		if (this.user && this.token) {
 			this.getUnseenMessages()
 			if (this.messagePollerStarted) { return }
-			if (!this.interval) { this.interval = setInterval(this.getUnseenMessages, 5000) }
+			if (!this.interval) { this.interval = setInterval(this.getUnseenMessages, 60000) }
 			this.messagePollerStarted = true
 		}
 	},
@@ -243,14 +242,8 @@ export default {
 			this.$router.go()
 		},
 		getUnseenMessages () {
-			this.$services.messageService.getUnseenMessageCount(this.user._id, this.token).then((res) => {
+			this.$services.messageService.getUnseenMessageCount(this.user._id).then((res) => {
 				this.unseen = res
-			}).catch((_) => {
-				// this.$bvToast.toast(error.response.statusText, {
-				//     title: 'Error',
-				//     variant: 'danger',
-				//     toaster: 'b-toaster-top-center'
-				// })
 			})
 		}
 	}

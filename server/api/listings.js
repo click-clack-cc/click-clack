@@ -1,10 +1,9 @@
 require('dotenv').config()
 const express = require('express');
 const mongodb = require('mongodb');
-const jwt = require('jsonwebtoken');
 const router = express.Router();
-isLoggedIn = require('../middleware/auth')
-isAdmin = require('../middleware/admin')
+let isLoggedIn = require('../middleware/auth')
+let isAdmin = require('../middleware/admin')
 
 
 const uri = `${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;

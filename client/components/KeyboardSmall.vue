@@ -95,8 +95,7 @@
         <b-col no-gutters>
           <div id="no-img-parts-list-container">
             <b-col class="keeb-info">
-              <a v-if="keeb.url" style="font-weight: bold" :href="keeb.url"> {{ truncate(keeb.url, 30,
-                                                                                         false) }}
+              <a v-if="keeb.url" style="font-weight: bold" :href="keeb.url"> {{ truncate(keeb.url, 30, false) }}
                 <b-icon icon="link45deg" />
               </a>
               <br v-if="keeb.url">
@@ -109,26 +108,25 @@
                   <span v-if="keeb.switches" style="font-weight: bold; margin-right: 1rem">
                     Switches
                   </span>
-                  {{ keeb.switches }} <br>
+                  {{ keeb.switches }} <br v-if="keeb.switches">
                   <span v-if="keeb.keycaps" style="font-weight: bold; margin-right: 1rem">
                     Keycaps
                   </span>
-                  {{ keeb.keycaps }} <br>
+                  {{ keeb.keycaps }} <br v-if="keeb.keycaps">
                   <span v-if="keeb.pcb" style="font-weight: bold; margin-right: 1rem">
                     PCB
                   </span>
-                  {{ keeb.pcb }} <br>
+                  {{ keeb.pcb }} <br v-if="keeb.pcb">
                   <span v-if="keeb.case" style="font-weight: bold; margin-right: 1rem">
                     Case
                   </span>
-                  {{ keeb.case }} <br>
+                  {{ keeb.case }} <br v-if="keeb.case">
                 </div>
               </a>
               <div style=" margin-top: 0.5rem">
                 <svg
                   v-if="!hearted"
-                  v-b-tooltip.top="&quot;Like&quot;"
-                  icon="heart"
+                  v-b-tooltip.top="`Like`"
                   style="cursor:pointer;"
                   version="1.1"
                   xmlns="http://www.w3.org/2000/svg"
@@ -210,15 +208,9 @@
                     d="M314.634 514.693l113.544 77.375"
                   />
                 </svg>
-                <!--                                <b-icon-->
-                <!--                                    v-if="!hearted"-->
-                <!--                                    icon="heart"-->
-                <!--                                    style="cursor:pointer;"-->
-                <!--                                    @click="toggleHeart(keeb)"-->
-                <!--                                />-->
                 <span v-else class="text-primary">
                   <svg
-                    v-b-tooltip.top="&quot;Like&quot;"
+                    v-b-tooltip.top="`Like`"
                     stroke="currentColor"
                     fill="currentColor"
                     version="1.1"
@@ -293,7 +285,6 @@
                     />
                   </svg>
                 </span>
-                <!--                                <b-icon v-else icon="heart-fill" variant="primary"/>-->
                 {{ ' ' + keeb.hearts?keeb.hearts.length:0 }}
                 <a :href="`/keyboard/${[keeb._id]}`">
                   <b-icon icon="chat-square" scale="1.2" style="margin-left: 1rem; margin-top: 0.2rem; margin-bottom: -0.1rem; margin-right: 0.2rem" />
@@ -369,7 +360,7 @@ export default {
 				centered: true
 			}).then((result) => {
 				if (result) {
-					this.$services.keyboardService.deleteKeyboard(this.owner._id, this.editKeyboard._id, this.token).then(() => {
+					this.$services.keyboardService.deleteKeyboard(this.owner._id || this.keeb.owner._id || this.keeb.owner, this.editKeyboard._id, this.token).then(() => {
 						this.$bvToast.toast('Keyboard deleted successfully', {
 							title: 'Success',
 							toaster: 'b-toaster-top-center',
@@ -437,11 +428,11 @@ export default {
 <style scoped>
 
     .keeb-info {
-        margin: 0rem;
+        margin: 0;
     }
 
     #container {
-        margin-top: 0rem;
+        margin-top: 0;
     }
 
     #carousel {
@@ -456,12 +447,12 @@ export default {
 
     #keebtitle {
         font-weight: bold;
-        margin-left: 0rem;
+        margin-left: 0;
         margin-right: 0.5rem;
     }
 
     #keebowner, .timeago {
-        margin-top: 0rem;
+        margin-top: 0;
     }
 
 </style>

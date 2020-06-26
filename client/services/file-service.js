@@ -1,6 +1,6 @@
 const url = '/img'
 
-export default class ImgService {
+export default class FileService {
 	http = null
 
 	constructor (axios) {
@@ -37,7 +37,7 @@ export default class ImgService {
 		return data
 	}
 
-	async uploadListingImages (id, listing, imageNames, images, token) {
+	async uploadListingImages (id, listing, imageNames, images) {
 		const formData = new FormData()
 		formData.append('id', id)
 		formData.append('listing', listing)
@@ -48,14 +48,13 @@ export default class ImgService {
 
 		const { data } = await this.http.post(`${url}/listingphotos`, formData, {
 			headers: {
-				'Content-Type': 'multipart/form-data',
-				Authorization: `Bearer ${token}`
+				'Content-Type': 'multipart/form-data'
 			}
 		})
 		return data
 	}
 
-	async uploadPostImages (id, post, imageNames, images, token) {
+	async uploadPostImages (id, post, imageNames, images) {
 		const formData = new FormData()
 		formData.append('id', id)
 		formData.append('post', post)
@@ -66,8 +65,7 @@ export default class ImgService {
 
 		const { data } = await this.http.post(`${url}/postphotos`, formData, {
 			headers: {
-				'Content-Type': 'multipart/form-data',
-				Authorization: `Bearer ${token}`
+				'Content-Type': 'multipart/form-data'
 			}
 		})
 		return data
