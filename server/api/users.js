@@ -58,7 +58,7 @@ router.post('/register', async (req, res) => {
                 id: user._id
             },
             process.env.SECRET_KEY, {
-                expiresIn: '14d'
+                expiresIn: '7d'
             }
         );
 
