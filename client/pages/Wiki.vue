@@ -2,7 +2,61 @@
   <div>
     <div id="title">
       <h4>
-        <b-icon scale="1.6" style="margin-right: 0.5rem; margin-bottom: 0.2rem" icon="files" />
+        <svg
+          style="margin-right: 0.5rem; margin-bottom: -0.4rem"
+          version="1.1"
+          stroke="currentColor"
+          xmlns="http://www.w3.org/2000/svg"
+          width="64"
+          height="64"
+          stroke-width="16"
+          viewBox="0 0 1024 1024"
+          stroke-linejoin="round"
+          stroke-linecap="round"
+          stroke-miterlimit="4"
+          fill="none"
+        >
+          <path
+            d="M81.305 191.549c0 0 110.851 74.238 230.614 10.888s195.976-64.338 200.926 2.975v397.877"
+          />
+          <path
+            d="M81.305 589.438c0 0 110.851 74.238 230.614 10.888s195.976-64.338 200.926 2.975"
+          />
+          <path
+            d="M81.305 191.549v458.746"
+          />
+          <path
+            d="M81.305 650.307c0 0 110.851 74.238 230.614 10.888s195.976-64.338 200.926 2.975v-60.869"
+          />
+          <path
+            d="M545.974 680.845c-25.892 12.251-58.44 0-58.44 0l-440.569 27.644-1.401-454.91 36.107-4.382"
+          />
+          <path
+            d="M944.372 191.549c0 0-110.851 74.238-230.614 10.888s-195.976-64.338-200.926 2.975v397.877"
+          />
+          <path
+            d="M944.372 589.438c0 0-110.851 74.238-230.614 10.888s-195.976-64.338-200.926 2.975"
+          />
+          <path
+            d="M944.372 191.549v458.746"
+          />
+          <path
+            d="M944.372 650.307c0 0-110.851 74.238-230.614 10.888s-195.976-64.338-200.926 2.975v-60.869"
+          />
+          <path
+            d="M479.716 680.845c25.892 12.251 58.44 0 58.44 0l443.36 36.040-2.803-461.905-34.705-5.784"
+          />
+          <path
+            d="M131.793 269.749c0 0 69.288 28.7 186.076-0.988"
+          />
+          <path
+            d="M131.793 304.114c0 0 69.288 28.7 186.076-0.988"
+          />
+          <path
+            d="M131.793 338.037c0 0 69.288 28.7 186.076-0.988"
+          />
+        </svg>
+        <!--        <b-icon scale="1.6" style="margin-right: 0.5rem; margin-bottom: 0.2rem" icon="files" />-->
         Keyboard Wiki
       </h4>
       <p class="text-muted">
@@ -14,26 +68,20 @@
         <b-tab title="Switches" active>
           <b-row>
             <b-col>
-              <div id="toolbar">
+              <div class="toolbar">
                 <b-button-group>
-                  <b-dropdown text="Manufacturer" />
-                  <b-dropdown text="Type" />
-                  <b-dropdown text="RGB" />
-                  <b-dropdown text="Actuation Force" />
-                </b-button-group>
-                <b-button-group>
-                  <b-button>
-                    Sort by
-                  </b-button>
-                  <b-button>
-                    <b-icon icon="chevron-up" />
-                  </b-button>
-                </b-button-group>
-                <b-button-group>
-                  <b-button v-b-tooltip.top="`Card view`">
+                  <b-button
+                    v-b-tooltip.top="`Card view`"
+                    :variant="displaymode===`card`?`primary`:`outline-primary`"
+                    @click="displaymode = `card`"
+                  >
                     <b-icon icon="grid" />
                   </b-button>
-                  <b-button v-b-tooltip.top="`Compact list`">
+                  <b-button
+                    v-b-tooltip.top="`Compact list`"
+                    :variant="displaymode===`compact`?`primary`:`outline-primary`"
+                    @click="displaymode = `compact`"
+                  >
                     <b-icon icon="list" />
                   </b-button>
                 </b-button-group>
@@ -43,8 +91,8 @@
               {{ switches.length + ` switches` }}
             </b-col>
           </b-row>
-          <div>
-            <b-row>
+          <div v-if="displaymode===`card`">
+            <b-row no-gutters>
               <b-col v-for="(sw, i) in switches" :key="i" cols="4">
                 <b-card class="dataCard" header-tag="header">
                   <template v-slot:header>
@@ -144,10 +192,10 @@
                       <span style="font-weight: bold">RGB Variant </span><br> {{ sw.rgbvarient?"Available":"No" }}
                     </b-col>
                     <b-col cols="6">
-                      <span style="font-weight: bold">Actuation Force </span><br> {{ sw.operating_force }}g
+                      <span style="font-weight: bold">Actuation F </span><br> {{ sw.operating_force }}gf
                     </b-col>
                     <b-col cols="6">
-                      <span style="font-weight: bold">Bottom Out Force </span><br> {{ sw.bottomout_force }}g
+                      <span style="font-weight: bold">Bottom Out F </span><br> {{ sw.bottomout_force }}gf
                     </b-col>
                     <b-col cols="6">
                       <span style="font-weight: bold">Pre Travel </span><br> {{ sw.pretravel }}mm
@@ -166,250 +214,600 @@
               </b-col>
             </b-row>
           </div>
+          <b-table
+            v-if="displaymode===`compact`"
+            striped
+            bordered
+            small
+            hover
+            foot-clone
+            fixed
+            responsive
+            :items="switches"
+            :fields="switchFields"
+          >
+            <template v-slot:cell(rgbvarient)="data">
+              {{ data.value?"Yes":"No" }}
+            </template>
+            <template v-slot:cell(operating_force)="data">
+              {{ data.value }}gf
+            </template>
+            <template v-slot:cell(bottomout_force)="data">
+              {{ data.value }}gf
+            </template>
+            <template v-slot:cell(pretravel)="data">
+              {{ data.value }}mm
+            </template>
+            <template v-slot:cell(totaltravel)="data">
+              {{ data.value }}mm
+            </template>
+          </b-table>
         </b-tab>
-        <b-tab title="Keycaps" />
-        <b-tab title="Cases">
-          <div>
+        <b-tab title="Keycaps">
+          <div class="toolbar">
             <b-row>
-              <b-col v-for="(cs, j) in cases" :key="j" cols="4">
-                <b-card class="dataCard" header-tag="header">
-                  <template v-slot:header>
-                    <b-row>
-                      <b-col cols="2">
-                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="48" viewBox="0 0 1024 1024">
-                          <path
-                            fill="none"
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-miterlimit="4"
-                            stroke-width="24"
-                            stroke="currentColor"
-                            d="M36.864 499.961l171.757 179.785 788.155-245.593-197.439-150.887z"
-                          />
-                          <path
-                            fill="none"
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-miterlimit="4"
-                            stroke-width="24"
-                            stroke="currentColor"
-                            d="M36.864 499.961l-9.632 104.337 36.918 25.682 16.049-4.812 125.207 115.574 783.336-252.017 8.028-54.578"
-                          />
-                          <path
-                            fill="none"
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-miterlimit="4"
-                            stroke-width="24"
-                            stroke="currentColor"
-                            d="M147.618 535.275l643.685-192.626 8.028-59.391"
-                          />
-                          <path
-                            fill="none"
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-miterlimit="4"
-                            stroke-width="24"
-                            stroke="currentColor"
-                            d="M791.303 342.649l89.892 60.995"
-                          />
-                          <path
-                            fill="none"
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-miterlimit="4"
-                            stroke-width="24"
-                            stroke="currentColor"
-                            d="M221.462 527.247l43.342 51.362 468.72-150.887"
-                          />
-                        </svg>
-                      </b-col>
-                      <b-col align="left">
-                        <h6>{{ cs.manufacturer }}</h6>
-                        <h5>{{ cs.name }}</h5>
-                      </b-col>
-                    </b-row>
-                  </template>
-                  <b-row>
-                    <b-col cols="6">
-                      <span style="font-weight: bold">Size </span><br> {{ cs.size }}
-                    </b-col>
-                    <b-col cols="6">
-                      <span style="font-weight: bold">Material </span><br> {{ cs.material }}
-                    </b-col>
-                    <b-col v-if="cs.colors && cs.colors.length > 0" cols="12">
-                      <span style="font-weight: bold">Variants </span><br>
-                      <a v-for="(seller, k) in cs.colors" :key="k">{{ truncate(seller, 30, false) }}, </a>
-                    </b-col>
-                    <b-col v-if="cs.sellers && cs.sellers.length > 0" cols="12">
-                      <span style="font-weight: bold">Sellers </span><br>
-                      <a v-for="(seller, k) in cs.sellers" :key="k" :href="seller"> - {{ truncate(seller, 30, false) }}
-                        <b-icon icon="link45deg" />
-                      </a>
-                    </b-col>
-                  </b-row>
-                </b-card>
+              <b-col>
+                <b-button-group>
+                  <b-button
+                    v-b-tooltip.top="`Card view`"
+                    :variant="displaymode===`card`?`primary`:`outline-primary`"
+                    @click="displaymode = `card`"
+                  >
+                    <b-icon icon="grid" />
+                  </b-button>
+                  <b-button
+                    v-b-tooltip.top="`Compact list`"
+                    :variant="displaymode===`compact`?`primary`:`outline-primary`"
+                    @click="displaymode = `compact`"
+                  >
+                    <b-icon icon="list" />
+                  </b-button>
+                </b-button-group>
+              </b-col>
+              <b-col align="right" cols="2">
+                {{ keycaps.length + ` keycap sets` }}
               </b-col>
             </b-row>
           </div>
+          <b-row v-if="displaymode === `card`" no-gutters>
+            <b-col v-for="(kc, j) in keycaps" :key="j" cols="4">
+              <b-card class="dataCard" header-tag="header">
+                <template v-slot:header>
+                  <b-row>
+                    <b-col cols="2">
+                      <svg
+                        version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="32"
+                        height="32"
+                        viewBox="0 0 1024 1024"
+                        fill="none"
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                        stroke-miterlimit="4"
+                        stroke-width="36"
+                        stroke="currentColor"
+                      >
+                        <path
+                          d="M284.991 354.558l227.242 119.907c0 0 178.891-8.704 220.472-102.499l-221.439-114.104c0 0-109.269 65.754-226.275 96.699z"
+                        />
+                        <path
+                          d="M284.991 354.558l-79.293 222.406 277.524 174.058 29.009 6.77 26.109-2.901 291.062-135.378 2.901-29.009-99.6-218.538"
+                        />
+                        <path
+                          d="M519.001 515.079l-6.77 180.826"
+                        />
+                      </svg>
+                    </b-col>
+                    <b-col align="left">
+                      <h6>{{ kc.manufacturer }}</h6>
+                      <h5>{{ kc.name }}</h5>
+                    </b-col>
+                  </b-row>
+                </template>
+                <b-row>
+                  <b-col cols="6">
+                    <span style="font-weight: bold">Size </span><br> {{ kc.size }}
+                  </b-col>
+                  <b-col cols="6">
+                    <span style="font-weight: bold">Material </span><br> {{ kc.material }}
+                  </b-col>
+                  <b-col v-if="kc.colors && kc.colors.length > 0" cols="12">
+                    <span style="font-weight: bold">Variants </span><br> {{ toNiceList(kc.colors) }}
+                  </b-col>
+                  <b-col v-if="kc.sellers && kc.sellers.length > 0" cols="12">
+                    <span style="font-weight: bold">Sellers </span><br>
+                    <a v-for="(seller, k) in kc.sellers" :key="k" :href="seller"> - {{ truncate(seller, 30, false) }}
+                      <b-icon icon="link45deg" />
+                    </a>
+                  </b-col>
+                </b-row>
+              </b-card>
+            </b-col>
+          </b-row>
+          <b-table
+            v-if="displaymode===`compact`"
+            striped
+            bordered
+            small
+            hover
+            foot-clone
+            fixed
+            responsive
+            :items="keycaps"
+            :fields="keycapFields"
+          >
+            <template v-slot:cell(colors)="data">
+              {{ toNiceList(data.value) }}
+            </template>
+            <template v-slot:cell(sellers)="data">
+              <span v-for="(seller, i) in data.value" :key="i">
+                <a :href="seller">{{ truncate(seller, 30, false) }}
+                  <b-icon icon="link45deg" />
+                </a>
+              </span>
+            </template>
+          </b-table>
+        </b-tab>
+        <b-tab title="Cases">
+          <div class="toolbar">
+            <b-row>
+              <b-col>
+                <b-button-group>
+                  <b-button
+                    v-b-tooltip.top="`Card view`"
+                    :variant="displaymode===`card`?`primary`:`outline-primary`"
+                    @click="displaymode = `card`"
+                  >
+                    <b-icon icon="grid" />
+                  </b-button>
+                  <b-button
+                    v-b-tooltip.top="`Compact list`"
+                    :variant="displaymode===`compact`?`primary`:`outline-primary`"
+                    @click="displaymode = `compact`"
+                  >
+                    <b-icon icon="list" />
+                  </b-button>
+                </b-button-group>
+              </b-col>
+              <b-col align="right" cols="2">
+                {{ cases.length + ` cases` }}
+              </b-col>
+            </b-row>
+          </div>
+          <b-row v-if="displaymode === `card`" no-gutters>
+            <b-col v-for="(cs, j) in cases" :key="j" cols="4">
+              <b-card class="dataCard" header-tag="header">
+                <template v-slot:header>
+                  <b-row>
+                    <b-col cols="2">
+                      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="48" viewBox="0 0 1024 1024">
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M36.864 499.961l171.757 179.785 788.155-245.593-197.439-150.887z"
+                        />
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M36.864 499.961l-9.632 104.337 36.918 25.682 16.049-4.812 125.207 115.574 783.336-252.017 8.028-54.578"
+                        />
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M147.618 535.275l643.685-192.626 8.028-59.391"
+                        />
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M791.303 342.649l89.892 60.995"
+                        />
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M221.462 527.247l43.342 51.362 468.72-150.887"
+                        />
+                      </svg>
+                    </b-col>
+                    <b-col align="left">
+                      <h6>{{ cs.manufacturer }}</h6>
+                      <h5>{{ cs.name }}</h5>
+                    </b-col>
+                  </b-row>
+                </template>
+                <b-row>
+                  <b-col cols="6">
+                    <span style="font-weight: bold">Size </span><br> {{ cs.size }}
+                  </b-col>
+                  <b-col cols="6">
+                    <span style="font-weight: bold">Material </span><br> {{ cs.material }}
+                  </b-col>
+                  <b-col v-if="cs.colors && cs.colors.length > 0" cols="12">
+                    <span style="font-weight: bold">Variants </span><br> {{ toNiceList(cs.colors) }}
+                  </b-col>
+                  <b-col v-if="cs.sellers && cs.sellers.length > 0" cols="12">
+                    <span style="font-weight: bold">Sellers </span><br>
+                    <a v-for="(seller, k) in cs.sellers" :key="k" :href="seller"> - {{ truncate(seller, 30, false) }}
+                      <b-icon icon="link45deg" />
+                    </a>
+                  </b-col>
+                </b-row>
+              </b-card>
+            </b-col>
+          </b-row>
+          <b-table
+            v-if="displaymode===`compact`"
+            striped
+            bordered
+            small
+            hover
+            foot-clone
+            fixed
+            responsive
+            :items="cases"
+            :fields="caseFields"
+          >
+            <template v-slot:cell(colors)="data">
+              {{ toNiceList(data.value) }}
+            </template>
+            <template v-slot:cell(sellers)="data">
+              <span v-for="(seller, i) in data.value" :key="i">
+                <a :href="seller">{{ truncate(seller, 30, false) }}
+                  <b-icon icon="link45deg" />
+                </a>
+              </span>
+            </template>
+          </b-table>
         </b-tab>
         <b-tab title="PCBs">
-          <div>
+          <div class="toolbar">
             <b-row>
-              <b-col v-for="(cs, j) in pcbs" :key="j" cols="4">
-                <b-card class="dataCard" header-tag="header">
-                  <template v-slot:header>
-                    <b-row>
-                      <b-col cols="2">
-                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="38" viewBox="0 0 1024 1024">
-                          <path
-                            fill="none"
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-miterlimit="4"
-                            stroke-width="24"
-                            stroke="currentColor"
-                            d="M57.946 357.789h911.669v297.811h-911.669v-297.811z"
-                          />
-                          <path
-                            fill="none"
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-miterlimit="4"
-                            stroke-width="24"
-                            stroke="currentColor"
-                            d="M240.28 412.49l-127.633 189.93"
-                          />
-                          <path
-                            fill="none"
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-miterlimit="4"
-                            stroke-width="24"
-                            stroke="currentColor"
-                            d="M347.585 412.868l-126.872 188.792"
-                          />
-                          <path
-                            fill="none"
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-miterlimit="4"
-                            stroke-width="24"
-                            stroke="currentColor"
-                            d="M450.713 412.868l-126.683 188.792"
-                          />
-                          <path
-                            fill="none"
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-miterlimit="4"
-                            stroke-width="24"
-                            stroke="currentColor"
-                            d="M561.443 412.49l-128.015 189.17"
-                          />
-                          <path
-                            fill="none"
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-miterlimit="4"
-                            stroke-width="24"
-                            stroke="currentColor"
-                            d="M678.064 411.73l-127.633 189.93"
-                          />
-                          <path
-                            fill="none"
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-miterlimit="4"
-                            stroke-width="24"
-                            stroke="currentColor"
-                            d="M795.063 411.73l-127.633 189.93"
-                          />
-                          <path
-                            fill="none"
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-miterlimit="4"
-                            stroke-width="24"
-                            stroke="currentColor"
-                            d="M907.313 411.73l-127.633 189.93"
-                          />
-                          <path
-                            fill="none"
-                            stroke-linejoin="miter"
-                            stroke-linecap="butt"
-                            stroke-miterlimit="4"
-                            stroke-width="24"
-                            stroke="currentColor"
-                            d="M60.984 603.937l718.697-2.277"
-                          />
-                          <path
-                            fill="none"
-                            stroke-linejoin="miter"
-                            stroke-linecap="butt"
-                            stroke-miterlimit="4"
-                            stroke-width="24"
-                            stroke="currentColor"
-                            d="M240.28 412.49l727.814-1.521"
-                          />
-                        </svg>
-                      </b-col>
-                      <b-col align="left">
-                        <h6>{{ cs.manufacturer }}</h6>
-                        <h5>{{ cs.name }}</h5>
-                      </b-col>
-                    </b-row>
-                  </template>
-                  <b-row>
-                    <b-col cols="6">
-                      <span style="font-weight: bold">Size </span><br> {{ cs.size }}
-                    </b-col>
-                    <b-col cols="6">
-                      <span style="font-weight: bold">Material </span><br> {{ cs.material }}
-                    </b-col>
-                    <b-col cols="6">
-                      <span style="font-weight: bold">Color </span><br> {{ cs.color }}
-                    </b-col>
-                    <b-col cols="6">
-                      <span style="font-weight: bold">Underglow </span><br> {{ cs.rgbunderglow?`Yes`:`No` }}
-                    </b-col>
-                    <b-col cols="6">
-                      <span style="font-weight: bold">Switch Lighting </span><br> {{ cs.rgbswitch?`Yes`:`No` }}
-                    </b-col>
-                    <b-col cols="6">
-                      <span style="font-weight: bold">Hotswappable </span><br> {{ cs.hotswappable?`Yes`:`No` }}
-                    </b-col>
-                    <b-col cols="6">
-                      <span style="font-weight: bold">Firmware </span><br> {{ cs.firmware }}
-                    </b-col>
-                    <b-col v-if="cs.usboptions && cs.usboptions.length > 0" cols="12">
-                      <span style="font-weight: bold">Connector options </span><br>
-                      <a v-for="(seller, k) in cs.usboptions" :key="k">{{ truncate(seller, 30, false) }}, </a>
-                    </b-col>
-                    <b-col v-if="cs.sellers && cs.sellers.length > 0" cols="12">
-                      <span style="font-weight: bold">Sellers </span><br>
-                      <a v-for="(seller, k) in cs.sellers" :key="k" :href="seller"> - {{ truncate(seller, 30, false) }}
-                        <b-icon icon="link45deg" />
-                      </a>
-                    </b-col>
-                  </b-row>
-                </b-card>
+              <b-col>
+                <b-button-group>
+                  <b-button
+                    v-b-tooltip.top="`Card view`"
+                    :variant="displaymode===`card`?`primary`:`outline-primary`"
+                    @click="displaymode = `card`"
+                  >
+                    <b-icon icon="grid" />
+                  </b-button>
+                  <b-button
+                    v-b-tooltip.top="`Compact list`"
+                    :variant="displaymode===`compact`?`primary`:`outline-primary`"
+                    @click="displaymode = `compact`"
+                  >
+                    <b-icon icon="list" />
+                  </b-button>
+                </b-button-group>
+              </b-col>
+              <b-col align="right" cols="2">
+                {{ pcbs.length + ` PCBs` }}
               </b-col>
             </b-row>
           </div>
+          <b-row v-if="displaymode === `card`" no-gutters>
+            <b-col v-for="(pcb, j) in pcbs" :key="j" cols="4">
+              <b-card class="dataCard" header-tag="header">
+                <template v-slot:header>
+                  <b-row>
+                    <b-col cols="2">
+                      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="38" viewBox="0 0 1024 1024">
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M57.946 357.789h911.669v297.811h-911.669v-297.811z"
+                        />
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M240.28 412.49l-127.633 189.93"
+                        />
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M347.585 412.868l-126.872 188.792"
+                        />
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M450.713 412.868l-126.683 188.792"
+                        />
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M561.443 412.49l-128.015 189.17"
+                        />
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M678.064 411.73l-127.633 189.93"
+                        />
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M795.063 411.73l-127.633 189.93"
+                        />
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M907.313 411.73l-127.633 189.93"
+                        />
+                        <path
+                          fill="none"
+                          stroke-linejoin="miter"
+                          stroke-linecap="butt"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M60.984 603.937l718.697-2.277"
+                        />
+                        <path
+                          fill="none"
+                          stroke-linejoin="miter"
+                          stroke-linecap="butt"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M240.28 412.49l727.814-1.521"
+                        />
+                      </svg>
+                    </b-col>
+                    <b-col align="left">
+                      <h6>{{ pcb.manufacturer }}</h6>
+                      <h5>{{ pcb.name }}</h5>
+                    </b-col>
+                  </b-row>
+                </template>
+                <b-row>
+                  <b-col cols="6">
+                    <span style="font-weight: bold">Size </span><br> {{ pcb.size }}
+                  </b-col>
+                  <b-col cols="6">
+                    <span style="font-weight: bold">Material </span><br> {{ pcb.material }}
+                  </b-col>
+                  <b-col cols="6">
+                    <span style="font-weight: bold">Color </span><br> {{ pcb.color }}
+                  </b-col>
+                  <b-col cols="6">
+                    <span style="font-weight: bold">Underglow </span><br> {{ pcb.rgbunderglow?`Yes`:`No` }}
+                  </b-col>
+                  <b-col cols="6">
+                    <span style="font-weight: bold">Switch Lighting </span><br> {{ pcb.rgbswitch?`Yes`:`No` }}
+                  </b-col>
+                  <b-col cols="6">
+                    <span style="font-weight: bold">Hotswappable </span><br> {{ pcb.hotswappable?`Yes`:`No` }}
+                  </b-col>
+                  <b-col cols="6">
+                    <span style="font-weight: bold">Firmware </span><br> {{ pcb.firmware }}
+                  </b-col>
+                  <b-col v-if="pcb.usboptions && pcb.usboptions.length > 0" cols="12">
+                    <span style="font-weight: bold">Connector options </span><br>
+                    {{ toNiceList(pcb.usboptions) }}
+                  </b-col>
+                  <b-col v-if="pcb.sellers && pcb.sellers.length > 0" cols="12">
+                    <span style="font-weight: bold">Sellers </span><br>
+                    <a v-for="(seller, k) in pcb.sellers" :key="k" :href="seller"> - {{ truncate(seller, 30, false) }}
+                      <b-icon icon="link45deg" />
+                    </a>
+                  </b-col>
+                </b-row>
+              </b-card>
+            </b-col>
+          </b-row>
+          <b-table
+            v-if="displaymode===`compact`"
+            striped
+            bordered
+            small
+            hover
+            foot-clone
+            fixed
+            responsive
+            :items="pcbs"
+            :fields="pcbFields"
+          >
+            <template v-slot:cell(colors)="data">
+              {{ toNiceList(data.value) }}
+            </template>
+            <template v-slot:cell(sellers)="data">
+              <span v-for="(seller, i) in data.value" :key="i">
+                <a :href="seller">{{ truncate(seller, 30, false) }}
+                  <b-icon icon="link45deg" />
+                </a>
+              </span>
+            </template>
+            <template v-slot:cell(rgbunderglow)="data">
+              {{ data?`Yes`:`No` }}
+            </template>
+            <template v-slot:cell(rgbswitch)="data">
+              {{ data?`Yes`:`No` }}
+            </template>
+            <template v-slot:cell(hotswappable)="data">
+              {{ data?`Yes`:`No` }}
+            </template>
+            <template v-slot:cell(usboptions)="data">
+              {{ toNiceList(data.value) }}
+            </template>
+          </b-table>
         </b-tab>
-        <b-tab title="Plates" />
-        <b-tab title="Builds" />
-        <b-tab title="A-Z" />
+        <b-tab title="Plates">
+          <div class="toolbar">
+            <b-row>
+              <b-col>
+                <b-button-group>
+                  <b-button
+                    v-b-tooltip.top="`Card view`"
+                    :variant="displaymode===`card`?`primary`:`outline-primary`"
+                    @click="displaymode = `card`"
+                  >
+                    <b-icon icon="grid" />
+                  </b-button>
+                  <b-button
+                    v-b-tooltip.top="`Compact list`"
+                    :variant="displaymode===`compact`?`primary`:`outline-primary`"
+                    @click="displaymode = `compact`"
+                  >
+                    <b-icon icon="list" />
+                  </b-button>
+                </b-button-group>
+              </b-col>
+              <b-col align="right" cols="2">
+                {{ plates.length + ` plates` }}
+              </b-col>
+            </b-row>
+          </div>
+          <b-row v-if="displaymode === `card`" no-gutters>
+            <b-col v-for="(pl, j) in plates" :key="j" cols="4">
+              <b-card class="dataCard" header-tag="header">
+                <template v-slot:header>
+                  <b-row>
+                    <b-col cols="2">
+                      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="36" height="48" viewBox="0 0 1024 1024">
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M756.85 306.398l-723.246 264.063 222.437 169.104 742.757-290.079z"
+                        />
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M93.442 579.566l165.202 123.577 517.719-201.623-162.6-109.267z"
+                        />
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M637.503 379.241l79.349 50.732 124.878-45.529-87.804-50.081z"
+                        />
+                        <path
+                          fill="none"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-miterlimit="4"
+                          stroke-width="24"
+                          stroke="currentColor"
+                          d="M811.484 487.858l-35.446-23.090 45.529-18.212-23.74-13.985 37.722-13.657 22.764 14.635 35.446-13.332 37.072 20.163z"
+                        />
+                      </svg>
+                    </b-col>
+                    <b-col align="left">
+                      <h6>{{ pl.manufacturer }}</h6>
+                      <h5>{{ pl.name }}</h5>
+                    </b-col>
+                  </b-row>
+                </template>
+                <b-row>
+                  <b-col cols="6">
+                    <span style="font-weight: bold">Size </span><br> {{ pl.size }}
+                  </b-col>
+                  <b-col cols="6">
+                    <span style="font-weight: bold">Material </span><br> {{ pl.material }}
+                  </b-col>
+                  <b-col v-if="pl.colors && pl.colors.length > 0" cols="12">
+                    <span style="font-weight: bold">Variants </span><br> {{ toNiceList(pl.colors) }}
+                  </b-col>
+                  <b-col v-if="pl.sellers && pl.sellers.length > 0" cols="12">
+                    <span style="font-weight: bold">Sellers </span><br>
+                    <a v-for="(seller, k) in pl.sellers" :key="k" :href="seller"> - {{ truncate(seller, 30, false) }}
+                      <b-icon icon="link45deg" />
+                    </a>
+                  </b-col>
+                </b-row>
+              </b-card>
+            </b-col>
+          </b-row>
+          <b-table
+            v-if="displaymode===`compact`"
+            striped
+            bordered
+            small
+            hover
+            foot-clone
+            fixed
+            responsive
+            :items="plates"
+            :fields="plateFields"
+          >
+            <template v-slot:cell(colors)="data">
+              {{ toNiceList(data.value) }}
+            </template>
+            <template v-slot:cell(sellers)="data">
+              <span v-for="(seller, i) in data.value" :key="i">
+                <a :href="seller">{{ truncate(seller, 30, false) }}
+                  <b-icon icon="link45deg" />
+                </a>
+              </span>
+            </template>
+          </b-table>
+        </b-tab>
+        <!--        <b-tab title="Builds" />-->
+        <!--        <b-tab title="A-Z" />-->
       </b-tabs>
     </b-card>
   </div>
-  <!--        CASES-->
-  <!--       {{cases}}-->
-  <!--        PLATES-->
-  <!--       {{plates}}-->
-  <!--        PCBS-->
-  <!--       {{pcbs}}-->
 </template>
 
 <script>
@@ -433,7 +831,57 @@ export default {
 		}
 	},
 	data () {
-		return {}
+		return {
+			displaymode: 'card',
+			sortingmode: 'alphabetical',
+			sortingdirection: 'increasing',
+			switchFields: [
+				{ key: 'manufacturer', label: 'Manufacturer', sortable: true },
+				{ key: 'name', label: 'Name', sortable: true },
+				{ key: 'type', label: 'Type', sortable: true },
+				{ key: 'rgbvarient', label: 'RGB Variant', sortable: true },
+				{ key: 'operating_force', label: 'Actuation F', sortable: true },
+				{ key: 'bottomout_force', label: 'Bottom Out F', sortable: true },
+				{ key: 'pretravel', label: 'Pre-travel', sortable: true },
+				{ key: 'totaltravel', label: 'Total Travel', sortable: true }
+			],
+			keycapFields: [
+				{ key: 'manufacturer', label: 'Manufacturer', sortable: true },
+				{ key: 'name', label: 'Name', sortable: true },
+				{ key: 'profile', label: 'Profile', sortable: true },
+				{ key: 'material', label: 'Material', sortable: true },
+				{ key: 'process', label: 'Process', sortable: true },
+				{ key: 'image', label: 'Image', sortable: true },
+				{ key: 'cherrycompatible', label: 'Cherry Compatible', sortable: true }
+			],
+			caseFields: [
+				{ key: 'manufacturer', label: 'Manufacturer', sortable: true },
+				{ key: 'name', label: 'Name', sortable: true },
+				{ key: 'size', label: 'Size', sortable: true },
+				{ key: 'material', label: 'Material', sortable: true },
+				{ key: 'colors', label: 'Colors', sortable: true },
+				{ key: 'sellers', label: 'Sellers', sortable: true }
+			],
+			pcbFields: [
+				{ key: 'manufacturer', label: 'Manufacturer', sortable: true },
+				{ key: 'name', label: 'Name', sortable: true },
+				{ key: 'size', label: 'Size', sortable: true },
+				{ key: 'color', label: 'Color', sortable: true },
+				{ key: 'rgbunderglow', label: 'Underglow LED', sortable: true },
+				{ key: 'rgbswitch', label: 'Switch LED', sortable: true },
+				{ key: 'hotswappable', label: 'Hotswappable', sortable: true },
+				{ key: 'firmware', label: 'Firmware', sortable: true },
+				{ key: 'usboptions', label: 'Connector Options', sortable: true }
+			],
+			plateFields: [
+				{ key: 'manufacturer', label: 'Manufacturer', sortable: true },
+				{ key: 'name', label: 'Name', sortable: true },
+				{ key: 'size', label: 'Size', sortable: true },
+				{ key: 'material', label: 'Material', sortable: true },
+				{ key: 'colors', label: 'Colors', sortable: true },
+				{ key: 'sellers', label: 'Sellers', sortable: true }
+			]
+		}
 	},
 	watch: {},
 	methods: {
@@ -445,6 +893,20 @@ export default {
 			return (useWordBoundary
 				? subString.substr(0, subString.lastIndexOf(' '))
 				: subString) + '...'
+		},
+		toNiceList (list) {
+			if (!list || list.length === 0) {
+				return '-'
+			}
+			let s = ''
+			for (let i = 0; i < list.length; i++) {
+				if (i === list.length - 1) {
+					s += list[i]
+				} else {
+					s += list[i] + ', '
+				}
+			}
+			return s
 		}
 	},
 	head () {
@@ -498,10 +960,10 @@ export default {
 	}
 
 	.dataCard {
-		margin-bottom: 2rem;
+		margin: 0.5rem;
 	}
 
-	#toolbar {
-		margin-bottom: 2rem;
+	.toolbar {
+		margin-bottom: 1rem;
 	}
 </style>
