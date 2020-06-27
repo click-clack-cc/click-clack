@@ -9,15 +9,15 @@ If you can read this, that means you have already spoken to @szabodanika and kno
 
 ## How to contribute
 
-1. Speak to @szabodanika about the feature/issue you would like to work on
+0. Speak to @szabodanika about the feature/issue you would like to work on
 If your project does not belong to an issue on the issue board, make sure you create an issue and assign it to yourself. Please include detailed description about what you plan to do and keep the issue updated, then solve the issue in your pull request. (e.g. solves #13)
-2. Create a personal fork of click-clack
-3. Implement your changes in your fork
-4. Test your changes locally
+1. Create a personal fork of click-clack
+2. Implement your changes in your fork
+3. Test your changes locally and ensure that the code satisfies the eslint rules
 If your changes affect CRUD functionality or API services, please speak to @szabodanika about testing, because setting up a test environment or creating a database backup might be required.
-5. Submit a pull request to the master branch and ping @szabodanika (email, discord or github)
-6. Your pull request will be reviewed and merged unless there's an issue with it
-7. Thank you for your contribution!
+4. Submit a pull request to the master branch and ping @szabodanika (email, discord or github)
+5. Your pull request will be reviewed and merged unless there's an issue with it
+6. Thank you for your contribution!
 
 # Setting up your local instance
 
