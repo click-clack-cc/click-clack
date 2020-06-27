@@ -104,23 +104,45 @@
                 <div v-html="$md.render(truncate(keeb.description,350,true))" />
               </a>
               <a style="cursor: pointer" @click="goToKeyboard(keeb._id)">
-                <div style="">
-                  <span v-if="keeb.switches" style="font-weight: bold; margin-right: 1rem">
-                    Switches
-                  </span>
-                  {{ keeb.switches }} <br v-if="keeb.switches">
-                  <span v-if="keeb.keycaps" style="font-weight: bold; margin-right: 1rem">
-                    Keycaps
-                  </span>
-                  {{ keeb.keycaps }} <br v-if="keeb.keycaps">
-                  <span v-if="keeb.pcb" style="font-weight: bold; margin-right: 1rem">
-                    PCB
-                  </span>
-                  {{ keeb.pcb }} <br v-if="keeb.pcb">
-                  <span v-if="keeb.case" style="font-weight: bold; margin-right: 1rem">
-                    Case
-                  </span>
-                  {{ keeb.case }} <br v-if="keeb.case">
+                <div>
+                  <b-row>
+                    <b-col cols="6" v-if="keeb.keycaps" >
+                      <span style="font-weight: bold; margin-right: 1rem">
+                        Keycaps
+                      </span>
+                      {{ keeb.keycaps }} <br v-if="keeb.keycaps">
+                    </b-col>
+                    <b-col cols="6" v-if="keeb.switches">
+                      <span  style="font-weight: bold; margin-right: 1rem">
+                        Switches
+                      </span>
+                      {{ keeb.switches }} <br v-if="keeb.switches">
+                    </b-col>
+                    <b-col cols="6" v-if="keeb.stabs" >
+                      <span style="font-weight: bold; margin-right: 1rem">
+                        Stabilizers
+                      </span>
+                      {{ keeb.stabs }} <br v-if="keeb.stabs">
+                    </b-col>
+                    <b-col cols="6" v-if="keeb.plate">
+                      <span   style="font-weight: bold; margin-right: 1rem">
+                        Plate
+                      </span>
+                      {{ keeb.plate }} <br v-if="keeb.plate">
+                    </b-col>
+                    <b-col cols="6"  v-if="keeb.pcb" >
+                      <span style="font-weight: bold; margin-right: 1rem">
+                        PCB
+                      </span>
+                      {{ keeb.pcb }} <br v-if="keeb.pcb">
+                    </b-col>
+                    <b-col cols="6" v-if="keeb.case">
+                      <span  style="font-weight: bold; margin-right: 1rem">
+                        Case
+                      </span>
+                      {{ keeb.case }} <br v-if="keeb.case">
+                    </b-col>
+                  </b-row>
                 </div>
               </a>
               <div style=" margin-top: 0.5rem">
@@ -133,156 +155,46 @@
                   width="32"
                   height="32"
                   viewBox="0 0 1024 1024"
+                  fill="none"
+                  stroke-linejoin="round"
+                  stroke-linecap="round"
+                  stroke-miterlimit="4"
+                  stroke-width="36"
+                  stroke="currentColor"
                   @click="toggleHeart(keeb)"
                 >
-                  <path
-                    fill="none"
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    stroke-miterlimit="4"
-                    stroke-width="36"
-                    stroke="currentColor"
-                    d="M204.502 512.298v-22.598l22.598-13.085 28.548-34.49 34.49-16.649 55.903-103.477 128.461-35.683-2.378-60.659 9.514-7.135 2.378-14.27 23.791-7.135 24.977 15.463 36.876-10.706 17.841 16.649-1.193 52.339 191.499 98.721 24.977 95.157 28.548 17.841 16.649 40.44 28.548 17.841-3.571 30.926-36.876 11.892v30.926l-15.463 82.072-21.413 8.328-13.085-7.135-52.339 22.598-7.135 11.892-3.571 48.767 2.378-52.339-53.524 20.22-21.412 15.463h-23.791l-91.586 27.355-30.926-5.949-15.463 8.328-5.949 26.169-13.085-2.378-19.034-5.949-15.463-2.378-7.135-14.27-134.404-110.62-14.27-2.378-5.949-14.27-17.841-17.841-13.085-109.427z"
-                  />
-                  <path
-                    fill="none"
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    stroke-miterlimit="4"
-                    stroke-width="36"
-                    stroke="currentColor"
-                    d="M264.174 546.657l190.082 140.459 24.39 10.936 27.751-4.206 329.697-110.176"
-                  />
-                  <path
-                    fill="none"
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    stroke-miterlimit="4"
-                    stroke-width="36"
-                    stroke="currentColor"
-                    d="M422.292 382.645l110.176 68.963 140.459-41.212"
-                  />
-                  <path
-                    fill="none"
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    stroke-miterlimit="4"
-                    stroke-width="36"
-                    stroke="currentColor"
-                    d="M562.751 391.9l-2.525-106.814"
-                  />
-                  <path
-                    fill="none"
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    stroke-miterlimit="4"
-                    stroke-width="36"
-                    stroke="currentColor"
-                    d="M498.83 391.056l34.482-12.617-1.681-54.666"
-                  />
-                  <path
-                    fill="none"
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    stroke-miterlimit="4"
-                    stroke-width="36"
-                    stroke="currentColor"
-                    d="M460.142 615.62l35.326 21.865c0 0 93.36-23.553 91.672-26.914s-23.553-118.587-23.553-118.587"
-                  />
-                  <path
-                    fill="none"
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    stroke-miterlimit="4"
-                    stroke-width="36"
-                    stroke="currentColor"
-                    d="M730.117 454.141l24.39 103.452 57.191-14.298"
-                  />
-                  <path
-                    fill="none"
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    stroke-miterlimit="4"
-                    stroke-width="36"
-                    stroke="currentColor"
-                    d="M314.634 514.693l113.544 77.375"
-                  />
+                  <path d="M204.502 512.298v-22.598l22.598-13.085 28.548-34.49 34.49-16.649 55.903-103.477 128.461-35.683-2.378-60.659 9.514-7.135 2.378-14.27 23.791-7.135 24.977 15.463 36.876-10.706 17.841 16.649-1.193 52.339 191.499 98.721 24.977 95.157 28.548 17.841 16.649 40.44 28.548 17.841-3.571 30.926-36.876 11.892v30.926l-15.463 82.072-21.413 8.328-13.085-7.135-52.339 22.598-7.135 11.892-3.571 48.767 2.378-52.339-53.524 20.22-21.412 15.463h-23.791l-91.586 27.355-30.926-5.949-15.463 8.328-5.949 26.169-13.085-2.378-19.034-5.949-15.463-2.378-7.135-14.27-134.404-110.62-14.27-2.378-5.949-14.27-17.841-17.841-13.085-109.427z" />
+                  <path d="M264.174 546.657l190.082 140.459 24.39 10.936 27.751-4.206 329.697-110.176" />
+                  <path d="M422.292 382.645l110.176 68.963 140.459-41.212" />
+                  <path d="M562.751 391.9l-2.525-106.814" />
+                  <path d="M498.83 391.056l34.482-12.617-1.681-54.666" />
+                  <path d="M460.142 615.62l35.326 21.865c0 0 93.36-23.553 91.672-26.914s-23.553-118.587-23.553-118.587" />
+                  <path d="M730.117 454.141l24.39 103.452 57.191-14.298" />
+                  <path d="M314.634 514.693l113.544 77.375" />
                 </svg>
                 <span v-else class="text-primary">
                   <svg
                     v-b-tooltip.top="`Like`"
                     stroke="currentColor"
-                    fill="currentColor"
+                    fill="none"
                     version="1.1"
                     xmlns="http://www.w3.org/2000/svg"
                     width="32"
                     height="32"
                     viewBox="0 0 1024 1024"
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    stroke-miterlimit="4"
+                    stroke-width="42"
                   >
-                    <path
-                      fill="none"
-                      stroke-linejoin="round"
-                      stroke-linecap="round"
-                      stroke-miterlimit="4"
-                      stroke-width="42"
-                      d="M204.502 512.298v-22.598l22.598-13.085 28.548-34.49 34.49-16.649 55.903-103.477 128.461-35.683-2.378-60.659 9.514-7.135 2.378-14.27 23.791-7.135 24.977 15.463 36.876-10.706 17.841 16.649-1.193 52.339 191.499 98.721 24.977 95.157 28.548 17.841 16.649 40.44 28.548 17.841-3.571 30.926-36.876 11.892v30.926l-15.463 82.072-21.413 8.328-13.085-7.135-52.339 22.598-7.135 11.892-3.571 48.767 2.378-52.339-53.524 20.22-21.412 15.463h-23.791l-91.586 27.355-30.926-5.949-15.463 8.328-5.949 26.169-13.085-2.378-19.034-5.949-15.463-2.378-7.135-14.27-134.404-110.62-14.27-2.378-5.949-14.27-17.841-17.841-13.085-109.427z"
-                    />
-                    <path
-                      fill="none"
-                      stroke-linejoin="round"
-                      stroke-linecap="round"
-                      stroke-miterlimit="4"
-                      stroke-width="42"
-                      d="M264.174 546.657l190.082 140.459 24.39 10.936 27.751-4.206 329.697-110.176"
-                    />
-                    <path
-                      fill="none"
-                      stroke-linejoin="round"
-                      stroke-linecap="round"
-                      stroke-miterlimit="4"
-                      stroke-width="42"
-                      d="M422.292 382.645l110.176 68.963 140.459-41.212"
-                    />
-                    <path
-                      fill="none"
-                      stroke-linejoin="round"
-                      stroke-linecap="round"
-                      stroke-miterlimit="4"
-                      stroke-width="42"
-                      d="M562.751 391.9l-2.525-106.814"
-                    />
-                    <path
-                      fill="none"
-                      stroke-linejoin="round"
-                      stroke-linecap="round"
-                      stroke-miterlimit="4"
-                      stroke-width="42"
-                      d="M498.83 391.056l34.482-12.617-1.681-54.666"
-                    />
-                    <path
-                      fill="none"
-                      stroke-linejoin="round"
-                      stroke-linecap="round"
-                      stroke-miterlimit="4"
-                      stroke-width="42"
-                      d="M460.142 615.62l35.326 21.865c0 0 93.36-23.553 91.672-26.914s-23.553-118.587-23.553-118.587"
-                    />
-                    <path
-                      fill="none"
-                      stroke-linejoin="round"
-                      stroke-linecap="round"
-                      stroke-miterlimit="4"
-                      stroke-width="42"
-                      d="M730.117 454.141l24.39 103.452 57.191-14.298"
-                    />
-                    <path
-                      fill="none"
-                      stroke-linejoin="round"
-                      stroke-linecap="round"
-                      stroke-miterlimit="4"
-                      stroke-width="42"
-                      d="M314.634 514.693l113.544 77.375"
-                    />
+                    <path d="M204.502 512.298v-22.598l22.598-13.085 28.548-34.49 34.49-16.649 55.903-103.477 128.461-35.683-2.378-60.659 9.514-7.135 2.378-14.27 23.791-7.135 24.977 15.463 36.876-10.706 17.841 16.649-1.193 52.339 191.499 98.721 24.977 95.157 28.548 17.841 16.649 40.44 28.548 17.841-3.571 30.926-36.876 11.892v30.926l-15.463 82.072-21.413 8.328-13.085-7.135-52.339 22.598-7.135 11.892-3.571 48.767 2.378-52.339-53.524 20.22-21.412 15.463h-23.791l-91.586 27.355-30.926-5.949-15.463 8.328-5.949 26.169-13.085-2.378-19.034-5.949-15.463-2.378-7.135-14.27-134.404-110.62-14.27-2.378-5.949-14.27-17.841-17.841-13.085-109.427z" />
+                    <path d="M264.174 546.657l190.082 140.459 24.39 10.936 27.751-4.206 329.697-110.176" />
+                    <path d="M422.292 382.645l110.176 68.963 140.459-41.212" />
+                    <path d="M562.751 391.9l-2.525-106.814" />
+                    <path d="M498.83 391.056l34.482-12.617-1.681-54.666" />
+                    <path d="M460.142 615.62l35.326 21.865c0 0 93.36-23.553 91.672-26.914s-23.553-118.587-23.553-118.587" />
+                    <path d="M730.117 454.141l24.39 103.452 57.191-14.298" />
+                    <path d="M314.634 514.693l113.544 77.375" />
                   </svg>
                 </span>
                 {{ ' ' + keeb.hearts?keeb.hearts.length:0 }}

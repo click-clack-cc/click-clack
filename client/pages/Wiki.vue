@@ -714,43 +714,23 @@
                 <template v-slot:header>
                   <b-row>
                     <b-col cols="2">
-                      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="36" height="48" viewBox="0 0 1024 1024">
-                        <path
-                          fill="none"
-                          stroke-linejoin="round"
-                          stroke-linecap="round"
-                          stroke-miterlimit="4"
-                          stroke-width="24"
-                          stroke="currentColor"
-                          d="M756.85 306.398l-723.246 264.063 222.437 169.104 742.757-290.079z"
-                        />
-                        <path
-                          fill="none"
-                          stroke-linejoin="round"
-                          stroke-linecap="round"
-                          stroke-miterlimit="4"
-                          stroke-width="24"
-                          stroke="currentColor"
-                          d="M93.442 579.566l165.202 123.577 517.719-201.623-162.6-109.267z"
-                        />
-                        <path
-                          fill="none"
-                          stroke-linejoin="round"
-                          stroke-linecap="round"
-                          stroke-miterlimit="4"
-                          stroke-width="24"
-                          stroke="currentColor"
-                          d="M637.503 379.241l79.349 50.732 124.878-45.529-87.804-50.081z"
-                        />
-                        <path
-                          fill="none"
-                          stroke-linejoin="round"
-                          stroke-linecap="round"
-                          stroke-miterlimit="4"
-                          stroke-width="24"
-                          stroke="currentColor"
-                          d="M811.484 487.858l-35.446-23.090 45.529-18.212-23.74-13.985 37.722-13.657 22.764 14.635 35.446-13.332 37.072 20.163z"
-                        />
+                      <svg
+                        version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="36"
+                        height="48"
+                        viewBox="0 0 1024 1024"
+                        fill="none"
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                        stroke-miterlimit="4"
+                        stroke-width="24"
+                        stroke="currentColor"
+                      >
+                        <path d="M756.85 306.398l-723.246 264.063 222.437 169.104 742.757-290.079z" />
+                        <path d="M93.442 579.566l165.202 123.577 517.719-201.623-162.6-109.267z" />
+                        <path d="M637.503 379.241l79.349 50.732 124.878-45.529-87.804-50.081z" />
+                        <path d="M811.484 487.858l-35.446-23.090 45.529-18.212-23.74-13.985 37.722-13.657 22.764 14.635 35.446-13.332 37.072 20.163z" />
                       </svg>
                     </b-col>
                     <b-col align="left">

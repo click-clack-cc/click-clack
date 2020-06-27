@@ -251,46 +251,62 @@ export default {
 </script>
 
 <style scoped>
-    #header {
 
-    }
+	@media only screen and (max-width: 990px) {
+		#title {
+			display: none;
+		}
 
-    #header-inside {
-        margin-top: -0.9rem;
-        margin-bottom: -1rem;
-    }
+		#search-container {
+			margin-right: 0.2rem;
+			margin-top: 0.5rem;
+		}
 
-    #title {
-        font-size: 1.6rem;
-        line-height: 1.6;
-        margin-left: 1rem;
-        margin-top: 1rem;
-        margin: 0.5rem;
-    }
+		#nav {
+			margin-right: 1rem;
+		}
+	}
 
-    #beta {
-        font-size: 1rem;
-    }
+	#header {
 
-    .mini-avatar {
-        margin-top: 0.2rem;
-        margin-left: 0rem;
-    }
+	}
 
-    #nav {
-        width: 100%;
-        margin: 0.5rem;
-        margin-top: 0.45rem;
-    }
+	#header-inside {
+		margin-top: -0.9rem;
+		margin-bottom: -1rem;
+	}
 
-    .active {
-        font-weight: bold;
-    }
+	#title {
+		font-size: 1.6rem;
+		line-height: 1.6;
+		margin-left: 1rem;
+		margin-top: 1rem;
+		margin: 0.5rem;
+	}
 
-    #search {
-        margin: 0.5rem;
-        height: 2.1rem;
-        margin-top: 0.55rem;
-        width: 100%;
-    }
+	#beta {
+		font-size: 1rem;
+	}
+
+	.mini-avatar {
+		margin-top: 0.2rem;
+		margin-left: 0rem;
+	}
+
+	#nav {
+		width: 100%;
+		margin: 0.5rem;
+		margin-top: 0.45rem;
+	}
+
+	.active {
+		font-weight: bold;
+	}
+
+	#search {
+		margin: 0.5rem;
+		height: 2.1rem;
+		margin-top: 0.55rem;
+		width: 100%;
+	}
 </style>

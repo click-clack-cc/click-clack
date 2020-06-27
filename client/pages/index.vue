@@ -91,47 +91,41 @@
       <b-col md="12" lg="8">
         <b-row id="postbuttons">
           <b-col align="right">
-            <b-button block pill @click="$nuxt.$router.push(user?`/editpost`:`/profile`)">
-              <b-icon icon="pencil" />
+            <b-button block pill style="height: 2.5rem" @click="$nuxt.$router.push(user?`/editpost`:`/profile`)">
+              <b-icon icon="pencil" style="margin-right: 1rem" />
               Write post
             </b-button>
           </b-col>
           <b-col>
-            <b-button block pill @click="$nuxt.$router.push(user?`editkeyboard`:`/profile`)">
+            <b-button block pill style="height: 2.5rem" @click="$nuxt.$router.push(user?`editkeyboard`:`/profile`)">
               <svg
                 version="1.1"
-                style="margin: -0.5rem; margin-right: 0"
+                style="margin: -0.5rem; margin-right: 1rem; margin-bottom: -0.7rem"
                 xmlns="http://www.w3.org/2000/svg"
-                width="2rem"
-                height="2rem"
+                width="2.5rem"
+                height="2.5rem"
                 viewBox="0 0 1024 1024"
+                fill="none"
+                stroke-linejoin="round"
+                stroke-linecap="round"
+                stroke-miterlimit="4"
+                stroke-width="36"
+                stroke="currentColor"
               >
                 <path
-                  fill="none"
-                  stroke-linejoin="round"
-                  stroke-linecap="round"
-                  stroke-miterlimit="4"
-                  stroke-width="36"
-                  stroke="currentColor"
-                  d="M284.991 354.558l227.242 119.907c0 0 178.891-8.704 220.472-102.499l-221.439-114.104c0 0-109.269 65.754-226.275 96.699z"
+                  d="M30.257 310.582l1.929 321.281h971.565l0.965-320.318z"
                 />
                 <path
-                  fill="none"
-                  stroke-linejoin="round"
-                  stroke-linecap="round"
-                  stroke-miterlimit="4"
-                  stroke-width="36"
-                  stroke="currentColor"
-                  d="M284.991 354.558l-79.293 222.406 277.524 174.058 29.009 6.77 26.109-2.901 291.062-135.378 2.901-29.009-99.6-218.538"
+                  d="M 274.353,621.84417 V 578.01694"
                 />
                 <path
-                  fill="none"
-                  stroke-linejoin="round"
-                  stroke-linecap="round"
-                  stroke-miterlimit="4"
-                  stroke-width="36"
-                  stroke="currentColor"
-                  d="M519.001 515.079l-6.77 180.826"
+                  d="M 680.154,622.94481 V 578.98482"
+                />
+                <path
+                  d="m 168.66743,311.77919 c 0,0 -25.69019,-100.27378 161.44779,-99.67143 l 309.62841,-0.84755"
+                />
+                <path
+                  d="m 274.353,578.01694 405.801,0.96788"
                 />
               </svg>
               Submit a keyboard

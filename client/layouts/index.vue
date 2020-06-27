@@ -218,131 +218,139 @@ export default {
 
 <style scoped>
 
-    #routerview {
-        max-width: 1000px;
-        margin: auto;
-        margin-bottom: 6rem;
-        padding-top: 4rem;
-    }
+	#routerview {
+		max-width: 1000px;
+		margin: auto;
+		margin-bottom: 6rem;
+		padding-top: 4rem;
+	}
 
-    #welcome-modal {
-        max-width: 1000px;
-        margin: auto;
-        margin-bottom: 1rem;
-    }
+	#welcome-modal {
+		max-width: 1000px;
+		margin: auto;
+		margin-bottom: 1rem;
+	}
 
-    #header {
-        max-width: 1000px;
-        margin: auto;
-        margin-top: -1.55rem;
-        margin-bottom: -1.55rem;
-    }
+	#header {
+		max-width: 1000px;
+		margin: auto;
+		margin-top: -1.55rem;
+		margin-bottom: -1.55rem;
+	}
 
-    #header-container {
-        width: 100%;
-        position: fixed;
-        margin-top: -1px;
-        z-index: 2;
-        padding: 0;
-    }
+	#header-container {
+		width: 100%;
+		position: fixed;
+		margin-top: -1px;
+		z-index: 2;
+		padding: 0;
+	}
 
-    #footer {
-        max-width: 1000px;
-        margin: auto;
-    }
+	#footer {
+		max-width: 1000px;
+		margin: auto;
+	}
 
-    #container {
-        min-height: 100vh;
-        margin: 0;
-        border: none;
-    }
+	#container {
+		min-height: 100vh;
+		margin: 0;
+		border: none;
+	}
 
-    @media only screen and (max-width: 900px) {
-        body, #welcome-modal, #routerview, #header, #footer {
-            max-width: unset;
-        }
-    }
+	@media only screen and (max-width: 990px) {
+		body, #welcome-modal, #routerview, #header, #footer {
+			max-width: unset;
+		}
 
-    .zen {
-        padding-top: 6rem;
-    }
+		#title {
+			display: none;
+		}
 
-    .loading-page {
-        z-index: 10000;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 255, 255, 1);
-        text-align: center;
-        padding-top: 43vh;
-        font-size: 30px;
-        font-family: sans-serif;
-    }
+		#routerview {
+			padding-top: 10rem;
+		}
+	}
 
-    .loader,
-    .loader:before,
-    .loader:after {
-        border-radius: 50%;
-        width: 2.5em;
-        height: 2.5em;
-        -webkit-animation-fill-mode: both;
-        animation-fill-mode: both;
-        -webkit-animation: load7 1.8s infinite ease-in-out;
-        animation: load7 1.8s infinite ease-in-out;
-    }
+	.zen {
+		padding-top: 6rem;
+	}
 
-    .loader {
-        color: #000000;
-        font-size: 10px;
-        margin: 80px auto;
-        position: relative;
-        text-indent: -9999em;
-        -webkit-transform: translateZ(0);
-        -ms-transform: translateZ(0);
-        transform: translateZ(0);
-        -webkit-animation-delay: -0.16s;
-        animation-delay: -0.16s;
-    }
+	.loading-page {
+		z-index: 10000;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(255, 255, 255, 1);
+		text-align: center;
+		padding-top: 43vh;
+		font-size: 30px;
+		font-family: sans-serif;
+	}
 
-    .loader:before,
-    .loader:after {
-        content: '';
-        position: absolute;
-        top: 0;
-    }
+	.loader,
+	.loader:before,
+	.loader:after {
+		border-radius: 50%;
+		width: 2.5em;
+		height: 2.5em;
+		-webkit-animation-fill-mode: both;
+		animation-fill-mode: both;
+		-webkit-animation: load7 1.8s infinite ease-in-out;
+		animation: load7 1.8s infinite ease-in-out;
+	}
 
-    .loader:before {
-        left: -3.5em;
-        -webkit-animation-delay: -0.32s;
-        animation-delay: -0.32s;
-    }
+	.loader {
+		color: #000000;
+		font-size: 10px;
+		margin: 80px auto;
+		position: relative;
+		text-indent: -9999em;
+		-webkit-transform: translateZ(0);
+		-ms-transform: translateZ(0);
+		transform: translateZ(0);
+		-webkit-animation-delay: -0.16s;
+		animation-delay: -0.16s;
+	}
 
-    .loader:after {
-        left: 3.5em;
-    }
+	.loader:before,
+	.loader:after {
+		content: '';
+		position: absolute;
+		top: 0;
+	}
 
-    @-webkit-keyframes load7 {
-        0%,
-        80%,
-        100% {
-            box-shadow: 0 2.5em 0 -1.3em;
-        }
-        40% {
-            box-shadow: 0 2.5em 0 0;
-        }
-    }
+	.loader:before {
+		left: -3.5em;
+		-webkit-animation-delay: -0.32s;
+		animation-delay: -0.32s;
+	}
 
-    @keyframes load7 {
-        0%,
-        80%,
-        100% {
-            box-shadow: 0 2.5em 0 -1.3em;
-        }
-        40% {
-            box-shadow: 0 2.5em 0 0;
-        }
-    }
+	.loader:after {
+		left: 3.5em;
+	}
+
+	@-webkit-keyframes load7 {
+		0%,
+		80%,
+		100% {
+			box-shadow: 0 2.5em 0 -1.3em;
+		}
+		40% {
+			box-shadow: 0 2.5em 0 0;
+		}
+	}
+
+	@keyframes load7 {
+		0%,
+		80%,
+		100% {
+			box-shadow: 0 2.5em 0 -1.3em;
+		}
+		40% {
+			box-shadow: 0 2.5em 0 0;
+		}
+	}
 
 </style>

@@ -80,7 +80,10 @@
                 <b-icon icon="eye" />
                 Preview
               </b-button>
-              <a v-if="isDisabled(theme.name) && theme.category === '❤️ Supporter only'" href="https://www.patreon.com/clickclackcc">
+              <a
+                v-if="isDisabled(theme.name) && theme.category === '❤️ Supporter only'"
+                href="https://www.patreon.com/clickclackcc"
+              >
                 <b-button style="margin-top: 1rem" variant="outline-primary">
                   Support click-clack
                   <b-icon style="margin-left: 0.5rem" icon="heart" />
@@ -195,7 +198,7 @@ export default {
 	},
 	methods: {
 		setLightTheme (theme) {
-			if (this.isEnabled(theme)) {
+			if (this.isDisabled(theme)) {
 				return
 			}
 			if (!this.user) {
@@ -206,7 +209,7 @@ export default {
 			this.$router.go()
 		},
 		setDarkTheme (theme) {
-			if (this.isEnabled(theme)) {
+			if (this.isDisabled(theme)) {
 				return
 			}
 			if (!this.user) {
@@ -227,10 +230,14 @@ export default {
 		reset () {
 			this.$router.go()
 		},
-		isEnabled (theme) {
+		isDisabled (theme) {
 			if (!this.user) {
 				return true
 			}
+
+			if (this.user.role.includes('admin') ||
+					this.user.role.includes('developer')) { return false }
+
 			if (theme === 'pressó') {
 				if (!this.user.achievements) {
 					return true
@@ -246,12 +253,10 @@ export default {
 					return true
 				}
 				return !this.user.achievements.includes('100tests')
-			} else if (theme === 'mint-latte') {
-				return !['supporter', 'developer', 'admin'].includes(this.user.role)
-			} else if (theme === 'americano') {
-				return !['supporter', 'developer', 'admin'].includes(this.user.role)
-			} else if (theme === 'iced-mocha') {
-				return !['supporter', 'developer', 'admin'].includes(this.user.role)
+			} else if (theme === 'mint-latte' ||
+				theme === 'americano' ||
+				theme === 'iced-mocha') {
+				return !this.user.role.includes('supporter')
 			}
 		}
 	},
