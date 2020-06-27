@@ -80,46 +80,46 @@
           <br>
           <b-row>
             <b-col cols="4" style="margin-left: 1rem">
-													<div>
-														<b-row>
-															<b-col cols="12" v-if="keeb.keycaps" >
-                      <span style="font-weight: bold; margin-right: 1rem">
-                        Keycaps
-                      </span>
-																{{ keeb.keycaps }} <br v-if="keeb.keycaps">
-															</b-col>
-															<b-col cols="12" v-if="keeb.switches">
-                      <span  style="font-weight: bold; margin-right: 1rem">
-                        Switches
-                      </span>
-																{{ keeb.switches }} <br v-if="keeb.switches">
-															</b-col>
-															<b-col cols="12" v-if="keeb.stabs" >
-                      <span style="font-weight: bold; margin-right: 1rem">
-                        Stabilizers
-                      </span>
-																{{ keeb.stabs }} <br v-if="keeb.stabs">
-															</b-col>
-															<b-col cols="12" v-if="keeb.plate">
-                      <span   style="font-weight: bold; margin-right: 1rem">
-                        Plate
-                      </span>
-																{{ keeb.plate }} <br v-if="keeb.plate">
-															</b-col>
-															<b-col cols="12"  v-if="keeb.pcb" >
-                      <span style="font-weight: bold; margin-right: 1rem">
-                        PCB
-                      </span>
-																{{ keeb.pcb }} <br v-if="keeb.pcb">
-															</b-col>
-															<b-col cols="12" v-if="keeb.case">
-                      <span  style="font-weight: bold; margin-right: 1rem">
-                        Case
-                      </span>
-																{{ keeb.case }} <br v-if="keeb.case">
-															</b-col>
-														</b-row>
-													</div>
+              <div>
+                <b-row>
+                  <b-col v-if="keeb.keycaps" cols="12">
+                    <span style="font-weight: bold; margin-right: 1rem">
+                      Keycaps
+                    </span>
+                    {{ keeb.keycaps }} <br v-if="keeb.keycaps">
+                  </b-col>
+                  <b-col v-if="keeb.switches" cols="12">
+                    <span style="font-weight: bold; margin-right: 1rem">
+                      Switches
+                    </span>
+                    {{ keeb.switches }} <br v-if="keeb.switches">
+                  </b-col>
+                  <b-col v-if="keeb.stabs" cols="12">
+                    <span style="font-weight: bold; margin-right: 1rem">
+                      Stabilizers
+                    </span>
+                    {{ keeb.stabs }} <br v-if="keeb.stabs">
+                  </b-col>
+                  <b-col v-if="keeb.plate" cols="12">
+                    <span style="font-weight: bold; margin-right: 1rem">
+                      Plate
+                    </span>
+                    {{ keeb.plate }} <br v-if="keeb.plate">
+                  </b-col>
+                  <b-col v-if="keeb.pcb" cols="12">
+                    <span style="font-weight: bold; margin-right: 1rem">
+                      PCB
+                    </span>
+                    {{ keeb.pcb }} <br v-if="keeb.pcb">
+                  </b-col>
+                  <b-col v-if="keeb.case" cols="12">
+                    <span style="font-weight: bold; margin-right: 1rem">
+                      Case
+                    </span>
+                    {{ keeb.case }} <br v-if="keeb.case">
+                  </b-col>
+                </b-row>
+              </div>
               <div style=" margin-top: 0.5rem">
                 <svg
                   v-if="!hearted"

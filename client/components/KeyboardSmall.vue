@@ -106,38 +106,38 @@
               <a style="cursor: pointer" @click="goToKeyboard(keeb._id)">
                 <div>
                   <b-row>
-                    <b-col cols="6" v-if="keeb.keycaps" >
+                    <b-col v-if="keeb.keycaps" cols="6">
                       <span style="font-weight: bold; margin-right: 1rem">
                         Keycaps
                       </span>
                       {{ keeb.keycaps }} <br v-if="keeb.keycaps">
                     </b-col>
-                    <b-col cols="6" v-if="keeb.switches">
-                      <span  style="font-weight: bold; margin-right: 1rem">
+                    <b-col v-if="keeb.switches" cols="6">
+                      <span style="font-weight: bold; margin-right: 1rem">
                         Switches
                       </span>
                       {{ keeb.switches }} <br v-if="keeb.switches">
                     </b-col>
-                    <b-col cols="6" v-if="keeb.stabs" >
+                    <b-col v-if="keeb.stabs" cols="6">
                       <span style="font-weight: bold; margin-right: 1rem">
                         Stabilizers
                       </span>
                       {{ keeb.stabs }} <br v-if="keeb.stabs">
                     </b-col>
-                    <b-col cols="6" v-if="keeb.plate">
-                      <span   style="font-weight: bold; margin-right: 1rem">
+                    <b-col v-if="keeb.plate" cols="6">
+                      <span style="font-weight: bold; margin-right: 1rem">
                         Plate
                       </span>
                       {{ keeb.plate }} <br v-if="keeb.plate">
                     </b-col>
-                    <b-col cols="6"  v-if="keeb.pcb" >
+                    <b-col v-if="keeb.pcb" cols="6">
                       <span style="font-weight: bold; margin-right: 1rem">
                         PCB
                       </span>
                       {{ keeb.pcb }} <br v-if="keeb.pcb">
                     </b-col>
-                    <b-col cols="6" v-if="keeb.case">
-                      <span  style="font-weight: bold; margin-right: 1rem">
+                    <b-col v-if="keeb.case" cols="6">
+                      <span style="font-weight: bold; margin-right: 1rem">
                         Case
                       </span>
                       {{ keeb.case }} <br v-if="keeb.case">
