@@ -19,6 +19,7 @@
             </b-dropdown-item>
           </b-dropdown>
           <b-dropdown :text="'Show '+showText" right variant="light">
+            <!-- Disable option to show all text if infinite words -->
             <b-dropdown-item v-if="wordLimit !== 'Infinite'" @click="setShowText('entire text')">
               Show entire text
             </b-dropdown-item>
@@ -370,12 +371,14 @@ export default {
 			for (let i = 0; i < wordLimit; i++) {
 				let newword = null
 				if (wordType === 'Easy' || (wordType === 'Mixed' && Math.random() < 0.6)) {
+					// Prevent duplicate ID when generating on the fly with infinite mode
 					newword = {
 						id: this.wordLimit === 'Infinite' ? ((this.infinityCounter) * this.infinitePrefetch + i) : i,
 						word: easywords[parseInt(Math.random() * easywords.length)],
 						state: 'waiting'
 					}
 				} else if (wordType === 'Hard' || (wordType === 'Mixed')) {
+					// Prevent duplicate ID when generating on the fly with infinite mode
 					newword = {
 						id: this.wordLimit === 'Infinite' ? ((this.infinityCounter) * this.infinitePrefetch + i) : i,
 						word: hardwords[parseInt(Math.random() * hardwords.length)],
