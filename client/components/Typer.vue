@@ -4,9 +4,12 @@
       <div>
         <b-button-group v-if="showToolbar" class="mx-1">
           <b-dropdown :text="wordLimit + ' words'" right variant="light">
-            <b-dropdown-item v-for="(num, index) in wordOptions" :key="`word-count-option-${index}`" @click="setWordLimit(num)">
-              {{ num }}
-            </b-dropdown-item>
+            <div v-for="(num, index) in wordOptions" :key="`word-count-option-${index}`" @click="setWordLimit(num)">
+              <b-dropdown-divider v-if="num === `Infinite`" />
+              <b-dropdown-item>
+                <span v-if="num === `Infinite`" style="font-weight: bold; font-size: large">∞</span> {{ num }}
+              </b-dropdown-item>
+            </div>
           </b-dropdown>
           <b-dropdown :text="wordType" right variant="light">
             <b-dropdown-item v-for="(diff, index) in difficultyOptions" :key="`difficulty-option-${index}`" @click="setWordType(diff)">
