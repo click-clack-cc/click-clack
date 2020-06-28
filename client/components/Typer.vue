@@ -199,6 +199,7 @@
     <b-input-group id="input-container">
       <b-form-input
         id="input-field"
+        ref="inputfield"
         v-model="uinput"
         :state="inputState"
         autocomplete="off"
@@ -364,6 +365,11 @@ export default {
 		})
 		this.loadCookies()
 		this.redo()
+	},
+	mounted () {
+		window.setTimeout(() => {
+			this.$refs.inputfield.$el.focus()
+		}, 300)
 	},
 	methods: {
 		getWords (wordLimit, wordType) {
