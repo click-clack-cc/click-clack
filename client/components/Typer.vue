@@ -4,49 +4,23 @@
       <div>
         <b-button-group v-if="showToolbar" class="mx-1">
           <b-dropdown :text="wordLimit + ' words'" right variant="light">
-            <b-dropdown-item @click="setWordLimit(10)">
-              10
-            </b-dropdown-item>
-            <b-dropdown-item @click="setWordLimit(50)">
-              50
-            </b-dropdown-item>
-            <b-dropdown-item @click="setWordLimit(100)">
-              100
-            </b-dropdown-item>
-            <b-dropdown-item @click="setWordLimit(250)">
-              250
-            </b-dropdown-item>
-            <b-dropdown-item @click="setWordLimit(500)">
-              500
-            </b-dropdown-item>
-            <b-dropdown-item @click="setWordLimit(1000)">
-              1000
-            </b-dropdown-item>
-            <b-dropdown-item @click="setWordLimit(10000)">
-              10000
+            <b-dropdown-item v-for="(num, index) in wordOptions" :key="`word-count-option-${index}`" @click="setWordLimit(num)">
+              {{ num }}
             </b-dropdown-item>
           </b-dropdown>
           <b-dropdown :text="wordType" right variant="light">
-            <b-dropdown-item @click="setWordType('Easy')">
-              Easy
-            </b-dropdown-item>
-            <b-dropdown-item @click="setWordType('Hard')">
-              Hard
-            </b-dropdown-item>
-            <b-dropdown-item @click="setWordType('Mixed')">
-              Mixed
+            <b-dropdown-item v-for="(diff, index) in difficultyOptions" :key="`difficulty-option-${index}`" @click="setWordType(diff)">
+              {{ diff }}
             </b-dropdown-item>
           </b-dropdown>
           <b-dropdown :text="textBehaviour" right variant="light">
-            <b-dropdown-item @click="setTextBehaviour('Keep typed')">
-              Keep typed
-            </b-dropdown-item>
-            <b-dropdown-item @click="setTextBehaviour('Hide typed')">
-              Hide typed
+            <b-dropdown-item v-for="(tb, index) in textBehaviorOptions" :key="`text-behavior-option-${index}`" @click="setTextBehaviour(tb)">
+              {{ tb }}
             </b-dropdown-item>
           </b-dropdown>
           <b-dropdown :text="'Show '+showText" right variant="light">
-            <b-dropdown-item @click="setShowText('entire text')">
+            <!-- Disable option to show all text if infinite words -->
+            <b-dropdown-item v-if="wordLimit !== 'Infinite'" @click="setShowText('entire text')">
               Show entire text
             </b-dropdown-item>
             <b-dropdown-item @click="setShowText('10 words')">
@@ -57,42 +31,8 @@
             </b-dropdown-item>
           </b-dropdown>
           <b-dropdown :text="textFont" right variant="light">
-            <b-dropdown-item style="font-family: 'Courier Prime'" @click="setTextFont('Courier Prime')">
-              Courier
-              Prime
-            </b-dropdown-item>
-            <b-dropdown-item
-              style="font-family: 'IBM Plex Sans'"
-              @click="setTextFont('IBM Plex Sans')"
-            >
-              IBM Plex Sans
-            </b-dropdown-item>
-            <b-dropdown-item style="font-family: 'Roboto'" @click="setTextFont('Roboto')">
-              Roboto
-            </b-dropdown-item>
-            <b-dropdown-item style="font-family: 'Open Sans'" @click="setTextFont('Open Sans')">
-              Open Sans
-            </b-dropdown-item>
-            <b-dropdown-item
-              style="font-family: 'Open Sans Condensed'"
-              @click="setTextFont('Open Sans Condensed')"
-            >
-              Open Sans Condensed
-            </b-dropdown-item>
-            <b-dropdown-item
-              style="font-family: 'Playfair Display'"
-              @click="setTextFont('Playfair Display')"
-            >
-              Playfair Display
-            </b-dropdown-item>
-            <b-dropdown-item style="font-family: 'Poppins'" @click="setTextFont('Poppins')">
-              Poppins
-            </b-dropdown-item>
-            <b-dropdown-item style="font-family: 'PT Serif'" @click="setTextFont('PT Serif')">
-              PT Serif
-            </b-dropdown-item>
-            <b-dropdown-item style="font-family: 'Source Code Pro'" @click="setTextFont('Source Code Pro')">
-              Source Code Pro
+            <b-dropdown-item v-for="(font, index) in fontOptions" :key="`font-option-${index}`" :style="`font-family: '${font}'`" @click="setTextFont(font)">
+              {{ font }}
             </b-dropdown-item>
           </b-dropdown>
         </b-button-group>
@@ -241,7 +181,7 @@
         <b-progress
           id="progress-bar"
           v-b-tooltip.hover
-          :max="words.length"
+          :max="wordLimit === 'Infinite' ? wordCounter : words.length"
           animated
           class="mb-3"
           show-value
@@ -259,6 +199,7 @@
     <b-input-group id="input-container">
       <b-form-input
         id="input-field"
+        ref="inputfield"
         v-model="uinput"
         :state="inputState"
         autocomplete="off"
@@ -301,7 +242,37 @@ const wordCounter = 0
 const mistakeCounter = 0
 const uinput = ''
 const wordLimit = 100
-const wordType = 'Easy'
+const infinitePrefetch = 1000
+const wordOptions = [
+	10,
+	50,
+	100,
+	250,
+	500,
+	1000,
+	'Infinite'
+]
+const difficultyOptions = [
+	'Easy',
+	'Hard',
+	'Mixed'
+]
+const textBehaviorOptions = [
+	'Keep typed',
+	'Hide typed'
+]
+const fontOptions = [
+	'Courier Prime',
+	'IBM Plex Sans',
+	'Roboto',
+	'Open Sans',
+	'Open Sans Condensed',
+	'Playfair Display',
+	'Poppins',
+	'PT Serif',
+	'Source Code Pro'
+]
+const wordType = difficultyOptions[0]
 const words = []
 let characters = 0
 for (let i = 0; i < words.length; i++) {
@@ -322,28 +293,6 @@ function shuffle (array) {
 	}
 }
 
-function resetWords (words) {
-	for (let i = 0; i < words.length; i++) {
-		if (showText === '10 words') {
-			if (i >= 10) {
-				words[i].state = 'hidden'
-			} else {
-				words[i].state = 'waiting'
-			}
-		} else if (showText === '50 words') {
-			if (i >= 50) {
-				words[i].state = 'hidden'
-			} else {
-				words[i].state = 'waiting'
-			}
-		} else {
-			words[i].state = 'waiting'
-		}
-	}
-	words[0].state = 'next'
-	return words
-}
-
 export default {
 	name: 'Typer',
 	components: {
@@ -361,6 +310,11 @@ export default {
 			characters,
 			uinput,
 			wordLimit,
+			infinitePrefetch,
+			wordOptions,
+			difficultyOptions,
+			textBehaviorOptions,
+			fontOptions,
 			startTime,
 			finishTime,
 			resultTime,
@@ -372,6 +326,7 @@ export default {
 			currentwpm: this.currentwpm,
 			wordtimes: [],
 			wordtimesdatacollection: this.wordtimesdatacollection,
+			infinityCounter: 0,
 			showToolbar: true,
 			zenMode: false,
 			enterToRedo: true
@@ -411,20 +366,27 @@ export default {
 		this.loadCookies()
 		this.redo()
 	},
+	mounted () {
+		window.setTimeout(() => {
+			this.$refs.inputfield.$el.focus()
+		}, 300)
+	},
 	methods: {
 		getWords (wordLimit, wordType) {
 			const newwordlist = []
 			for (let i = 0; i < wordLimit; i++) {
 				let newword = null
 				if (wordType === 'Easy' || (wordType === 'Mixed' && Math.random() < 0.6)) {
+					// Prevent duplicate ID when generating on the fly with infinite mode
 					newword = {
-						id: i,
+						id: this.wordLimit === 'Infinite' ? ((this.infinityCounter) * this.infinitePrefetch + i) : i,
 						word: easywords[parseInt(Math.random() * easywords.length)],
 						state: 'waiting'
 					}
 				} else if (wordType === 'Hard' || (wordType === 'Mixed')) {
+					// Prevent duplicate ID when generating on the fly with infinite mode
 					newword = {
-						id: i,
+						id: this.wordLimit === 'Infinite' ? ((this.infinityCounter) * this.infinitePrefetch + i) : i,
 						word: hardwords[parseInt(Math.random() * hardwords.length)],
 						state: 'waiting'
 					}
@@ -540,6 +502,13 @@ export default {
 				this.wordCounter++
 				this.uinput = ''
 			}
+			// Fetch new batch of words when current word is close enough to currently stored word count
+			if (this.wordLimit === 'Infinite' && this.wordCounter > ((this.infinityCounter + 1) * this.infinitePrefetch - this.infinitePrefetch / 2)) {
+				this.infinityCounter++
+				const newWords = this.getWords(this.infinitePrefetch, this.wordType)
+				newWords.forEach((w) => { w.state = 'hidden' })
+				this.words.push(...newWords)
+			}
 		},
 		async done () {
 			this.$refs['done-modal'].show()
@@ -607,7 +576,12 @@ export default {
 			}
 		},
 		redo () {
-			this.words = this.getWords(this.wordLimit, this.wordType)
+			if (this.wordLimit === 'Infinite') {
+				this.words = this.getWords(this.infinitePrefetch, this.wordType)
+				this.infinityCounter = 0
+			} else {
+				this.words = this.getWords(this.wordLimit, this.wordType)
+			}
 			this.characters = 0
 			for (let i = 0; i < this.words.length; i++) {
 				this.characters += this.words[i].word.length + 1
@@ -621,11 +595,8 @@ export default {
 			this.enterToRedo = true
 		},
 		redoSame () {
-			this.words = resetWords(this.words)
-			this.wordCounter = 0
-			this.mistakeCounter = 0
-			this.uinput = ''
-			this.startTime = null
+			this.setShowText(this.showText)
+			this.infinityCounter = 0
 			this.wordtimes = []
 			this.enterToRedo = true
 		},
@@ -637,13 +608,13 @@ export default {
 		setShowText (showText) {
 			this.showText = showText
 			for (let i = 0; i < this.words.length; i++) {
-				if (showText === '10 words') {
+				if (this.showText === '10 words') {
 					if (i >= 10) {
 						this.words[i].state = 'hidden'
 					} else {
 						this.words[i].state = 'waiting'
 					}
-				} else if (showText === '50 words') {
+				} else if (this.showText === '50 words') {
 					if (i >= 50) {
 						this.words[i].state = 'hidden'
 					} else {
@@ -654,11 +625,20 @@ export default {
 				}
 			}
 			this.words[0].state = 'next'
+			this.wordCounter = 0
+			this.mistakeCounter = 0
+			this.uinput = ''
+			this.startTime = null
 			this.$cookies.set('typer.showText', showText, '7d')
 		},
 		setWordType (wordType) {
 			this.wordType = wordType
-			this.words = this.getWords(this.wordLimit, this.wordType)
+			if (this.wordLimit === 'Infinite') {
+				this.words = this.getWords(this.infinitePrefetch, this.wordType)
+				this.infinityCounter = 0
+			} else {
+				this.words = this.getWords(this.wordLimit, this.wordType)
+			}
 			this.wordCounter = 0
 			this.mistakeCounter = 0
 			this.uinput = ''
