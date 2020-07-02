@@ -657,25 +657,25 @@
               stroke-width="24"
               stroke="currentColor"
             >
-													<rect
-														y="369.70535"
-														x="165.25999"
-														height="282.8161"
-														width="132.88948"
-														style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:44.9;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers;stroke-miterlimit:4;stroke-dasharray:none"
-													/>
-													<rect
-														style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:44.9;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers;stroke-miterlimit:4;stroke-dasharray:none"
-														width="132.88948"
-														height="282.8161"
-														x="701.92908"
-														y="369.70535"
-													/>
-													<path d="M 231.70475,456.59465 V 214.66763 h 540.0765 v 240.2233" />
-													<path d="m 165.64706,460.19764 h 134.3247" />
-													<path d="M 163.23764,566.21176 H 299.97176" />
-													<path d="m 702.94588,460.19764 h 134.3247" />
-													<path d="M 700.53646,566.21176 H 837.27058" />
+              <rect
+                y="369.70535"
+                x="165.25999"
+                height="282.8161"
+                width="132.88948"
+                style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:44.9;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers;stroke-miterlimit:4;stroke-dasharray:none"
+              />
+              <rect
+                style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:44.9;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers;stroke-miterlimit:4;stroke-dasharray:none"
+                width="132.88948"
+                height="282.8161"
+                x="701.92908"
+                y="369.70535"
+              />
+              <path d="M 231.70475,456.59465 V 214.66763 h 540.0765 v 240.2233" />
+              <path d="m 165.64706,460.19764 h 134.3247" />
+              <path d="M 163.23764,566.21176 H 299.97176" />
+              <path d="m 702.94588,460.19764 h 134.3247" />
+              <path d="M 700.53646,566.21176 H 837.27058" />
             </svg>
             Stabilizers
           </template>

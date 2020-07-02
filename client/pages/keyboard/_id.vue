@@ -437,7 +437,7 @@ export default {
 	},
 	head () {
 		const k = this.keeb
-		const description = k.name + ' built by ' + k.creatorName ? k.creatorName : k.owner.firstname + ' ' +
+		const description = k.name + ' built by ' + (k.creatorName ? k.creatorName : k.owner.firstname) + ' ' +
                 ((k.owner.lastname === null) ? ('') : (k.owner.lastname)) + ' @' + k.owner.id + ' Built with ' +
                 k.switches + ', ' + k.keycaps + ', ' + k.pcb + ' and ' + k.case
 		const title = `${k.name} - Click-Clack`
