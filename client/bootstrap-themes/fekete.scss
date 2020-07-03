@@ -1,5 +1,5 @@
-$white: #000000 !default;
-$gray-100: #363636 !default;
+$white: #1a1a1a !default;
+$gray-100: #232323 !default;
 $gray-200: #4e4e4e !default;
 $gray-300: #4c4c4c !default;
 $gray-400: #525252 !default;
@@ -54,7 +54,7 @@ $enable-shadows: false;
 $enable-rounded: true;
 
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=Poppins:wght@400&family=Courier+Prime&family=PT+Serif&family=Montserrat:ital,wght@1,400;1,800&amily=Source+Code+Pro&family=Open+Sans&family=Open+Sans+Condensed:wght@300&family=Playfair+Display&family=Press+Start+2P&family=Roboto&display=swap');
-$font-family-sans-serif: 'IBM Plex Sans', Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+$font-family-sans-serif: 'Open Sans', Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
 
 
 @import '../node_modules/bootstrap/scss/bootstrap';
@@ -64,25 +64,29 @@ $font-family-sans-serif: 'IBM Plex Sans', Roboto, -apple-system, BlinkMacSystemF
 //  background-color: black;
 //}
 
-* {
-    font-size: 15px;
-    line-height: 1.5;
-}
 
-p {
-    color: $black;
+body {
+	background: $gray-100;
 }
 
 a {
-    text-decoration: none !important;
+	text-decoration: none !important;
 }
 
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-    color: $black;
-    //font-family: 'Anton';
-    font-family: 'IBM Plex Sans';
-    font-weight: 600;
-    //font-weight: 400;
+* {
+	font-size: 14px;
+	line-height: 1.5;
 }
 
-
+h1, .h1 {
+	font-family: 'IBM Plex Sans SemiBold';
+	font-weight: 600;
+	color: $black;
+}
+h2, h3, h4, h5, h6, .h2, .h3, .h4, .h5, .h6 {
+	color: $black;
+	//font-family: 'Anton';
+	font-family: 'Open Sans';
+	font-weight: 600;
+	//font-weight: 400;
+}

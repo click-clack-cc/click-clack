@@ -52,7 +52,7 @@
           <b-carousel-slide
             v-for="(img, index) in post.images"
             :key="index"
-            :img-src="`https://media.click-clack.cc/images/${img}`"
+            :img-src="$config.imageBaseUrl + img"
           />
         </a>
       </b-carousel>
@@ -66,7 +66,7 @@
           <b-carousel-slide
             v-for="(img, index) in post.images"
             :key="index"
-            :img-src="`https://media.click-clack.cc/images/${img}`"
+            :img-src="$config.imageBaseUrl + img"
           />
         </a>
       </b-carousel>

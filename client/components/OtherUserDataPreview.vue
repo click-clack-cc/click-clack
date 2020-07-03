@@ -152,7 +152,7 @@ export default {
 	methods: {
 		loadUserData () {
 			if (this.inspectedUser) {
-				this.img = `https://media.click-clack.cc/images/${this.inspectedUser._id}.jpg`
+				this.img = this.$config.imageBaseUrl + this.inspectedUser._id + '.jpg'
 				this.userName = this.inspectedUser.firstname + (this.inspectedUser.lastname == null ? '' : (' ' + this.inspectedUser.lastname))
 				this.publicUserName = `@${this.inspectedUser.id}`
 				this.bio = this.inspectedUser.bio
@@ -167,7 +167,7 @@ export default {
 					this.keyboards = keebs
 					for (let i = 0; i < this.keyboards.length; i++) {
 						for (let j = 0; j < this.keyboards[i].images.length; j++) {
-							this.keyboards[i].images[j] = `https://media.click-clack.cc/images/${this.keyboards[i].images[j]}`
+							this.keyboards[i].images[j] = this.$config.imageBaseUrl + this.keyboards[i].images[j]
 						}
 					}
 				})

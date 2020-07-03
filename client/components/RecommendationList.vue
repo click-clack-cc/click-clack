@@ -4,7 +4,7 @@
       <b-list-group v-if="!loading">
         <b-list-group-item v-for="(rec, index) in recommendations" :key="index">
           <b-avatar
-            :src="`https://media.click-clack.cc/images/${rec.submitter}.jpg`"
+            :src="$config.imageBaseUrl + rec.submitter + `.jpg`"
             button
             class="avatar"
             size="2rem"

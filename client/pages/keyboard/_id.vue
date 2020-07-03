@@ -52,7 +52,7 @@
 
             <b-col cols="4" align="left" class="user-thumbnail">
               <b-avatar
-                :src="`https://media.click-clack.cc/images/${keeb.owner._id}.jpg`"
+                :src="$config.imageBaseUrl + keeb.owner._id + '.jpg'"
                 badge-offset="-0.2rem"
                 button
                 class="avatar"
@@ -340,7 +340,7 @@ export default {
 		const keeb = await app.$services.keyboardService.getKeyboard(params.id)
 
 		for (let j = 0; j < keeb.images.length; j++) {
-			keeb.images[j] = `https://media.click-clack.cc/images/${keeb.images[j]}`
+			keeb.images[j] = app.$config.imageBaseUrl + keeb.images[j]
 		}
 		if (keeb.comments) {
 			keeb.comments = keeb.comments.reverse()

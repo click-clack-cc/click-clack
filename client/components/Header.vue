@@ -63,7 +63,7 @@
               <b-avatar
                 v-if="user"
                 class="mini-avatar"
-                :src="`https://media.click-clack.cc/images/${user._id}.jpg`"
+                :src="$config.imageBaseUrl + user._id + `.jpg`"
                 size="2.3rem"
                 variant="light"
                 badge-top

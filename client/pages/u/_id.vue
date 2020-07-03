@@ -50,7 +50,7 @@ export default {
 		const u = this.inspectedUser
 		const description = (u.firstname + ' @' + u.id + ' on click-clack.cc: ' + u.bio)
 		const title = (u.firstname + ' @' + u.id + ' on Click-Clack')
-		const image = `https://media.click-clack.cc/images/${u._id}.jpg`
+		const image = this.$config.imageBaseUrl + u._id + '.jpg'
 		const url = `https://click-clack.cc/u/${u.id}`
 		return {
 			title,

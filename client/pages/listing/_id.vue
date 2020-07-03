@@ -92,7 +92,7 @@
               </b-col>
               <b-col cols="4" align="right" class="user-thumbnail">
                 <b-avatar
-                  :src="`https://media.click-clack.cc/images/${listing.userdata._id}.jpg`"
+                  :src="$config.imageBaseUrl + listing.userdata._id + '.jpg'"
                   badge-offset="-0.2rem"
                   button
                   class="avatar"
@@ -203,7 +203,7 @@ export default {
 		const listing = await app.$services.listingService.getListing(params.id)
 		if (listing.images) {
 			for (let j = 0; j < listing.images.length; j++) {
-				listing.images[j] = `https://media.click-clack.cc/images/${listing.images[j]}`
+				listing.images[j] = app.$config.imageBaseUrl + listing.images[j]
 			}
 		}
 		const userdata = await app.$services.userService.getUser(listing.user)
@@ -291,7 +291,7 @@ export default {
 		const k = this.listing
 		const description = ''
 		const title = `${k.name} - Click-Clack`
-		let image = 'https://media.click-clack.cc/images/indeximage.JPG'
+		let image = this.$config.imageBaseUrl + 'indeximage.JPG'
 		if (k.images) {
 			image = k.images[0]
 		}

@@ -175,7 +175,7 @@
             <template v-slot:cell(user)="data">
               <div>
                 <b-avatar
-                  :src="`https://media.click-clack.cc/images/${data.value}.jpg`"
+                  :src="$config.imageBaseUrl + data.value + `.jpg`"
                   button
                   class="avatar"
                   size="2rem"

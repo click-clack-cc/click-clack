@@ -41,16 +41,26 @@
         </b-col>
         <b-col cols="7">
           <b-avatar
-            :src="`https://media.click-clack.cc/images/${stat.user._id}.jpg`"
+            v-if="stat.user"
+            :src="$config.imageBaseUrl + stat.user._id + `.jpg`"
             button
             class="avatar"
             size="2rem"
             variant="light"
             @click="previewUser(stat.user.id)"
           />
-          <b-link :href="`/u/${stat.user.id}`" class="name">
+          <b-avatar
+            v-else
+            class="avatar"
+            size="2rem"
+            variant="light"
+          />
+          <b-link v-if="stat.user" :href="`/u/${stat.user.id}`" class="name">
             <span class="text-muted"> @{{ stat.user.id }} </span>
           </b-link>
+          <span v-else class="name">
+            <span class="text-muted"> Deleted User </span>
+          </span>
         </b-col>
         <b-col>
           <p align="middle">

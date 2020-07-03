@@ -11,7 +11,7 @@
         "generate": "nuxt generate",
         "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
         "fix": "eslint --ext .js,.vue --ignore-path .gitignore . --fix",
-        "sass": "sass --watch bootstrap-themes/americano.scss:americano.css bootstrap-themes/blueberry-cappucino.scss:blueberry-cappucino.css bootstrap-themes/cinnamon-latte.scss:cinnamon-latte.css bootstrap-themes/fekete.scss:fekete.css bootstrap-themes/iced-mocha.scss:iced-mocha.css bootstrap-themes/mint-latte.scss:mint-latte.css bootstrap-themes/light.scss:light.css  --style compressed"
+        "sass": "sass --watch bootstrap-themes/americano.scss:bootstrap-themes/americano.css bootstrap-themes/blueberry-cappucino.scss:bootstrap-themes/blueberry-cappucino.css bootstrap-themes/cinnamon-latte.scss:bootstrap-themes/cinnamon-latte.css bootstrap-themes/fekete.scss:bootstrap-themes/fekete.css bootstrap-themes/iced-mocha.scss:bootstrap-themes/iced-mocha.css bootstrap-themes/mint-latte.scss:bootstrap-themes/mint-latte.css bootstrap-themes/light.scss:bootstrap-themes/light.css bootstrap-themes/pressó.scss:bootstrap-themes/pressó.css --style compressed "
     },
     "dependencies": {
         "@nuxtjs/axios": "^5.11.0",
@@ -27,7 +27,7 @@
         "core-js": "^2.6.5",
         "cors": "^2.8.5",
         "dateformat": "^3.0.3",
-        "helmet": "^3.22.1",
+        "helmet": "^3.23.3",
         "html": "^1.0.0",
         "http": "0.0.1-security",
         "https": "^1.0.0",
@@ -35,11 +35,11 @@
         "markdown-it-attrs": "^3.0.3",
         "markdown-it-div": "^1.1.0",
         "nodemon": "^2.0.4",
-        "nuxt": "^2.0.0",
+        "nuxt": "^2.13.3",
         "openssl": "^1.1.0",
         "portal-vue": "^2.1.7",
         "redirect-ssl": "^2.0.0",
-        "sass": "^1.26.7",
+        "sass": "^1.26.9",
         "save": "^2.4.0",
         "ssl-root-cas": "^1.3.1",
         "timeago.js": "^4.0.2",
@@ -48,9 +48,9 @@
         "vue-chat-scroll": "^1.4.0",
         "vue-cookies": "^1.7.0",
         "vue-meta": "^2.3.4",
-        "vue-router": "^3.2.0",
+        "vue-router": "^3.3.4",
         "vue-router-sitemap": "0.0.4",
-        "vuex": "^3.4.0"
+        "vuex": "^3.5.1"
     },
     "devDependencies": {
         "@babel/parser": "7.7.5",

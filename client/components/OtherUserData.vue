@@ -483,7 +483,7 @@ export default {
 	methods: {
 		loadUserData () {
 			if (this.inspectedUser) {
-				this.img = `https://media.click-clack.cc/images/${this.inspectedUser._id}.jpg`
+				this.img = this.$config.imageBaseUrl + `${this.inspectedUser._id}.jpg`
 				this.userName = this.inspectedUser.firstname + (this.inspectedUser.lastname == null ? '' : (' ' + this.inspectedUser.lastname))
 				this.publicUserName = `@${this.inspectedUser.id}`
 				this.bio = this.inspectedUser.bio

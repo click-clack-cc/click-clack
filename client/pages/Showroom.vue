@@ -123,7 +123,7 @@ export default {
 	head () {
 		const description = 'The Click-Clack mechanical keyboard showroom has the prettiest custom mechanical keyboards. Come and share your own build as well!'
 		const title = 'Click-Clack - Showroom'
-		const image = 'https://media.click-clack.cc/images/indeximage.JPG'
+		const image = this.$config.imageBaseUrl + 'indeximage.JPG'
 		const url = 'https://click-clack.cc/showroom'
 		return {
 			title,

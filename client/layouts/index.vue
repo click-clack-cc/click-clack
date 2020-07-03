@@ -185,7 +185,7 @@ export default {
 							for (let i = 0; i < u.keyboards.length; i++) {
 								if (u.keyboards[i].images) {
 									for (let j = 0; j < u.keyboards[i].images.length; j++) {
-										u.keyboards[i].images[j] = `https://media.click-clack.cc/images/${u.keyboards[i].images[j]}`
+										u.keyboards[i].images[j] = this.$config.imageBaseUrl + u.keyboards[i].images[j]
 									}
 								}
 							}

@@ -29,7 +29,7 @@
       >
         <img
           style="border-radius: 0.25rem; max-width: 10rem; max-height: 10rem; margin-bottom: 1rem"
-          :src="`https://media.click-clack.cc/images/${img}`"
+          :src="$config.imageBaseUrl + img"
         >
         <b-button
           size="sm"
@@ -501,7 +501,7 @@ export default {
 	head () {
 		const description = 'Submit a new keyboard to click-clack!'
 		const title = 'Click-Clack - ' + this.edit ? 'Update Keyboard' : 'New Keyboard'
-		const image = 'https://media.click-clack.cc/images/indeximage.JPG'
+		const image = this.$config.imageBaseUrl + 'indeximage.JPG'
 		const url = 'https://click-clack.cc/editkeyboard'
 		return {
 			title,

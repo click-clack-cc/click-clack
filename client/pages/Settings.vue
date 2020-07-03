@@ -263,7 +263,7 @@ export default {
 	head () {
 		const description = 'Sign up to Click-Clack and check out the newest and nicest custom mechanical keyboard builds.'
 		const title = 'Click-Clack - Settings'
-		const image = 'https://media.click-clack.cc/images/indeximage.jpg'
+		const image = this.$config.imageBaseUrl + 'indeximage.jpg'
 		const url = 'https://click-clack.cc/settings'
 		return {
 			title,

@@ -17,7 +17,7 @@
         <b-col v-for="(u, index) in users" :key="index" cols="6">
           <b-card class="user-thumbnail">
             <b-avatar
-              :src="`https://media.click-clack.cc/images/${u._id}.jpg`"
+              :src="$config.imageBaseUrl + u._id + `.jpg`"
               badge-offset="-0.3rem"
               button
               class="avatar"
@@ -192,7 +192,7 @@ export default {
 	head () {
 		const description = 'Search for newest and nicest custom mechanical keyboard builds, members and community posts'
 		const title = 'Click-Clack - Search'
-		const image = 'https://media.click-clack.cc/images/indeximage.jpg'
+		const image = this.$config.imageBaseUrl + 'indeximage.jpg'
 		const url = 'https://click-clack.cc/search'
 		return {
 			title,

@@ -512,7 +512,7 @@ export default {
 		const description = 'List your items and services, buy used mechanical keyboards from fellow enthusiasts' +
                 ' and browse their keyboard building and maintenance services!'
 		const title = 'Click-Clack - Market - Used mechanical keyboards, accessories and services'
-		const image = 'https://media.click-clack.cc/images/indeximage.JPG'
+		const image = this.$config.imageBaseUrl + 'indeximage.JPG'
 		const url = 'https://click-clack.cc/market'
 		return {
 			title,

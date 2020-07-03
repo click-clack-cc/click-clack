@@ -22,7 +22,7 @@
         </b-form-file>
       </b-form-group>
       <b-card v-for="(img, index) in post.images" :key="index" class="photoPreview" style="max-width: 10rem; max-height: 10rem; margin: 0.5rem">
-        <img style="border-radius: 0.25rem; max-width: 10rem; max-height: 10rem; margin-bottom: 1rem" :src="'https://media.click-clack.cc/images/'+img">
+        <img style="border-radius: 0.25rem; max-width: 10rem; max-height: 10rem; margin-bottom: 1rem" :src="$config.imageBaseUrl+img">
         <b-button
           size="sm"
           variant="outline-danger"
@@ -204,7 +204,7 @@ export default {
 	head () {
 		const description = 'Submit a new post to click-clack!'
 		const title = 'Click-Clack - ' + this.edit ? 'Update Post' : 'New Post'
-		const image = 'https://media.click-clack.cc/images/indeximage.JPG'
+		const image = this.$config.imageBaseUrl + 'indeximage.JPG'
 		const url = 'https://click-clack.cc/editpost'
 		return {
 			title,

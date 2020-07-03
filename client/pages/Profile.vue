@@ -45,7 +45,7 @@
           id="login-form-card"
           footer-tag="footer"
         >
-          <b-form id="login-form" align="left">
+          <b-form id="login-form" align="left" @keydown.enter="signIn">
             <b-form-group
               label="Email or username"
             >
@@ -81,7 +81,7 @@
           <template v-slot:footer>
             <b-row align="middle">
               <b-col>
-                <b-button id="login-button" type="submit" variant="primary" @click="signIn">
+                <b-button type="submit" variant="primary" @click="signIn">
                   Log in
                 </b-button>
               </b-col>
@@ -216,7 +216,7 @@ export default {
 	head () {
 		const description = 'Sign up to Click-Clack and check out the newest and nicest custom mechanical keyboard builds.'
 		const title = 'Click-Clack - Profile'
-		const image = 'https://media.click-clack.cc/images/indeximage.jpg'
+		const image = this.$config.imageBaseUrl + 'indeximage.jpg'
 		const url = 'https://click-clack.cc/profile'
 		return {
 			title,

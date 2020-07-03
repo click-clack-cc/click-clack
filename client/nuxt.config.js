@@ -39,13 +39,13 @@ export default {
 				name: 'og:image',
 				hid: 'og:image',
 				property: 'og:image',
-				content: 'https://media.click-clack.cc/images/indeximage.JPG'
+				content: process.env.IMAGE_URL + 'indeximage.JPG'
 			},
 			{
 				name: 'image',
 				hid: 'image',
 				property: 'image',
-				content: 'https://media.click-clack.cc/images/indeximage.JPG'
+				content: process.env.IMAGE_URL + 'indeximage.JPG'
 			},
 			{ name: 'og:site_name', property: 'og:site_name', hid: 'og:site_name', content: 'click-clack' },
 			{ name: 'og:type', property: 'og:type', hid: 'og:type', content: 'website' },
@@ -61,12 +61,19 @@ export default {
 				name: 'twitter:image',
 				hid: 'twitter:image',
 				property: 'twitter:image',
-				content: 'https://media.click-clack.cc/images/indeximage.JPG'
+				content: process.env.IMAGE_URL + 'indeximage.JPG'
 			}
 		],
 		link: [
 			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
 		]
+	},
+
+	publicRuntimeConfig: {
+		imageBaseUrl: process.env.IMAGE_URL
+	},
+	privateRuntimeConfig: {
+		apiSecret: process.env.API_SECRET
 	},
 
 	axios: {
