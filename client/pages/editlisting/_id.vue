@@ -134,7 +134,7 @@
       >
         <b-card-img
           style="max-width: 10rem; max-height: 10rem"
-          :src="'https://click-clack.cc:5000/files/images/'+img"
+          :src="'https://media.click-clack.cc/images/'+img"
         />
         <b-button
           size="sm"
@@ -656,7 +656,7 @@ export default {
 	head () {
 		const description = 'List your items and services, buy mechanical keyboards from fellow enthusiasts!'
 		const title = 'Click-Clack - ' + this.edit ? 'Update Listing' : 'New Listing'
-		const image = 'https://click-clack.cc:5000/files/images/indeximage.JPG'
+		const image = 'https://media.click-clack.cc/images/indeximage.JPG'
 		const url = 'https://click-clack.cc/newlisting'
 		return {
 			title,

@@ -17,7 +17,7 @@
     <div v-if="!newMembersLoading" id="newest-members-body">
       <b-row v-for="(user, index) in users" :key="index" class="user-thumbnail">
         <b-avatar
-          :src="`https://click-clack.cc:5000/files/images/${user._id}.jpg`"
+          :src="`https://media.click-clack.cc/images/${user._id}.jpg`"
           button
           class="avatar"
           size="2rem"

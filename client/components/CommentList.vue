@@ -7,7 +7,7 @@
             <b-row>
               <b-col cols="4">
                 <b-avatar
-                  :src="`https://click-clack.cc:5000/files/images/${com.submitter._id}.jpg`"
+                  :src="`https://media.click-clack.cc/images/${com.submitter._id}.jpg`"
                   badge-offset="-0.2rem"
                   button
                   class="avatar"

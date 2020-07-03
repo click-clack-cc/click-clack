@@ -258,7 +258,7 @@ export default {
 	head () {
 		const description = ' Newest custom mechanical keyboard builds on click-clack. Join our community, check out the nicest custom mech keebs uploaded by our members and share yur own keyboards!'
 		const title = 'Click-Clack - Newest Mechanical Keyboard Builds'
-		const image = 'https://click-clack.cc:5000/files/images/indeximage.JPG'
+		const image = 'https://media.click-clack.cc/images/indeximage.JPG'
 		const url = 'https://click-clack.cc/'
 		return {
 			title,

@@ -52,7 +52,7 @@
 
             <b-col cols="4" align="left" class="user-thumbnail">
               <b-avatar
-                :src="`https://click-clack.cc:5000/files/images/${keeb.owner._id}.jpg`"
+                :src="`https://media.click-clack.cc/images/${keeb.owner._id}.jpg`"
                 badge-offset="-0.2rem"
                 button
                 class="avatar"
@@ -340,7 +340,7 @@ export default {
 		const keeb = await app.$services.keyboardService.getKeyboard(params.id)
 
 		for (let j = 0; j < keeb.images.length; j++) {
-			keeb.images[j] = `https://click-clack.cc:5000/files/images/${keeb.images[j]}`
+			keeb.images[j] = `https://media.click-clack.cc/images/${keeb.images[j]}`
 		}
 		if (keeb.comments) {
 			keeb.comments = keeb.comments.reverse()
@@ -437,9 +437,14 @@ export default {
 	},
 	head () {
 		const k = this.keeb
-		const description = k.name + ' built by ' + (k.creatorName ? k.creatorName : k.owner.firstname) + ' ' +
-                ((k.owner.lastname === null) ? ('') : (k.owner.lastname)) + ' @' + k.owner.id + ' Built with ' +
-                k.switches + ', ' + k.keycaps + ', ' + k.pcb + ' and ' + k.case
+		const description = k.name + ' built by ' + (k.creatorName ? k.creatorName : k.owner.firstname + ' @' + k.owner.id) +
+			(k.switches || k.pcb || k.keycaps || k.plate || k.case || k.stabs) ? '.' : (' with ' +
+			(k.switches ? (k.switches + ', ') : '') +
+			(k.pcb ? (k.pcb + ', ') : '') +
+			(k.keycaps ? (k.keycaps + ', ') : '') +
+			(k.plate ? (k.plate + ', ') : '') +
+			(k.case ? (k.case + ', ') : '') +
+			(k.stabs ? (k.stabs + ', ') : '') + '.')
 		const title = `${k.name} - Click-Clack`
 		const image = k.images[0]
 		const url = `https://click-clack.cc/keyboard/${k._id}`

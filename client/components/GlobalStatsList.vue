@@ -159,7 +159,7 @@
             <template v-slot:cell(userdata)="data">
               <div @click="previewUser(data.value._id)">
                 <b-avatar
-                  :src="`https://click-clack.cc:5000/files/images/${data.value._id}.jpg`"
+                  :src="`https://media.click-clack.cc/images/${data.value._id}.jpg`"
                   button
                   class="avatar"
                   size="2rem"

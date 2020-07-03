@@ -31,7 +31,7 @@ export default {
                 'is one of the most sophisticated typing tests with lots of options and great performance tracking. You can even compete with' +
                 'other members by trying to rank higher on the leaderboard!'
 		const title = 'Click-Clack - Typing Test'
-		const image = 'https://click-clack.cc:5000/files/images/indeximage.jpg'
+		const image = 'https://media.click-clack.cc/images/indeximage.jpg'
 		const url = 'https://click-clack.cc/typing'
 		return {
 			title,

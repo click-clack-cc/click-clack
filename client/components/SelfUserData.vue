@@ -458,7 +458,7 @@ export default {
 		}
 	},
 	created () {
-		this.img = `https://click-clack.cc:5000/files/images/${this.user._id}.jpg`
+		this.img = `https://media.click-clack.cc/images/${this.user._id}.jpg`
 		this.userName = this.user.firstname + (this.user.lastname == null ? '' : (' ' + this.user.lastname))
 		this.publicUserName = this.user.id
 		this.bio = this.user.bio

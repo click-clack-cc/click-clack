@@ -52,7 +52,7 @@
 
             <b-col cols="3" align="left" class="user-thumbnail">
               <b-avatar
-                :src="`https://click-clack.cc:5000/files/images/${post.author._id}.jpg`"
+                :src="`https://media.click-clack.cc/images/${post.author._id}.jpg`"
                 badge-offset="-0.2rem"
                 button
                 class="avatar"
@@ -317,7 +317,7 @@ export default {
 
 		if (post.images) {
 			for (let j = 0; j < post.images.length; j++) {
-				post.images[j] = `https://click-clack.cc:5000/files/images/${post.images[j]}`
+				post.images[j] = `https://media.click-clack.cc/images/${post.images[j]}`
 			}
 		} else {
 			post.images = []

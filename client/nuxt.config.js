@@ -39,13 +39,13 @@ export default {
 				name: 'og:image',
 				hid: 'og:image',
 				property: 'og:image',
-				content: 'https://click-clack.cc:5000/files/images/indeximage.JPG'
+				content: 'https://media.click-clack.cc/images/indeximage.JPG'
 			},
 			{
 				name: 'image',
 				hid: 'image',
 				property: 'image',
-				content: 'https://click-clack.cc:5000/files/images/indeximage.JPG'
+				content: 'https://media.click-clack.cc/images/indeximage.JPG'
 			},
 			{ name: 'og:site_name', property: 'og:site_name', hid: 'og:site_name', content: 'click-clack' },
 			{ name: 'og:type', property: 'og:type', hid: 'og:type', content: 'website' },
@@ -61,7 +61,7 @@ export default {
 				name: 'twitter:image',
 				hid: 'twitter:image',
 				property: 'twitter:image',
-				content: 'https://click-clack.cc:5000/files/images/indeximage.JPG'
+				content: 'https://media.click-clack.cc/images/indeximage.JPG'
 			}
 		],
 		link: [

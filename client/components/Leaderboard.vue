@@ -53,7 +53,7 @@
         </b-col>
         <b-col cols="7">
           <b-avatar
-            :src="`https://click-clack.cc:5000/files/images/${stat.user._id}.jpg`"
+            :src="`https://media.click-clack.cc/images/${stat.user._id}.jpg`"
             button
             class="avatar"
             size="2rem"

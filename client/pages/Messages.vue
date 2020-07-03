@@ -14,7 +14,7 @@
                   <b-row no-gutters>
                     <b-col cols="3">
                       <b-avatar
-                        :src="`https://click-clack.cc:5000/files/images/${index}.jpg`"
+                        :src="`https://media.click-clack.cc/images/${index}.jpg`"
                         badge-offset="-0.25rem"
                         button
                         class="avatar"
@@ -226,7 +226,7 @@ export default {
 	head () {
 		const description = 'Chat with other members on Click-Clack'
 		const title = 'Click-Clack - Messages'
-		const image = 'https://click-clack.cc:5000/files/images/indeximage.JPG'
+		const image = 'https://media.click-clack.cc/images/indeximage.JPG'
 		const url = 'https://click-clack.cc/messages'
 		return {
 			title,

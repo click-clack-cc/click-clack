@@ -34,7 +34,7 @@ export default {
                 ' Test your typing speed with our feature rich and clean typing test and check out' +
                 'the newest custom mech keeb builds in the showroom'
 		const title = 'Community - Click-Clack'
-		const image = 'https://click-clack.cc:5000/files/images/indeximage.jpg'
+		const image = 'https://media.click-clack.cc/images/indeximage.jpg'
 		const url = 'https://click-clack.cc/communityresults'
 		return {
 			title,
