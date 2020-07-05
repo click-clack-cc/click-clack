@@ -54,35 +54,7 @@
       />
     </div>
 
-    <b-alert
-      v-model="showCookies"
-      class="position-fixed fixed-bottom m-0 rounded-0"
-      style="z-index: 2000; "
-      variant="info"
-      dismissible
-      @dismissed="cookiesClosed"
-    >
-      <div style="max-width: 960px; margin: auto;">
-        <b-row no-gutters>
-          <b-col cols="1" align="left">
-            <b-icon class="align-middle" icon="info-circle" style="margin-right: 1rem" scale="1.4" />
-          </b-col>
-          <b-col align="left">
-            We use a few cookies to save your settings and for basic analytics. We hope you're okay with
-            that.
-          </b-col>
-          <b-col style="margin: 0" cols="2" align="right">
-            <b-button
-              style="margin-top: -0.5rem; margin-bottom: -0.5rem"
-              variant="primary"
-              @click="cookiesClosed"
-            >
-              Okay, thank you
-            </b-button>
-          </b-col>
-        </b-row>
-      </div>
-    </b-alert>
+    <CookiesNotice v-if="showCookies" @dismiss-cookies="cookiesClosed" />
 
     <div v-show="!loaded" class="loading-page">
       <div class="loader" />
@@ -98,6 +70,7 @@ import PortalVue from 'portal-vue'
 import { mapState } from 'vuex'
 import VueCookies from 'vue-cookies'
 import Header from '../components/Header'
+import CookiesNotice from '../components/CookiesNotice'
 
 Vue.use(VueCookies)
 Vue.use(BootstrapVue)
@@ -108,7 +81,8 @@ Vue.use(PortalVue)
 export default {
 	name: 'Index',
 	components: {
-		Header
+		Header,
+		CookiesNotice
 	},
 	data () {
 		return {
