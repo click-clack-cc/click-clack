@@ -52,33 +52,33 @@ export default {
 </script>
 
 <style scoped>
-.remove-style {
-    background-color: transparent;
-    border: 0;
-    color: rgba(0, 0, 0, 0.7);
-    position: fixed;
-    bottom: 15px;
-    right: 5px;
-}
-
-@media (max-width: 991px) {
-  .cookies-alert {
-    bottom: 57px;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
     .remove-style {
-      bottom: auto;
-      position: absolute;
-      right: -30px;
-      top: 0;
+        background-color: transparent;
+        border: 0;
+        color: rgba(0, 0, 0, 0.7);
+        position: fixed;
+        bottom: 15px;
+        right: 5px;
     }
-}
 
-@media (max-width: 767px) {
-    .remove-style {
-        position: relative;
+    @media (max-width: 991px) {
+      .cookies-alert {
+        bottom: 57px;
+      }
     }
-}
+
+    @media (min-width: 768px) and (max-width: 991px) {
+        .remove-style {
+          bottom: auto;
+          position: absolute;
+          right: -30px;
+          top: 0;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .remove-style {
+            position: relative;
+        }
+    }
 </style>
