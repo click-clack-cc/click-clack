@@ -1,25 +1,41 @@
 <template>
   <div id="header">
-    <b-row
-      id="header-inside"
-      align="left"
-      no-gutters
-    >
-      <b-col lg="4" sm="4">
-        <router-link to="/">
-          <h1 id="title">
-            click-clack
-          </h1>
-        </router-link>
+    <b-row>
+      <b-col lg="4" cols="12" class="d-flex align-items-center">
+        <div class="d-flex align-items-center justify-content-between w-100">
+          <nuxt-link to="/" class="title-container mr-3" :class="{'shrink': isFocusSearch}">
+            <h1 id="title">
+              click-clack
+            </h1>
+          </nuxt-link>
+          <b-input-group class="d-lg-none d-flex search-container">
+            <b-form-input
+              v-model="searchinput"
+              autocomplete="off"
+              placeholder="Search for anything"
+              variant="light"
+              @focus="isFocusSearch = true"
+              @blur="isFocusSearch = false"
+              @keydown.enter="search"
+              @submit.prevent
+            />
+            <b-input-group-append>
+              <b-button variant="outline" @click="search">
+                <b-icon icon="search" />
+              </b-button>
+            </b-input-group-append>
+          </b-input-group>
+        </div>
       </b-col>
-
-      <b-col id="search-container" lg="4" sm="8">
-        <b-input-group id="search">
+      <b-col lg="4" cols="0" class="d-flex align-items-center">
+        <b-input-group class="d-lg-flex d-none">
           <b-form-input
             v-model="searchinput"
             autocomplete="off"
             placeholder="Search for anything"
             variant="light"
+            @focus="isFocusSearch = true"
+            @blur="isFocusSearch = false"
             @keydown.enter="search"
             @submit.prevent
           />
@@ -30,137 +46,8 @@
           </b-input-group-append>
         </b-input-group>
       </b-col>
-      <b-col lg="4" sm="12">
-        <b-nav
-          id="nav"
-          align="right"
-          card-header
-          no-gutters
-          pill
-        >
-          <b-nav-item>
-            <nuxt-link exact-active-class="active" to="/">
-              <b-icon v-b-tooltip.hover.bottom="`Home`" icon="view-stacked" />
-            </nuxt-link>
-          </b-nav-item>
-          <b-nav-item>
-            <nuxt-link exact-active-class="active" to="/market">
-              <b-icon v-b-tooltip.hover.bottom="`Market`" icon="shop-window" />
-            </nuxt-link>
-          </b-nav-item>
-          <b-nav-item>
-            <nuxt-link exact-active-class="active" to="/showroom">
-              <b-icon v-b-tooltip.hover.bottom="`Showroom`" icon="star" />
-            </nuxt-link>
-          </b-nav-item>
-          <b-nav-item>
-            <nuxt-link exact exact-active-class="active" to="/typing">
-              <b-icon v-b-tooltip.hover.bottom="`Typing Test`" icon="lightning" />
-            </nuxt-link>
-          </b-nav-item>
-          <b-dropdown no-caret right variant="link" style="margin-top: -0.5rem; margin-bottom: -0.5rem" toggle-class="text-decoration-none">
-            <template v-slot:button-content>
-              <b-avatar
-                v-if="user"
-                class="mini-avatar"
-                :src="$config.imageBaseUrl + user._id + `.jpg`"
-                size="2.3rem"
-                variant="light"
-                badge-top
-                badge-variant="danger"
-                badge-offset="-0.23rem"
-              >
-                <template v-if="unseen > 0" v-slot:badge>
-                  {{ unseen }}
-                </template>
-              </b-avatar>
-              <b-avatar
-                v-else
-                class="mini-avatar"
-                size="2.3rem"
-                variant="light"
-              />
-            </template>
-            <b-dropdown-item @click="$nuxt.$router.push(`/profile`)">
-              <nuxt-link to="/profile">
-                <b-icon icon="person" />
-                <span v-if="user">Profile</span>
-                <span v-else>Sign in</span>
-              </nuxt-link>
-            </b-dropdown-item>
-            <b-dropdown-item v-if="user && (user.role.includes('admin') || user.role.includes('developer'))" @click=" $nuxt.$router.push(`/admintools`)">
-              <nuxt-link to="/profile">
-                <b-icon icon="shield" />
-                <span>AdminTools</span>
-              </nuxt-link>
-            </b-dropdown-item>
-            <b-dropdown-item v-if="!user" @click="$nuxt.$router.push(`/signup`)">
-              <nuxt-link to="/profile">
-                <b-icon icon="person-plus" />
-                <span>Sign up</span>
-              </nuxt-link>
-            </b-dropdown-item>
-            <b-dropdown-item v-if="user" @click="$nuxt.$router.push(`/messages`)">
-              <nuxt-link to="/messages">
-                <b-icon v-if="unseen === 0" icon="envelope-open" />
-                <b-icon v-else icon="envelope" />
-                Messages
-                <b-badge v-if="unseen > 0" variant="danger">
-                  {{ unseen }}
-                </b-badge>
-              </nuxt-link>
-            </b-dropdown-item>
-            <b-dropdown-item v-if="user" @click="$nuxt.$router.push(`/settings`)">
-              <nuxt-link exact exact-active-class="active" to="/settings">
-                <b-icon icon="window" />
-                Themes
-              </nuxt-link>
-            </b-dropdown-item>
-            <b-form-checkbox
-              :checked="nightmode"
-              name="check-button"
-              style="margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem"
-              switch
-              @change="changeTheme"
-            >
-              Night mode
-            </b-form-checkbox>
-            <b-dropdown-item-btn>
-              <a href="https://www.patreon.com/clickclackcc">
-                <b-icon icon="heart" />
-                Become a supporter
-              </a>
-            </b-dropdown-item-btn>
-            <b-dropdown-divider />
-            <b-dropdown-item @click="$nuxt.$router.push(`/wip`)">
-              <nuxt-link to="/wip">
-                <b-icon icon="question-circle" />
-                FAQ
-              </nuxt-link>
-            </b-dropdown-item>
-            <b-dropdown-item @click="$nuxt.$router.push(`/termsandconditions`)">
-              <nuxt-link to="/termsandconditions">
-                <b-icon icon="justify" />
-                T&C
-              </nuxt-link>
-            </b-dropdown-item>
-            <b-dropdown-item-btn>
-              <a href="mailto:support@click-clack.cc">
-                <b-icon icon="person" />
-                Contact support
-              </a>
-            </b-dropdown-item-btn>
-            <b-dropdown-item @click="$nuxt.$router.push(`/bugreport`)">
-              <b-icon icon="exclamation-square" />
-              Report bug
-            </b-dropdown-item>
-            <b-dropdown-divider v-if="user" />
-            <b-dropdown-item-btn v-if="user" @click="signOut">
-              <b-icon icon="arrow-right-circle" />
-              Sign out
-            </b-dropdown-item-btn>
-          </b-dropdown>
-        </b-nav>
+      <b-col lg="4" cols="0" class="d-flex justify-content-end align-items-center">
+        <NavMenu :nav-items="navItems" :user="user" @change-theme="changeTheme" />
       </b-col>
     </b-row>
   </div>
@@ -168,14 +55,41 @@
 
 <script>
 import { mapState } from 'vuex'
+import NavMenu from './NavMenu'
 
 export default {
 	name: 'Header',
+	components: {
+		NavMenu
+	},
 	props: [
 	],
 	data () {
 		return {
 			searchinput: this.searchinput,
+			isFocusSearch: false,
+			navItems: [
+				{
+					link: '/',
+					name: 'Home',
+					icon: 'view-stacked'
+				},
+				{
+					link: '/market',
+					name: 'Market',
+					icon: 'shop-window'
+				},
+				{
+					link: '/showroom',
+					name: 'Showroom',
+					icon: 'star'
+				},
+				{
+					link: '/typing',
+					name: 'Typing Test',
+					icon: 'lightning'
+				}
+			],
 			unseen: 0
 		}
 	},
@@ -251,62 +165,53 @@ export default {
 </script>
 
 <style scoped>
-
-	@media only screen and (max-width: 990px) {
-		#title {
-			display: none;
-		}
-
-		#search-container {
-			margin-right: 0.2rem;
-			margin-top: 0.5rem;
-		}
-
-		#nav {
-			margin-right: 1rem;
-		}
+@media (max-width: 991px) {
+	.title-container {
+		max-width: 150px;
 	}
 
-	#header {
-
+	.title-container.shrink {
+		max-width: 0;
+		overflow: hidden;
+		transform: scaleX(0);
+		transition: max-width ease-in-out 0.2s;
+		white-space: nowrap;
 	}
+}
 
-	#header-inside {
-		margin-top: -0.9rem;
-		margin-bottom: -1rem;
-	}
+#header {
+	padding: 0 15px;
+}
 
-	#title {
-		font-size: 1.6rem;
-		line-height: 1.6;
-		margin-left: 1rem;
-		margin-top: 1rem;
-		margin: 0.5rem;
-	}
+#title {
+	font-size: 1.6rem;
+	line-height: 1.6;
+	margin-left: 1rem;
+	margin-top: 1rem;
+	margin: 0.5rem;
+}
 
-	#beta {
-		font-size: 1rem;
-	}
+#beta {
+	font-size: 1rem;
+}
 
-	.mini-avatar {
-		margin-top: 0.2rem;
-		margin-left: 0rem;
-	}
+.mini-avatar {
+	margin-top: 0.2rem;
+	margin-left: 0rem;
+}
 
-	#nav {
-		width: 100%;
-		margin: 0.5rem;
-		margin-top: 0.45rem;
-	}
+.active {
+	font-weight: bold;
+}
 
-	.active {
-		font-weight: bold;
-	}
+.search-container {
+	flex: 1;
+}
 
-	#search {
-		margin: 0.5rem;
-		height: 2.1rem;
-		margin-top: 0.55rem;
-		width: 100%;
-	}
+#search {
+	margin: 0.5rem;
+	height: 2.1rem;
+	margin-top: 0.55rem;
+	flex: 1;
+}
 </style>
