@@ -139,37 +139,37 @@ export default {
 /* Removed scope here because scoped styles cannot be applied to bootstrap generated elements */
 /* Wrapped every item with unique #nav parent to avoid leaking styles to the rest of the site */
 
-#nav {
-    width: 100%;
-}
-
-#nav .nav-link {
-    padding: 0;
-}
-
-#nav .nav-link .dropdown-toggle {
-    padding: 0;
-}
-
-#nav .dropdown-menu .dropdown-item .active {
-    font-weight: bold;
-}
-
-@media (max-width: 991px) {
     #nav {
-        background-color: #ffffff;
-        border-top: 1px solid #eeeeee;
-        bottom: 0;
-        left: 0;
-        margin: 0;
-        padding: 0.5rem 0;
-        position: fixed;
-        right: 0;
-        z-index: 99;
+        width: 100%;
     }
 
-    #nav .nav-item .b-icon {
-        font-size: 180%;
+    #nav .nav-link {
+        padding: 0;
     }
-}
+
+    #nav .nav-link .dropdown-toggle {
+        padding: 0;
+    }
+
+    #nav .dropdown-menu .dropdown-item .active {
+        font-weight: bold;
+    }
+
+    @media (max-width: 991px) {
+        #nav {
+            background-color: #ffffff;
+            border-top: 1px solid #eeeeee;
+            bottom: 0;
+            left: 0;
+            margin: 0;
+            padding: 0.5rem 0;
+            position: fixed;
+            right: 0;
+            z-index: 99;
+        }
+
+        #nav .nav-item .b-icon {
+            font-size: 180%;
+        }
+    }
 </style>

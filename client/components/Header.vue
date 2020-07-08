@@ -165,53 +165,53 @@ export default {
 </script>
 
 <style scoped>
-@media (max-width: 991px) {
-	.title-container {
-		max-width: 150px;
+	@media (max-width: 991px) {
+		.title-container {
+			max-width: 150px;
+		}
+
+		.title-container.shrink {
+			max-width: 0;
+			overflow: hidden;
+			transform: scaleX(0);
+			transition: max-width ease-in-out 0.2s;
+			white-space: nowrap;
+		}
 	}
 
-	.title-container.shrink {
-		max-width: 0;
-		overflow: hidden;
-		transform: scaleX(0);
-		transition: max-width ease-in-out 0.2s;
-		white-space: nowrap;
+	#header {
+		padding: 0 15px;
 	}
-}
 
-#header {
-	padding: 0 15px;
-}
+	#title {
+		font-size: 1.6rem;
+		line-height: 1.6;
+		margin-left: 1rem;
+		margin-top: 1rem;
+		margin: 0.5rem;
+	}
 
-#title {
-	font-size: 1.6rem;
-	line-height: 1.6;
-	margin-left: 1rem;
-	margin-top: 1rem;
-	margin: 0.5rem;
-}
+	#beta {
+		font-size: 1rem;
+	}
 
-#beta {
-	font-size: 1rem;
-}
+	.mini-avatar {
+		margin-top: 0.2rem;
+		margin-left: 0rem;
+	}
 
-.mini-avatar {
-	margin-top: 0.2rem;
-	margin-left: 0rem;
-}
+	.active {
+		font-weight: bold;
+	}
 
-.active {
-	font-weight: bold;
-}
+	.search-container {
+		flex: 1;
+	}
 
-.search-container {
-	flex: 1;
-}
-
-#search {
-	margin: 0.5rem;
-	height: 2.1rem;
-	margin-top: 0.55rem;
-	flex: 1;
-}
+	#search {
+		margin: 0.5rem;
+		height: 2.1rem;
+		margin-top: 0.55rem;
+		flex: 1;
+	}
 </style>
