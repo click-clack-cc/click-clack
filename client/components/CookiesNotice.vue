@@ -1,6 +1,6 @@
 <template>
   <b-alert
-    class="position-fixed fixed-bottom m-0 rounded-0"
+    class="cookies-alert position-fixed fixed-bottom m-0 rounded-0"
     style="z-index: 2000; "
     variant="info"
     show
@@ -61,9 +61,18 @@ export default {
     right: 5px;
 }
 
+@media (max-width: 991px) {
+  .cookies-alert {
+    bottom: 57px;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 991px) {
     .remove-style {
-        bottom: 35px;
+      bottom: auto;
+      position: absolute;
+      right: -30px;
+      top: 0;
     }
 }
 
