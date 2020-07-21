@@ -100,10 +100,7 @@ export default {
 		'@nuxtjs/markdownit',
 		'@nuxtjs/axios',
 		'cookie-universal-nuxt',
-		'bootstrap-vue/nuxt',
-		['@nuxtjs/google-adsense', {
-			id: process.env.GOOGLE_ADSENSE_ID
-		}]
+		'bootstrap-vue/nuxt'
 	],
 	markdownit: {
 		preset: 'default',
