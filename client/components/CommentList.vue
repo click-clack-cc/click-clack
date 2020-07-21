@@ -35,9 +35,7 @@
             </b-row>
           </b-col>
           <b-col>
-            <div style="margin-top: 0.3rem;">
-              {{ com.text }}
-            </div>
+            <div style="margin-top: 0.3rem;" v-html="$md.render(com.text)" />
           </b-col>
           <b-col cols="2">
             <div style="margin-top: 0.3rem;">

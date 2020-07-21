@@ -24,18 +24,6 @@
         </div>
       </b-col>
     </b-row>
-    <b-row>
-      <b-col align="middle">
-        <p id="support">
-          <a href="https://www.patreon.com/clickclackcc">
-            <b-button block variant="outline-primary">
-              Support click-clack
-              <b-icon style="margin-left: 0.5rem" icon="heart" />
-            </b-button>
-          </a><br>
-        </p>
-      </b-col>
-    </b-row>
   </b-col>
 </template>
 

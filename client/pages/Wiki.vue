@@ -115,7 +115,7 @@
               </div>
             </b-col>
             <b-col align="right" cols="2">
-              {{ switches.length + ` switches` }}
+              {{ ( switches?switches.length:`No`) + ` switches` }}
             </b-col>
           </b-row>
           <div v-if="displaymode===`card`">
@@ -242,7 +242,7 @@
                 </b-button-group>
               </b-col>
               <b-col align="right" cols="2">
-                {{ keycaps.length + ` keycap sets` }}
+                {{ ( keycaps?keycaps.length:`No`) + ` keycap sets` }}
               </b-col>
             </b-row>
           </div>
@@ -453,7 +453,7 @@
                 </b-button-group>
               </b-col>
               <b-col align="right" cols="2">
-                {{ pcbs.length + ` PCBs` }}
+                {{ ( pcbs?pcbs.length:`No`) + ` PCBs` }}
               </b-col>
             </b-row>
           </div>
@@ -700,7 +700,7 @@
                 </b-button-group>
               </b-col>
               <b-col align="right" cols="2">
-                {{ plates.length + ` plates` }}
+                {{ ( plates?plates.length:`No`) + ` plates` }}
               </b-col>
             </b-row>
           </div>
@@ -842,7 +842,7 @@ export default {
 	watch: {},
 	methods: {
 		truncate (str, n, useWordBoundary) {
-			if (str.length <= n) {
+			if (str && str.length <= n) {
 				return str
 			}
 			const subString = str.substr(0, n - 1)

@@ -72,12 +72,108 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, response) => {
-    let user = null;
-    if (req.body.id.includes('@')) {
-        user = await result.find({email: req.body.id}).toArray();
-    } else {
-        user = await result.find({id: req.body.id}).toArray();
-    }
+    let user = await result.aggregate([
+            {
+                '$match': (req.body.id.includes('@'))?{
+                    email: req.body.id
+                }:{
+                    id: req.body.id
+                }
+            },
+            {
+                '$addFields': {
+                    'stringId': {
+                        '$toString': '$_id'
+                    }
+                }
+            }, {
+                '$lookup': {
+                    'from': 'posts',
+                    'let': {
+                        'id': '$id',
+                        'user': '$stringId'
+                    },
+                    'pipeline': [
+                        {
+                            '$match': {
+                                '$expr': {
+                                    '$eq': [
+                                        '$user', '$$user'
+                                    ]
+                                }
+                            }
+                        }, {
+                            '$project': {
+                                'heartsNum': {
+                                    '$size': '$hearts'
+                                }
+                            }
+                        }
+                    ],
+                    'as': 'posts'
+                }
+            }, {
+                '$lookup': {
+                    'from': 'keyboards',
+                    'let': {
+                        'id': '$id',
+                        'user': '$stringId'
+                    },
+                    'pipeline': [
+                        {
+                            '$match': {
+                                '$expr': {
+                                    '$eq': [
+                                        '$owner', '$$user'
+                                    ]
+                                }
+                            }
+                        }, {
+                            '$project': {
+                                'heartsNum': {
+                                    '$size': '$hearts'
+                                }
+                            }
+                        }
+                    ],
+                    'as': 'keyboards'
+                }
+            }, {
+                '$lookup': {
+                    'from': 'stats',
+                    'localField': 'stringId',
+                    'foreignField': 'user',
+                    'as': 'tests'
+                }
+            }, {
+                '$addFields': {
+                    'postsNum': {
+                        '$size': '$posts'
+                    },
+                    'keyboardsNum': {
+                        '$size': '$keyboards'
+                    },
+                    'testsTaken': {
+                        '$size': '$tests'
+                    }
+                }
+            }, {
+                '$addFields': {
+                    'postHearts': {
+                        '$sum': '$posts.heartsNum'
+                    },
+                    'keyboardHearts': {
+                        '$sum': '$keyboards.heartsNum'
+                    }
+                }
+            }, {
+                '$project': {
+                    'posts': 0,
+                    'keyboards': 0,
+                    'tests': 0,
+                }
+            }
+        ]).toArray()
     user = user[0]
     if (user) {
         bcrypt.compare(req.body.password, user.password, function (err, res) {
@@ -107,20 +203,115 @@ router.post('/login', async (req, response) => {
 });
 
 router.get('/', async (req, res) => {
-    if (req.query.id !== undefined && req.query.id.length < 16) {
-        let response = await result
-            .find({id: req.query.id})
-            .project({email: false})
-            .limit(100).toArray()
-        response.password = undefined;
-        response._id = undefined;
-        res.send(response);
-    } else {
-        let response = await result
-            .find({_id: mongodb.ObjectId(req.query.id)})
-            .project({email: false}).toArray()
-        response.password = undefined;
-        response._id = undefined;
+    let match
+    try {
+        match = {_id: mongodb.ObjectId(req.query.id)}
+    }
+    // eslint-disable-next-line no-empty
+    catch (e) {
+        match = {id: req.query.id}
+    }
+    if (req.query.id !== undefined) {
+        let response = await result.aggregate([
+            {
+                '$match': match
+            },
+            {
+                '$addFields': {
+                    'stringId': {
+                        '$toString': '$_id'
+                    }
+                }
+            }, {
+                '$lookup': {
+                    'from': 'posts',
+                    'let': {
+                        'id': '$id',
+                        'user': '$stringId'
+                    },
+                    'pipeline': [
+                        {
+                            '$match': {
+                                '$expr': {
+                                    '$eq': [
+                                        '$user', '$$user'
+                                    ]
+                                }
+                            }
+                        }, {
+                            '$project': {
+                                'heartsNum': {
+                                    '$size': '$hearts'
+                                }
+                            }
+                        }
+                    ],
+                    'as': 'posts'
+                }
+            }, {
+                '$lookup': {
+                    'from': 'keyboards',
+                    'let': {
+                        'id': '$id',
+                        'user': '$stringId'
+                    },
+                    'pipeline': [
+                        {
+                            '$match': {
+                                '$expr': {
+                                    '$eq': [
+                                        '$owner', '$$user'
+                                    ]
+                                }
+                            }
+                        }, {
+                            '$project': {
+                                'heartsNum': {
+                                    '$size': '$hearts'
+                                }
+                            }
+                        }
+                    ],
+                    'as': 'keyboards'
+                }
+            }, {
+                '$lookup': {
+                    'from': 'stats',
+                    'localField': 'stringId',
+                    'foreignField': 'user',
+                    'as': 'tests'
+                }
+            }, {
+                '$addFields': {
+                    'postsNum': {
+                        '$size': '$posts'
+                    },
+                    'keyboardsNum': {
+                        '$size': '$keyboards'
+                    },
+                    'testsTaken': {
+                        '$size': '$tests'
+                    }
+                }
+            }, {
+                '$addFields': {
+                    'postHearts': {
+                        '$sum': '$posts.heartsNum'
+                    },
+                    'keyboardHearts': {
+                        '$sum': '$keyboards.heartsNum'
+                    }
+                }
+            }, {
+                '$project': {
+                    'posts': 0,
+                    'keyboards': 0,
+                    'tests': 0,
+                    'email': 0,
+                    'password': 0
+                }
+            }
+        ]).toArray()
         res.send(response);
     }
 });
@@ -134,11 +325,108 @@ router.get('/resolveid/', async (req, res) => {
 
 router.get('/u/', async (req, res) => {
     if (req.query.id !== undefined) {
-        let response = await result
-            .find({id: req.query.id})
-            .project({email: false}).toArray()
-        response.password = undefined;
-        response._id = undefined;
+        let response = await result.aggregate([
+            {
+                '$match': {
+                    id: req.query.id
+                }
+            },
+            {
+                '$addFields': {
+                    'stringId': {
+                        '$toString': '$_id'
+                    }
+                }
+            }, {
+                '$lookup': {
+                    'from': 'posts',
+                    'let': {
+                        'id': '$id',
+                        'user': '$stringId'
+                    },
+                    'pipeline': [
+                        {
+                            '$match': {
+                                '$expr': {
+                                    '$eq': [
+                                        '$user', '$$user'
+                                    ]
+                                }
+                            }
+                        }, {
+                            '$project': {
+                                'heartsNum': {
+                                    '$size': '$hearts'
+                                }
+                            }
+                        }
+                    ],
+                    'as': 'posts'
+                }
+            }, {
+                '$lookup': {
+                    'from': 'keyboards',
+                    'let': {
+                        'id': '$id',
+                        'user': '$stringId'
+                    },
+                    'pipeline': [
+                        {
+                            '$match': {
+                                '$expr': {
+                                    '$eq': [
+                                        '$owner', '$$user'
+                                    ]
+                                }
+                            }
+                        }, {
+                            '$project': {
+                                'heartsNum': {
+                                    '$size': '$hearts'
+                                }
+                            }
+                        }
+                    ],
+                    'as': 'keyboards'
+                }
+            }, {
+                '$lookup': {
+                    'from': 'stats',
+                    'localField': 'stringId',
+                    'foreignField': 'user',
+                    'as': 'tests'
+                }
+            }, {
+                '$addFields': {
+                    'postsNum': {
+                        '$size': '$posts'
+                    },
+                    'keyboardsNum': {
+                        '$size': '$keyboards'
+                    },
+                    'testsTaken': {
+                        '$size': '$tests'
+                    }
+                }
+            }, {
+                '$addFields': {
+                    'postHearts': {
+                        '$sum': '$posts.heartsNum'
+                    },
+                    'keyboardHearts': {
+                        '$sum': '$keyboards.heartsNum'
+                    }
+                }
+            }, {
+                '$project': {
+                    'posts': 0,
+                    'keyboards': 0,
+                    'tests': 0,
+                    'email': 0,
+                    'password': 0
+                }
+            }
+        ]).toArray()
         res.send(response);
     }
 });

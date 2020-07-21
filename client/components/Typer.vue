@@ -2,8 +2,8 @@
   <div @keydown.esc="closeModal">
     <b-row id="toolbar">
       <div>
-        <b-button-group v-if="showToolbar" class="mx-1">
-          <b-dropdown :text="wordLimit + ' words'" right variant="light">
+        <b-button-group v-if="showToolbar">
+          <b-dropdown :text="wordLimit + ' words'" right>
             <div v-for="(num, index) in wordOptions" :key="`word-count-option-${index}`" @click="setWordLimit(num)">
               <b-dropdown-divider v-if="num === `Infinite`" />
               <b-dropdown-item>
@@ -11,17 +11,17 @@
               </b-dropdown-item>
             </div>
           </b-dropdown>
-          <b-dropdown :text="wordType" right variant="light">
+          <b-dropdown :text="wordType" right>
             <b-dropdown-item v-for="(diff, index) in difficultyOptions" :key="`difficulty-option-${index}`" @click="setWordType(diff)">
               {{ diff }}
             </b-dropdown-item>
           </b-dropdown>
-          <b-dropdown :text="textBehaviour" right variant="light">
+          <b-dropdown :text="textBehaviour" right>
             <b-dropdown-item v-for="(tb, index) in textBehaviorOptions" :key="`text-behavior-option-${index}`" @click="setTextBehaviour(tb)">
               {{ tb }}
             </b-dropdown-item>
           </b-dropdown>
-          <b-dropdown :text="'Show '+showText" right variant="light">
+          <b-dropdown :text="'Show '+showText" right>
             <!-- Disable option to show all text if infinite words -->
             <b-dropdown-item v-if="wordLimit !== 'Infinite'" @click="setShowText('entire text')">
               Show entire text
@@ -33,14 +33,14 @@
               Show 50 words
             </b-dropdown-item>
           </b-dropdown>
-          <b-dropdown :text="textFont" right variant="light">
+          <b-dropdown :text="textFont" right>
             <b-dropdown-item v-for="(font, index) in fontOptions" :key="`font-option-${index}`" :style="`font-family: '${font}'`" @click="setTextFont(font)">
               {{ font }}
             </b-dropdown-item>
           </b-dropdown>
         </b-button-group>
         <b-button-group v-if="showToolbar && user" class="mx-1">
-          <b-dropdown :text="truncate(selectedKeyboard.name,16,true)" right variant="light">
+          <b-dropdown :text="truncate(selectedKeyboard.name,16,true)" right>
             <b-dropdown-item @click="setKeyboard('No keyboard selected')">
               <span
                 :style="{ fontWeight: selectedKeyboard=='No keyboard selected'?'bold':'normal', color: selectedKeyboard=='No keyboard selected'?'#6610f2':''}"
@@ -146,7 +146,6 @@
           <b-button
             block
             class="mt-2"
-            variant="light"
             @click="closeModal"
           >
             Thanks
@@ -214,6 +213,9 @@
         @keydown.space.prevent
         @keyup="checkState"
       />
+      <b-input-group-append is-text>
+        {{ miniTimer }}
+      </b-input-group-append>
       <template v-slot:append>
         <b-dropdown
           id="redo-button"
@@ -326,6 +328,8 @@ export default {
 			textFont,
 			showText,
 			selectedKeyboard,
+			miniTimer: '00:00',
+			miniTimerInterval: null,
 			currentwpm: this.currentwpm,
 			wordtimes: [],
 			wordtimesdatacollection: this.wordtimesdatacollection,
@@ -514,6 +518,10 @@ export default {
 			}
 		},
 		async done () {
+			if (this.miniTimerInterval) {
+				clearInterval(this.miniTimerInterval)
+				this.miniTimer = '00:00'
+			}
 			this.$refs['done-modal'].show()
 			this.finishTime = new Date().getTime()
 			this.resultTime = this.finishTime - this.startTime
@@ -596,12 +604,20 @@ export default {
 			this.currentwpm = 0
 			this.wordtimes = []
 			this.enterToRedo = true
+			if (this.miniTimerInterval) {
+				clearInterval(this.miniTimerInterval)
+				this.miniTimer = '00:00'
+			}
 		},
 		redoSame () {
 			this.setShowText(this.showText)
 			this.infinityCounter = 0
 			this.wordtimes = []
 			this.enterToRedo = true
+			if (this.miniTimerInterval) {
+				clearInterval(this.miniTimerInterval)
+				this.miniTimer = '00:00'
+			}
 		},
 		setWordLimit (wordNumber) {
 			this.wordLimit = wordNumber
@@ -679,10 +695,25 @@ export default {
 					}
 				}
 
-				if (this.startTime === null) {
+				if (this.startTime === null && this.uinput.length > 0) {
 					this.startTime = new Date().getTime()
+					this.startMiniTimer()
 				}
 			}
+		},
+		startMiniTimer () {
+			if (this.miniTimerInterval) {
+				clearInterval(this.miniTimerInterval)
+				this.miniTimer = '00:00'
+			}
+			this.miniTimerInterval = setInterval(() => {
+				let s = Math.floor((new Date() - this.startTime) / 1000)
+				let m = Math.floor(s / 60)
+				s = s % 60
+				if (s < 10) { s = '0' + s }
+				if (m < 10) { m = '0' + m }
+				this.miniTimer = `${m}:${s}`
+			}, 1000)
 		},
 		setTextBehaviour (behaviour) {
 			this.textBehaviour = behaviour
@@ -776,10 +807,8 @@ export default {
 
     #toolbar {
         margin-left: -0.2rem;
-        margin-top: 1rem;
         margin-bottom: 1rem;
         margin-top: 6rem;
-
     }
 
     .waiting {

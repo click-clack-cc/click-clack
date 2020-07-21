@@ -66,7 +66,7 @@
           </nuxt-link>
         </b-dropdown-item>
         <b-form-checkbox
-          :checked="nightmode"
+          :checked="nightmodeSwitchValue"
           name="check-button"
           style="margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem"
           switch
@@ -114,6 +114,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
 	props: {
 		navItems: {
@@ -130,6 +132,12 @@ export default {
 	methods: {
 		changeTheme () {
 			this.$emit('change-theme')
+		}
+	},
+	computed: mapState(['nightmode']),
+	data () {
+		return {
+			 nightmodeSwitchValue: this.nightmode
 		}
 	}
 }

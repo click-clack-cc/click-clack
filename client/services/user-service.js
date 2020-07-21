@@ -1,4 +1,4 @@
-const url = '/users/'
+const url = '/users'
 export default class UserService {
 	http = null
 
@@ -18,11 +18,13 @@ export default class UserService {
 
 	async getUser (id) {
 		const { data: [user] } = await this.http.get(url, { params: { id } })
+		if (!user) { return null }
 		return { ...user, createdAt: new Date(user.createdAt) }
 	}
 
 	async resolveId (id) {
 		const { data: [user] } = await this.http.get(`${url}/resolveid`, { params: { id } })
+		if (!user) { return null }
 		return { ...user, createdAt: new Date(user.createdAt) }
 	}
 
@@ -32,15 +34,15 @@ export default class UserService {
 	}
 
 	changeId (oldid, newid) {
-		return this.http.post(url + 'id', { id: oldid, newid })
+		return this.http.post(url + '/id', { id: oldid, newid })
 	}
 
 	changeUserBio (id, bio) {
-		return this.http.post(url + 'bio', { id, bio })
+		return this.http.post(url + '/bio', { id, bio })
 	}
 
 	changeKeebs (id, keyboards) {
-		return this.http.post(url + 'keebs', { id, keebs: keyboards })
+		return this.http.post(url + '/keebs', { id, keebs: keyboards })
 	}
 
 	async recommend (submitterid, recommendedid, recommendationtext) {
@@ -53,7 +55,7 @@ export default class UserService {
 	}
 
 	async report (submitterid, reportedid, reporttext) {
-		const { data } = await this.http.post(url + 'report', {
+		const { data } = await this.http.post(url + '/report', {
 			id: submitterid,
 			user: reportedid,
 			text: reporttext
@@ -71,6 +73,6 @@ export default class UserService {
 	}
 
 	changeFirstname (id, firstname) {
-		return this.http.post(url + 'firstname', { id, firstname })
+		return this.http.post(url + '/firstname', { id, firstname })
 	}
 }

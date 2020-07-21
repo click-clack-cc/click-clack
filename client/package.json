@@ -11,7 +11,7 @@
         "generate": "nuxt generate",
         "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
         "fix": "eslint --ext .js,.vue --ignore-path .gitignore . --fix",
-        "sass": "sass --watch bootstrap-themes/americano.scss:bootstrap-themes/americano.css bootstrap-themes/blueberry-cappucino.scss:bootstrap-themes/blueberry-cappucino.css bootstrap-themes/cinnamon-latte.scss:bootstrap-themes/cinnamon-latte.css bootstrap-themes/fekete.scss:bootstrap-themes/fekete.css bootstrap-themes/iced-mocha.scss:bootstrap-themes/iced-mocha.css bootstrap-themes/mint-latte.scss:bootstrap-themes/mint-latte.css bootstrap-themes/light.scss:bootstrap-themes/light.css bootstrap-themes/pressó.scss:bootstrap-themes/pressó.css --style compressed "
+        "sass": "sass --watch bootstrap-themes/iced-cappucino.scss:bootstrap-themes/iced-cappucino.css bootstrap-themes/americano.scss:bootstrap-themes/americano.css bootstrap-themes/blueberry-cappucino.scss:bootstrap-themes/blueberry-cappucino.css bootstrap-themes/cinnamon-latte.scss:bootstrap-themes/cinnamon-latte.css bootstrap-themes/fekete.scss:bootstrap-themes/fekete.css bootstrap-themes/iced-mocha.scss:bootstrap-themes/iced-mocha.css bootstrap-themes/mint-latte.scss:bootstrap-themes/mint-latte.css bootstrap-themes/light.scss:bootstrap-themes/light.css bootstrap-themes/pressó.scss:bootstrap-themes/pressó.css --style compressed "
     },
     "dependencies": {
         "@nuxtjs/axios": "^5.11.0",
@@ -30,13 +30,11 @@
         "helmet": "^3.23.3",
         "html": "^1.0.0",
         "http": "0.0.1-security",
-        "https": "^1.0.0",
         "jquery": "^3.5.1",
         "markdown-it-attrs": "^3.0.3",
         "markdown-it-div": "^1.1.0",
         "nodemon": "^2.0.4",
         "nuxt": "^2.13.3",
-        "openssl": "^1.1.0",
         "portal-vue": "^2.1.7",
         "redirect-ssl": "^2.0.0",
         "sass": "^1.26.9",

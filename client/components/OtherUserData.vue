@@ -423,6 +423,7 @@
 import VueMeta from 'vue-meta'
 import Vue from 'vue'
 import dateformat from 'dateformat'
+import { mapState } from 'vuex'
 import Keyboard from './KeyboardSmall'
 import ListingSmall from './ListingSmall'
 import PostSmall from './PostSmall'
@@ -463,6 +464,7 @@ export default {
 			messageInput: null
 		}
 	},
+	computed: mapState(['user', 'token', 'nightmode', 'zenmode', 'darktheme', 'lighttheme', 'search']),
 	watch: {
 		inspectedUser: {
 			immediate: true,

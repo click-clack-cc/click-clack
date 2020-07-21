@@ -6,6 +6,7 @@ const router = express.Router();
 let isLoggedIn = require('../middleware/auth')
 
 const uri = `${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
+const PAGE_SIZE = 3;
 
 let result = null;
 connect().then((db) => {
@@ -85,8 +86,8 @@ router.get('/new', async (req, res) => {
                 "$userdata"
 
         }
-    ]).limit(100)
-        .sort({createdAt: -1})
+    ]).sort({createdAt: -1})
+        .skip(((req.query.page?parseInt(req.query.page):1)-1)*PAGE_SIZE).limit(PAGE_SIZE)
         .toArray();
     res.send(response);
 });
@@ -137,8 +138,8 @@ router.get('/best', async (req, res) => {
                 "$userdata"
 
         }
-    ]).limit(100)
-        .sort({heartsNum: -1})
+    ]).sort({heartsNum: -1})
+        .skip(((req.query.page?parseInt(req.query.page):1)-1)*PAGE_SIZE).limit(PAGE_SIZE)
         .toArray();
     res.send(response);
 });
@@ -198,8 +199,8 @@ router.get('/rising', async (req, res) => {
                 "$userdata"
 
         }
-    ]).limit(100)
-        .sort({heartsNum: -1})
+    ]).sort({heartsNum: -1})
+        .skip(((req.query.page?parseInt(req.query.page):1)-1)*PAGE_SIZE).limit(PAGE_SIZE)
         .toArray();
     res.send(response);
 });
@@ -211,7 +212,7 @@ router.get('/search/', async (req, res) => {
         $text: {
             $search: req.query.text
         }
-    }).limit(100)
+    }).skip(((req.query.page?parseInt(req.query.page):1)-1)*PAGE_SIZE).limit(PAGE_SIZE)
         .sort({createdAt: -1}).toArray()
     res.send(response);
 });

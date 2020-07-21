@@ -12,8 +12,8 @@ export default class KeyboardService {
 		return data.map(keyboard => ({ ...keyboard, createdAt: new Date(keyboard.createdAt), lastModified: new Date(keyboard.lastModified) }))
 	}
 
-	async getNewKeyboards (method) {
-		const { data } = await this.http.get(`${url}/${method}`)
+	async getNewKeyboards (method, page) {
+		const { data } = await this.http.get(`${url}/${method}`, { params: { page } })
 		return data.map(keyboard => ({
 			...keyboard,
 			createdAt: new Date(keyboard.createdAt),

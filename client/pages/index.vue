@@ -1,94 +1,86 @@
 <template>
   <div>
-    <b-row id="topcards" class="d-none d-lg-inline-flex">
-      <b-col>
-        <nuxt-link to="/typing">
-          <b-card no-body>
-            <b-row no-gutters>
-              <b-col cols="3">
-                <b-row align="middle" style="margin-top: 2.6rem; margin-left: 2rem">
-                  <b-icon v-b-tooltip.hover.bottom="`Typing Test`" scale="1.4" icon="lightning" />
-                </b-row>
-              </b-col>
-              <b-col style="margin: 1rem">
-                <b-row no-gutters style="font-weight: bold" align="middle">
-                  Typing Test
-                </b-row>
-                <b-row no-gutters>
-                  Test your typing speed
-                </b-row>
-              </b-col>
-            </b-row>
-          </b-card>
-        </nuxt-link>
-      </b-col>
-      <b-col>
-        <nuxt-link to="/market">
-          <b-card no-body>
-            <b-row no-gutters>
-              <b-col cols="3">
-                <b-row align="middle" style="margin-top: 2.6rem; margin-left: 2rem">
-                  <b-icon v-b-tooltip.hover.bottom="`Market`" scale="1.4" icon="shop-window" />
-                </b-row>
-              </b-col>
-              <b-col style="margin: 1rem">
-                <b-row no-gutters style="font-weight: bold" align="middle">
-                  Market
-                </b-row>
-                <b-row no-gutters>
-                  Buy and sell items, services
-                </b-row>
-              </b-col>
-            </b-row>
-          </b-card>
-        </nuxt-link>
-      </b-col>
-      <b-col>
-        <nuxt-link to="/showroom">
-          <b-card no-body>
-            <b-row no-gutters>
-              <b-col cols="3">
-                <b-row align="middle" style="margin-top: 2.6rem; margin-left: 2rem">
-                  <b-icon v-b-tooltip.hover.bottom="`Showroom`" scale="1.4" icon="star" />
-                </b-row>
-              </b-col>
-              <b-col style="margin: 1rem">
-                <b-row no-gutters style="font-weight: bold" align="middle">
-                  Showroom
-                </b-row>
-                <b-row no-gutters>
-                  Custom keyboard showroom
-                </b-row>
-              </b-col>
-            </b-row>
-          </b-card>
-        </nuxt-link>
-      </b-col>
-      <b-col>
-        <nuxt-link to="/settings">
-          <b-card no-body>
-            <b-row no-gutters>
-              <b-col cols="3">
-                <b-row align="middle" style="margin-top: 2.6rem; margin-left: 2rem">
-                  <b-icon v-b-tooltip.hover.bottom="`Themes`" scale="1.4" icon="window" />
-                </b-row>
-              </b-col>
-              <b-col style="margin: 1rem">
-                <b-row no-gutters style="font-weight: bold" align="middle">
-                  Themes
-                </b-row>
-                <b-row no-gutters>
-                  Customize click-clack with themes
-                </b-row>
-              </b-col>
-            </b-row>
-          </b-card>
-        </nuxt-link>
-      </b-col>
-    </b-row>
-
     <b-row class="posts">
       <b-col md="12" lg="8">
+        <b-row id="topcards" align="middle">
+          <b-col>
+            <b-card no-body style="padding-top: 1rem; padding-bottom: 1rem">
+              <b-button variant="outline" to="/typing">
+                <b-row no-gutters>
+                  <b-col cols="3">
+                    <b-row align="left" style="margin-top: 0.8rem; margin-left: 1rem">
+                      <b-icon v-b-tooltip.hover.bottom="`Showroom`" scale="1.1" icon="lightning" />
+                    </b-row>
+                  </b-col>
+                  <b-col>
+                    <b-row no-gutters style="font-weight: bold" align="middle">
+                      Typing Test
+                    </b-row>
+                    <b-row no-gutters align="left">
+                      Let's see how fast you can type
+                    </b-row>
+                  </b-col>
+                </b-row>
+              </b-button>
+            </b-card>
+          </b-col><b-col>
+            <b-card no-body style="padding-top: 1rem; padding-bottom: 1rem">
+              <b-button variant="outline" to="/showroom">
+                <b-row no-gutters>
+                  <b-col cols="3">
+                    <b-row align="middle" style="margin-top: 0.8rem; margin-left: 1rem">
+                      <b-icon v-b-tooltip.hover.bottom="`Showroom`" scale="1.1" icon="star" />
+                    </b-row>
+                  </b-col>
+                  <b-col>
+                    <b-row no-gutters style="font-weight: bold" align="middle">
+                      Showroom
+                    </b-row>
+                    <b-row no-gutters align="left">
+                      Custom keyboard showroom
+                    </b-row>
+                  </b-col>
+                </b-row>
+              </b-button>
+            </b-card>
+          </b-col>
+          <!--            <b-button variant="outline" to="/settings">-->
+          <!--              <b-row no-gutters>-->
+          <!--                <b-col cols="3">-->
+          <!--                  <b-row align="middle" style="margin-top: 1.7rem; margin-left: 1rem">-->
+          <!--                    <b-icon v-b-tooltip.hover.bottom="`Themes`" scale="1.1" icon="window" />-->
+          <!--                  </b-row>-->
+          <!--                </b-col>-->
+          <!--                <b-col>-->
+          <!--                  <b-row no-gutters style="font-weight: bold" align="middle">-->
+          <!--                    Themes-->
+          <!--                  </b-row>-->
+          <!--                  <b-row no-gutters align="left">-->
+          <!--                    Customize click-clack with themes-->
+          <!--                  </b-row>-->
+          <!--                </b-col>-->
+          <!--              </b-row>-->
+          <!--            </b-button>-->
+          <!--      <b-col>-->
+          <!--        <nuxt-link to="/market">-->
+          <!--            <b-row no-gutters>-->
+          <!--              <b-col cols="3">-->
+          <!--                <b-row align="middle" style="margin-top: 2.6rem; margin-left: 2rem">-->
+          <!--                  <b-icon v-b-tooltip.hover.bottom="`Market`" scale="1.4" icon="shop-window" />-->
+          <!--                </b-row>-->
+          <!--              </b-col>-->
+          <!--              <b-col style="margin: 1rem">-->
+          <!--                <b-row no-gutters style="font-weight: bold" align="middle">-->
+          <!--                  Market-->
+          <!--                </b-row>-->
+          <!--                <b-row no-gutters>-->
+          <!--                  Buy and sell items, services-->
+          <!--                </b-row>-->
+          <!--              </b-col>-->
+          <!--            </b-row>-->
+          <!--        </nuxt-link>-->
+          <!--      </b-col>-->
+        </b-row>
         <b-row id="postbuttons">
           <b-col align="right">
             <b-button block pill style="height: 2.5rem" @click="$nuxt.$router.push(user?`/editpost`:`/profile`)">
@@ -97,7 +89,7 @@
             </b-button>
           </b-col>
           <b-col>
-            <b-button block pill style="height: 2.5rem" @click="$nuxt.$router.push(user?`editkeyboard`:`/profile`)">
+            <b-button pill block style="height: 2.5rem" @click="$nuxt.$router.push(user?`editkeyboard`:`/profile`)">
               <svg
                 version="1.1"
                 style="margin: -0.5rem; margin-right: 1rem; margin-bottom: -0.7rem"
@@ -123,30 +115,30 @@
           </b-col>
         </b-row>
         <b-row id="sortbuttons">
-          <b-col align="middle">
+          <b-col align="left">
             <b-button-group size="sm">
               <b-button
                 variant="outline-primary"
-                :pressed="sortMethod === 'best'"
-                @click="sortBy('best')"
+                :pressed="sortMethod === 'rising'"
+                @click="setSort('rising')"
               >
                 <b-icon v-if="sortMethod === 'best'" icon="star-fill" />
                 <b-icon v-else icon="star" />
                 Best
               </b-button>
-              <b-button
-                variant="outline-primary"
-                :pressed="sortMethod === 'rising'"
-                @click="sortBy('rising')"
-              >
-                <b-icon v-if="sortMethod === 'rising'" icon="brightness-alt-high-fill" />
-                <b-icon v-else icon="brightness-alt-high" />
-                Rising
-              </b-button>
+              <!--              <b-button-->
+              <!--                variant="outline-primary"-->
+              <!--                :pressed="sortMethod === 'rising'"-->
+              <!--                @click="sortBy('rising')"-->
+              <!--              >-->
+              <!--                <b-icon v-if="sortMethod === 'rising'" icon="brightness-alt-high-fill" />-->
+              <!--                <b-icon v-else icon="brightness-alt-high" />-->
+              <!--                Rising-->
+              <!--              </b-button>-->
               <b-button
                 variant="outline-primary"
                 :pressed="sortMethod === 'new'"
-                @click="sortBy('new')"
+                @click="setSort('new')"
               >
                 <b-icon v-if="sortMethod === 'new'" icon="egg-fill" />
                 <b-icon v-else icon="egg" />
@@ -155,12 +147,10 @@
             </b-button-group>
           </b-col>
         </b-row>
-
         <div v-if="!loaded" id="loading" class="text-center">
           <b-spinner :variant="'primary'" type="grow" />
         </div>
-
-        <div v-if="allContent">
+        <div v-if="allContent" ref="contentContainer">
           <b-card-group
             v-for="(content, index) in allContent"
             :key="index"
@@ -187,8 +177,25 @@
             />
           </b-card-group>
         </div>
+        <b-row>
+          <b-col align="middle">
+            <b-spinner v-if="!(this.keebsEndReached && this.postsEndReached)" />
+            <p v-else class="text-muted" style="font-size: x-large">
+              That's it for now, you've seen everything.
+            </p>
+          </b-col>
+        </b-row>
       </b-col>
       <b-col class="d-none d-lg-block">
+        <other-user-data-preview v-if="user && token" id="usercard" :inspected-user="user" />
+        <span id="support">
+          <a href="https://www.patreon.com/clickclackcc">
+            <b-button block variant="outline-primary">
+              Become a Supporter
+              <b-icon style="margin-left: 0.5rem" icon="heart" />
+            </b-button>
+          </a><br>
+        </span>
         <announcements id="announcements" />
         <Leaderboard id="leaderboard" />
         <!--                <NewUsers id="new-users"/>-->
@@ -198,7 +205,6 @@
     </b-row>
   </div>
 </template>
-
 <script>
 
 import { mapState } from 'vuex'
@@ -207,11 +213,13 @@ import Announcements from '../components/Announcements'
 import Leaderboard from '../components/LeaderboardSmall'
 import Footer from '../components/Footer'
 import PostSmall from '../components/PostSmall'
+import OtherUserDataPreview from '../components/OtherUserDataPreview'
 
 export default {
 	name: 'Showroom',
 	layout: 'index',
 	components: {
+		OtherUserDataPreview,
 		KeyboardSmall,
 		Announcements,
 		Leaderboard,
@@ -221,38 +229,71 @@ export default {
 	props: [],
 	data () {
 		return {
-			keyboards: null,
-			posts: null,
+			keyboards: [],
+			posts: [],
 			loaded: false,
-			allContent: null,
-			sortMethod: 'rising'
+			allContent: [],
+			page: 1,
+			sortMethod: 'rising',
+			keebsEndReached: false,
+			postsEndReached: false
 		}
 	},
 	computed: mapState(['user', 'token', 'nightmode', 'zenmode', 'darktheme', 'lighttheme', 'search']),
 	created () {
-		this.sortBy('rising')
+		this.getPage(false)
+		if (process.client) {
+			// eslint-disable-next-line nuxt/no-globals-in-created
+			window.addEventListener('scroll', this.onScroll)
+		}
+	},
+	destroyed () {
+		// eslint-disable-next-line nuxt/no-globals-in-created
+		window.removeEventListener('scroll', this.onScroll)
 	},
 	methods: {
-		async sortBy (method) {
-			this.sortMethod = method
+		async getPage (append) {
+			if (this.keebsEndReached && this.postsEndReached) { return }
 			this.loaded = false
-			let allContent = []
-			const keebs = await this.$services.keyboardService.getNewKeyboards(this.sortMethod)
-			this.keyboards = keebs
-
-			allContent = allContent.concat(keebs)
-			const posts = await this.$services.postService.getNewPosts(this.sortMethod)
-			this.posts = posts
-
-			allContent = allContent.concat(posts)
-			if (method === ('new')) {
-				allContent.sort((b, a) => a.createdAt - b.createdAt)
+			let allContent = append ? this.allContent : []
+			if (!this.keebsEndReached) {
+				const keebs = await this.$services.keyboardService.getNewKeyboards(this.sortMethod, this.page)
+				this.keyboards = this.keyboards.concat(keebs)
+				allContent = allContent.concat(keebs)
+				if (keebs.length < 3) { this.keebsEndReached = true }
 			}
-			if (method === ('best') || method === ('rising')) {
-				allContent.sort((b, a) => a.heartsNum - b.heartsNum)
+			if (!this.postsEndReached) {
+				const posts = await this.$services.postService.getNewPosts(this.sortMethod, this.page)
+				this.posts = this.posts.concat(posts)
+				allContent = allContent.concat(posts)
+				if (posts.length < 3) { this.postsEndReached = true }
+			}
+			if (!append) {
+				if (this.sortMethod === ('new')) {
+					allContent.sort((b, a) => a.createdAt - b.createdAt)
+				}
+				if (this.sortMethod === ('best') || this.sortMethod === ('rising')) {
+					allContent.sort((b, a) => a.heartsNum - b.heartsNum)
+				}
 			}
 			this.allContent = allContent
+			this.page++
 			this.loaded = true
+		},
+		nextPage () {
+			this.getPage(true)
+		},
+		setSort (sort) {
+			this.sortMethod = sort
+			this.page = 1
+			this.keebsEndReached = false
+			this.postsEndReached = false
+			this.getPage(false)
+		},
+		onScroll () {
+			if ((window.innerHeight + window.scrollY) > (this.$refs.contentContainer.clientHeight)) {
+				if (this.loaded) { this.nextPage() }
+			}
 		}
 	},
 	head () {
@@ -303,7 +344,8 @@ export default {
 <style scoped>
 
     #postbuttons {
-        margin-bottom: 1rem;
+								margin-top: 2rem;
+        margin-bottom: 2rem;
     }
 
     #sortbuttons {
@@ -314,7 +356,7 @@ export default {
         margin-top: 1rem;
     }
 
-    #new-users, #leaderboard, #announcements {
+    #new-users, #leaderboard, #announcements, #usercard {
         margin-bottom: 1.25rem;
     }
 
