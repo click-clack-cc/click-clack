@@ -17,7 +17,7 @@
             </b-row>
             <b-row>
               <b-col>
-                <div v-if="showOwner === true" id="keebowner">
+                <div v-if="showOwner === true && owner" id="keebowner">
                   <div v-if="keeb.creatorName">
                     <span class="text-muted"> made by </span>
                     <a :href="keeb.url"> {{ keeb.creatorName }} </a>

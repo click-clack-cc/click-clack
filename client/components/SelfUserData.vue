@@ -415,6 +415,7 @@
 
 <script>
 import dateformat from 'dateformat'
+import { mapState } from 'vuex'
 import Keyboard from './KeyboardSmall'
 import ListingSmall from './ListingSmall'
 import PostSmall from './PostSmall'
@@ -429,8 +430,6 @@ export default {
 		RecommendationList
 	},
 	props: [
-		'user',
-		'token'
 	],
 	data () {
 		return {
@@ -457,6 +456,7 @@ export default {
 			recommendations: this.recommendations
 		}
 	},
+	computed: mapState(['user', 'token', 'nightmode', 'zenmode', 'darktheme', 'lighttheme', 'search']),
 	created () {
 		this.img = this.img = this.$config.imageBaseUrl + this.user._id + '.jpg'
 		this.userName = this.user.firstname + (this.user.lastname == null ? '' : (' ' + this.user.lastname))

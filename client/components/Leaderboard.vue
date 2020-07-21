@@ -63,6 +63,8 @@
           />
           <b-avatar
             v-else
+            v-b-tooltip.top="`Deleted User`"
+            :src="$config.imageBaseUrl + `anonnymouse.png`"
             class="avatar"
             size="2rem"
             variant="light"
@@ -70,8 +72,8 @@
           <b-link v-if="stat.user" :href="`/u/${stat.user.id}`" class="name">
             <span class="text-muted"> @{{ stat.user.id }} </span>
           </b-link>
-          <span v-else class="name">
-            <span class="text-muted"> Deleted User </span>
+          <span v-else v-b-tooltip.top="`Deleted User`" class="name">
+            <span class="text-muted"> @anonnymouse </span>
           </span>
         </b-col>
         <b-col>

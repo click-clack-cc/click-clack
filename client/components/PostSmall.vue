@@ -10,6 +10,8 @@
       <template v-slot:header>
         <b-row>
           <a id="posttitle" style="cursor: pointer" @click="goToPost(post._id)">{{ post.title }}</a>
+        </b-row>
+        <b-row>
           <div v-if="showAuthor === true" id="postauthor">
             <span class="text-muted" />
             <a :href="`/u/${author.id}`"> {{ author.firstname }}
@@ -433,4 +435,8 @@ export default {
     .timeago {
         margin-top: 0;
     }
+
+	#postauthor {
+		margin-left: 1rem;
+	}
 </style>

@@ -9,7 +9,7 @@ const log_file = fs.createWriteStream(`../logs/${dateformat(new Date(), "dd-mm-y
 const log_stdout = process.stdout;
 
 const cors = require('cors');
-const https = require('https');
+const http = require('http');
 const generateSitemap = require('./generateSitemap')
 
 const guard = require('./middleware/guard')
@@ -57,26 +57,23 @@ app.use('/api/messages', messages);
 app.use('/api/keyboards', keyboards);
 app.use('/api/kbapi', kbapi);
 
+
 app.use(express.static('public'));
 app.use(express.static('images'));
+app.use('/sitemap', express.static('public/sitemap.xml'))
+app.use('/files', express.static('files'))
 
 generateSitemap((app))
 setInterval(function (){
     generateSitemap(app)
 }, 1000 * 60 * 60)
 
-app.use('/sitemap', express.static('public/sitemap.xml'))
-app.use('/files', express.static('files'))
+app.use((error, req, res, next) => {
+    res.status(401)
+    next()
+})
 
-var privateKey = fs.readFileSync('certs/click-clack_cc.key');
-var certificate = fs.readFileSync('certs/click-clack_cc.crt');
-var ca = fs.readFileSync('certs/click-clack_cc.ca-bundle');
-
-https.createServer({
-    key: privateKey,
-    ca: ca,
-    cert: certificate
-}, app).listen(process.env.PORT, () => console.log(`server started at ${process.env.HOST}:${process.env.PORT}`));
+http.createServer( app).listen(process.env.PORT, () => console.log(`server started at ${process.env.HOST}:${process.env.PORT}`));
 
 
 

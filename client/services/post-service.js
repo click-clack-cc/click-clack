@@ -17,8 +17,8 @@ export default class PostService {
 		return data.map(post => ({ ...post, createdAt: new Date(post.createdAt), lastModified: new Date(post.lastModified) }))
 	}
 
-	async getNewPosts (method) {
-		const { data } = await this.http.get(`${url}/${method}`)
+	async getNewPosts (method, page) {
+		const { data } = await this.http.get(`${url}/${method}`, { params: { page } })
 		return data.map(post => ({
 			...post,
 			createdAt: new Date(post.createdAt),

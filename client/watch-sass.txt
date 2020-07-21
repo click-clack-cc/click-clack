@@ -1,1 +1,10 @@
-sass --watch americano.scss:americano.css blueberry-cappucino.scss:blueberry-cappucino.css cinnamon-latte.scss:cinnamon-latte.css fekete.scss:fekete.css iced-mocha.scss:iced-mocha.css mint-latte.scss:mint-latte.css light.scss:light.css  --style compressed
+sass --watch
+bootstrap-themes/americano.scss:bootstrap-themes/americano.css
+bootstrap-themes/blueberry-cappucino.scss:bootstrap-themes/blueberry-cappucino.css
+bootstrap-themes/cinnamon-latte.scss:bootstrap-themes/cinnamon-latte.css
+bootstrap-themes/fekete.scss:bootstrap-themes/fekete.css
+bootstrap-themes/iced-mocha.scss:bootstrap-themes/iced-mocha.css
+bootstrap-themes/mint-latte.scss:bootstrap-themes/mint-latte.css
+bootstrap-themes/light.scss:bootstrap-themes/light.css
+bootstrap-themes/pressó.scss:bootstrap-themes/pressó.css
+--style compressed

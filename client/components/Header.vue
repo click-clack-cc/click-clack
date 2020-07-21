@@ -80,11 +80,11 @@ export default {
 					name: 'Home',
 					icon: 'view-stacked'
 				},
-				{
-					link: '/market',
-					name: 'Market',
-					icon: 'shop-window'
-				},
+				// {
+				// link: '/market',
+				// name: 'Market',
+				// icon: 'shop-window'
+				// },
 				{
 					link: '/showroom',
 					name: 'Showroom',

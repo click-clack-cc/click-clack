@@ -135,6 +135,11 @@ export default {
 			default: 0
 		}
 	},
+	data () {
+		return {
+			 nightmodeSwitchValue: this.nightmode
+		}
+	},
 	computed: mapState(['nightmode']),
 	methods: {
 		changeTheme () {

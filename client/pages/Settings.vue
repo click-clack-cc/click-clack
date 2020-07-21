@@ -17,7 +17,6 @@
       @ok="reset"
     >
       <ThemePreview
-
         :theme="previewSelection"
         style="margin: 5rem"
       />
@@ -166,7 +165,8 @@ export default {
 						'#836E5B'
 					],
 					category: '❤️ Supporter only'
-				}, {
+				},
+				{
 					name: 'americano',
 					desc: '69 20 6c 75 76 20 63 6f 66 79 ',
 					colours: [

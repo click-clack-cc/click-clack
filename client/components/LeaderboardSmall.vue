@@ -36,10 +36,10 @@
         </b-col>
       </b-row>
       <b-row v-for="(stat, index) in stats" :key="index" class="user-thumbnail">
-        <b-col align="middle" cols="2">
+        <b-col align="middle" style="position: absolute" cols="2">
           {{ stat.pos }}
         </b-col>
-        <b-col cols="7">
+        <b-col cols="9" style="padding-left: 3rem">
           <b-avatar
             v-if="stat.user"
             :src="$config.imageBaseUrl + stat.user._id + `.jpg`"
@@ -51,6 +51,8 @@
           />
           <b-avatar
             v-else
+            v-b-tooltip.top="`Deleted User`"
+            :src="$config.imageBaseUrl + `anonnymouse.png`"
             class="avatar"
             size="2rem"
             variant="light"
@@ -58,8 +60,8 @@
           <b-link v-if="stat.user" :href="`/u/${stat.user.id}`" class="name">
             <span class="text-muted"> @{{ stat.user.id }} </span>
           </b-link>
-          <span v-else class="name">
-            <span class="text-muted"> Deleted User </span>
+          <span v-else v-b-tooltip.top="`Deleted User`" class="name">
+            <span class="text-muted"> @anonnymouse </span>
           </span>
         </b-col>
         <b-col>
