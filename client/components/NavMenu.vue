@@ -65,15 +65,16 @@
             Themes
           </nuxt-link>
         </b-dropdown-item>
-        <b-form-checkbox
-          :checked="nightmode"
-          name="check-button"
-          style="margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem"
-          switch
-          @change="changeTheme"
-        >
-          Night mode
-        </b-form-checkbox>
+        <b-dropdown-item @click="changeTheme">
+          <div v-if="nightmode">
+            <b-icon icon="sun" />
+            Disable night mode
+          </div>
+          <div v-else>
+            <b-icon icon="moon" />
+            Enable night mode
+          </div>
+        </b-dropdown-item>
         <b-dropdown-item-btn>
           <a href="https://www.patreon.com/clickclackcc">
             <b-icon icon="heart" />
@@ -114,6 +115,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
 	props: {
 		navItems: {
@@ -125,11 +128,20 @@ export default {
 			type: Object,
 			required: false,
 			default: () => {}
+		},
+		unseen: {
+			type: Number,
+			required: false,
+			default: 0
 		}
 	},
+	computed: mapState(['nightmode']),
 	methods: {
 		changeTheme () {
 			this.$emit('change-theme')
+		},
+		signOut () {
+			this.$emit('sign-out')
 		}
 	}
 }

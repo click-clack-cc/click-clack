@@ -47,7 +47,13 @@
         </b-input-group>
       </b-col>
       <b-col lg="4" cols="0" class="d-flex justify-content-end align-items-center">
-        <NavMenu :nav-items="navItems" :user="user" @change-theme="changeTheme" />
+        <NavMenu
+          :nav-items="navItems"
+          :user="user"
+          :unseen="unseen"
+          @change-theme="changeTheme"
+          @sign-out="signOut"
+        />
       </b-col>
     </b-row>
   </div>

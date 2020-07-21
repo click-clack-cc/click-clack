@@ -210,8 +210,7 @@ export default {
 	}
 
 	#header-container {
-		background-color: #ffffff;
-		border-bottom: 1px solid #dddddd;
+		border-bottom: 1px solid rgba(221, 221, 221, 0.7);
 		width: 100%;
 		position: fixed;
 		margin-top: -1px;
