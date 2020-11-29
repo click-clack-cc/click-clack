@@ -5,13 +5,15 @@ const router = express.Router();
 
 let isLoggedIn = require('../middleware/auth')
 
-const uri = `${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
+const uri = `${process.env.DB_CONNECT_URL_PREFIX}${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL_POSTFIX}`;
 const PAGE_SIZE = 3;
 
 let result = null;
 connect().then((db) => {
     result = db;
     console.log('keyboards.js connected to ' + process.env.DB_NAME + '.keyboards')
+}).catch((err) => {
+    console.error('keyboards.js could not connect to ' + process.env.DB_NAME + '.keyboards: ' + err)
 })
 
 router.get('/u', async (req, res) => {

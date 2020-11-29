@@ -6,12 +6,14 @@ let isLoggedIn = require('../middleware/auth')
 let isAdmin = require('../middleware/admin')
 
 
-const uri = `${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
+const uri = `${process.env.DB_CONNECT_URL_PREFIX}${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL_POSTFIX}`;
 
 let result = null;
 connect().then((db) => {
     result = db;
     console.log('listings.js connected to ' + process.env.DB_NAME + '.listings')
+}).catch((err) => {
+    console.error('listings.js could not connect to ' + process.env.DB_NAME + '.listings: ' + err)
 })
 
 

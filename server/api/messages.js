@@ -5,12 +5,14 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 isLoggedIn = require('../middleware/auth')
 
-const uri = `${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
+const uri = `${process.env.DB_CONNECT_URL_PREFIX}${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL_POSTFIX}`;
 
 let result = null;
 connect().then((db) => {
     result = db;
     console.log('messages.js connected to ' + process.env.DB_NAME + '.messages')
+}).catch((err) => {
+    console.error('messages.js could not connect to ' + process.env.DB_NAME + '.messages: ' + err)
 })
 
 router.get('/messages', isLoggedIn, async (req, res) => {

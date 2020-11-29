@@ -17,6 +17,7 @@ module.exports = {
       "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
       "vue/require-prop-types": "off",
       "vue/no-v-html": "off",
-      "quotes": [2, "single", { "avoidEscape": true }]
+      "quotes": [2, "single", { "avoidEscape": true }],
+						"vue/comment-directive": 0
     }
 }

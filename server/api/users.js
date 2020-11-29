@@ -8,12 +8,14 @@ let isLoggedIn = require('../middleware/auth')
 const router = express.Router();
 const salt = 10
 
-const uri = `${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
+const uri = `${process.env.DB_CONNECT_URL_PREFIX}${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL_POSTFIX}`;
 
 let result = null;
 connect().then((db) => {
     result = db;
     console.log('users.js connected to ' + process.env.DB_NAME + '.users')
+}).catch((err) => {
+    console.error('users.js could not connect to ' + process.env.DB_NAME + '.users: ' + err)
 })
 
 router.post('/', isLoggedIn, async (req, res) => {

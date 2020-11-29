@@ -4,13 +4,15 @@ const mongodb = require('mongodb');
 const router = express.Router();
 const isLoggedIn = require('../middleware/auth')
 
-const uri = `${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL}`;
+const uri = `${process.env.DB_CONNECT_URL_PREFIX}${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CONNECT_URL_POSTFIX}`;
 const PAGE_SIZE = 3;
 
 let result = null;
 connect().then((db) => {
     result = db;
     console.log('posts.js connected to ' + process.env.DB_NAME + '.posts')
+}).catch((err) => {
+    console.error('posts.js could not connect to ' + process.env.DB_NAME + '.posts: ' + err)
 })
 
 

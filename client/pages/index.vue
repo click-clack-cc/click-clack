@@ -114,39 +114,39 @@
             </b-button>
           </b-col>
         </b-row>
-        <b-row id="sortbuttons">
-          <b-col align="left">
-            <b-button-group size="sm">
-              <b-button
-                variant="outline-primary"
-                :pressed="sortMethod === 'rising'"
-                @click="setSort('rising')"
-              >
-                <b-icon v-if="sortMethod === 'best'" icon="star-fill" />
-                <b-icon v-else icon="star" />
-                Best
-              </b-button>
-              <!--              <b-button-->
-              <!--                variant="outline-primary"-->
-              <!--                :pressed="sortMethod === 'rising'"-->
-              <!--                @click="sortBy('rising')"-->
-              <!--              >-->
-              <!--                <b-icon v-if="sortMethod === 'rising'" icon="brightness-alt-high-fill" />-->
-              <!--                <b-icon v-else icon="brightness-alt-high" />-->
-              <!--                Rising-->
-              <!--              </b-button>-->
-              <b-button
-                variant="outline-primary"
-                :pressed="sortMethod === 'new'"
-                @click="setSort('new')"
-              >
-                <b-icon v-if="sortMethod === 'new'" icon="egg-fill" />
-                <b-icon v-else icon="egg" />
-                New
-              </b-button>
-            </b-button-group>
-          </b-col>
-        </b-row>
+<!--        <b-row id="sortbuttons">-->
+<!--          <b-col align="left">-->
+<!--            <b-button-group size="sm">-->
+<!--              <b-button-->
+<!--                variant="outline-primary"-->
+<!--                :pressed="sortMethod === 'rising'"-->
+<!--                @click="setSort('rising')"-->
+<!--              >-->
+<!--                <b-icon v-if="sortMethod === 'best'" icon="star-fill" />-->
+<!--                <b-icon v-else icon="star" />-->
+<!--                Best-->
+<!--              </b-button>-->
+<!--              &lt;!&ndash;              <b-button&ndash;&gt;-->
+<!--              &lt;!&ndash;                variant="outline-primary"&ndash;&gt;-->
+<!--              &lt;!&ndash;                :pressed="sortMethod === 'rising'"&ndash;&gt;-->
+<!--              &lt;!&ndash;                @click="sortBy('rising')"&ndash;&gt;-->
+<!--              &lt;!&ndash;              >&ndash;&gt;-->
+<!--              &lt;!&ndash;                <b-icon v-if="sortMethod === 'rising'" icon="brightness-alt-high-fill" />&ndash;&gt;-->
+<!--              &lt;!&ndash;                <b-icon v-else icon="brightness-alt-high" />&ndash;&gt;-->
+<!--              &lt;!&ndash;                Rising&ndash;&gt;-->
+<!--              &lt;!&ndash;              </b-button>&ndash;&gt;-->
+<!--              <b-button-->
+<!--                variant="outline-primary"-->
+<!--                :pressed="sortMethod === 'new'"-->
+<!--                @click="setSort('new')"-->
+<!--              >-->
+<!--                <b-icon v-if="sortMethod === 'new'" icon="egg-fill" />-->
+<!--                <b-icon v-else icon="egg" />-->
+<!--                New-->
+<!--              </b-button>-->
+<!--            </b-button-group>-->
+<!--          </b-col>-->
+<!--        </b-row>-->
         <div v-if="!loaded" id="loading" class="text-center">
           <b-spinner :variant="'primary'" type="grow" />
         </div>
@@ -234,7 +234,7 @@ export default {
 			loaded: false,
 			allContent: [],
 			page: 1,
-			sortMethod: 'rising',
+			sortMethod: 'new',
 			keebsEndReached: false,
 			postsEndReached: false
 		}
